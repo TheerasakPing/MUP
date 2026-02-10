@@ -31,6 +31,7 @@ const PROVIDER_ICONS: Partial<Record<ProviderName, React.FC>> = {
   ollama: OllamaIcon,
   "mux-gateway": GatewayIcon,
   "github-copilot": GitHubIcon,
+  "local-gateway": GatewayIcon, // Reuse GatewayIcon for local gateway
 };
 
 /**

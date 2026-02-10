@@ -86,6 +86,13 @@ export const PROVIDER_DEFINITIONS = {
     factoryName: "createOllama",
     requiresApiKey: false, // Local service
   },
+  "local-gateway": {
+    displayName: "Local Gateway",
+    import: () => import("@ai-sdk/openai-compatible"),
+    factoryName: "createOpenAICompatible",
+    requiresApiKey: true,
+    strokeBasedIcon: true,
+  },
 } as const satisfies Record<string, ProviderDefinition>;
 
 /**

@@ -8,6 +8,9 @@
 GIT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
+# Use RELEASE_TAG if set (CI builds), otherwise empty
+RELEASE_TAG="${RELEASE_TAG:-}"
+
 if [ -n "$RELEASE_TAG" ]; then
   # CI release: use the authoritative tag, never dirty
   GIT_DESCRIBE="$RELEASE_TAG"
