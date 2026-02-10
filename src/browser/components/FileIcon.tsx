@@ -1,138 +1,53 @@
 import React, { useMemo } from "react";
-import setiIconTheme from "@/browser/assets/file-icons/seti-icon-theme.json";
+import mapping from "@/browser/assets/catppuccin-icons/mapping.json";
+import { cn } from "@/common/lib/utils";
 
-interface SetiIconDefinition {
-  fontCharacter?: string;
-  fontColor?: string;
+// Import all SVGs as URLs
+// The keys will be like "@/browser/assets/catppuccin-icons/name.svg"
+const iconUrls = import.meta.glob("@/browser/assets/catppuccin-icons/*.svg", {
+  eager: true,
+  import: "default",
+});
+
+// Helper to get URL from relative icon name (e.g., "angular.svg")
+const getIconUrl = (iconName: string): string | undefined => {
+  const key = `@/browser/assets/catppuccin-icons/${iconName}`;
+  return iconUrls[key] as string;
+};
+
+// Types from mapping.json
+interface IconMapping {
+  fileExtensions?: Record<string, string>;
+  fileNames?: Record<string, string>;
+  languageIds?: Record<string, string>;
+  defaultFile?: string;
+  defaultFolder?: string;
 }
 
-interface FileIconGlyph {
-  character: string;
-  color?: string;
-}
+const iconMapping = mapping as IconMapping;
 
-const setiIconDefinitions: Record<string, SetiIconDefinition> = setiIconTheme.iconDefinitions;
-const setiDefaultIconId = setiIconTheme.file;
-const setiFileNames = setiIconTheme.fileNames as Record<string, string>;
-const setiFileExtensions = setiIconTheme.fileExtensions as Record<string, string>;
-const setiLanguageIds = setiIconTheme.languageIds as Record<string, string>;
-
-const setiDefaultIconDefinition: SetiIconDefinition = setiIconDefinitions[setiDefaultIconId] ?? {
-  fontCharacter: "\\E023",
-};
-
-const decodeFontCharacter = (encoded?: string): string => {
-  if (!encoded) return "";
-  if (!encoded.startsWith("\\")) return encoded;
-
-  const hex = encoded.slice(1);
-  const codePoint = Number.parseInt(hex, 16);
-  if (Number.isNaN(codePoint)) return "";
-
-  return String.fromCodePoint(codePoint);
-};
-
-const collectExtensionCandidates = (fileName: string): string[] => {
-  const parts = fileName.split(".");
-  if (parts.length <= 1) return [];
-
-  const candidates: string[] = [];
-  for (let i = 1; i < parts.length; i++) {
-    const candidate = parts.slice(i).join(".");
-    if (candidate) {
-      candidates.push(candidate);
-    }
-  }
-
-  return candidates;
-};
-
-const resolveSetiIconId = (fileName: string): string | undefined => {
-  const direct = setiFileNames[fileName];
-  if (direct) return direct;
-
+const resolveIconName = (fileName: string): string | undefined => {
   const lowerName = fileName.toLowerCase();
-  if (lowerName !== fileName) {
-    const lowerDirect = setiFileNames[lowerName];
-    if (lowerDirect) return lowerDirect;
-  }
 
-  if (fileName.startsWith(".") && fileName.length > 1) {
-    const withoutDot = fileName.slice(1);
-    const withoutDotMatch = setiFileNames[withoutDot];
-    if (withoutDotMatch) return withoutDotMatch;
-  }
+  // 1. Check exact filename (case-insensitive mostly, but mapping has specific keys)
+  if (iconMapping.fileNames?.[fileName]) return iconMapping.fileNames[fileName];
+  if (iconMapping.fileNames?.[lowerName]) return iconMapping.fileNames[lowerName];
 
-  const extensionCandidates = collectExtensionCandidates(fileName);
-
-  for (const candidate of extensionCandidates) {
-    const extMatch = setiFileExtensions[candidate];
-    if (extMatch) return extMatch;
-
-    const lowerCandidate = candidate.toLowerCase();
-    if (lowerCandidate !== candidate) {
-      const lowerExtMatch = setiFileExtensions[lowerCandidate];
-      if (lowerExtMatch) return lowerExtMatch;
+  // 2. Check extensions
+  const parts = fileName.split(".");
+  if (parts.length > 1) {
+    // Try matching all possible extensions from longest to shortest
+    // e.g. "foo.test.ts" -> "test.ts", "ts"
+    for (let i = 1; i < parts.length; i++) {
+      const ext = parts.slice(i).join(".");
+      if (iconMapping.fileExtensions?.[ext]) {
+        return iconMapping.fileExtensions[ext];
+      }
     }
   }
 
-  const languageMatch = setiLanguageIds[lowerName];
-  if (languageMatch) return languageMatch;
-
-  for (const candidate of extensionCandidates) {
-    const languageIdMatch = setiLanguageIds[candidate];
-    if (languageIdMatch) return languageIdMatch;
-
-    const lowerCandidate = candidate.toLowerCase();
-    if (lowerCandidate !== candidate) {
-      const lowerLanguageIdMatch = setiLanguageIds[lowerCandidate];
-      if (lowerLanguageIdMatch) return lowerLanguageIdMatch;
-    }
-  }
-
-  if (fileName.startsWith(".") && fileName.length > 1) {
-    const trimmedLower = fileName.slice(1).toLowerCase();
-    const trimmedLanguageMatch = setiLanguageIds[trimmedLower];
-    if (trimmedLanguageMatch) return trimmedLanguageMatch;
-  }
-
-  return undefined;
-};
-
-const getSetiIconForFile = (fileName: string): FileIconGlyph => {
-  if (!fileName) {
-    return {
-      character: decodeFontCharacter(setiDefaultIconDefinition.fontCharacter) || " ",
-      color: setiDefaultIconDefinition.fontColor,
-    };
-  }
-
-  const iconId = resolveSetiIconId(fileName);
-  const iconDefinition = iconId ? setiIconDefinitions[iconId] : undefined;
-
-  return {
-    character:
-      decodeFontCharacter(iconDefinition?.fontCharacter) ||
-      decodeFontCharacter(setiDefaultIconDefinition.fontCharacter) ||
-      " ",
-    color: iconDefinition?.fontColor ?? setiDefaultIconDefinition.fontColor,
-  };
-};
-
-const BASE_ICON_STYLE: React.CSSProperties = {
-  fontFamily:
-    '"Seti", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-  fontSize: 14,
-  lineHeight: 1,
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  minWidth: "1rem",
-  height: "1rem",
-  userSelect: "none",
-  fontStyle: "normal",
-  fontWeight: "normal",
-  letterSpacing: "normal",
+  // 3. Fallback to default file
+  return iconMapping.defaultFile;
 };
 
 export interface FileIconProps {
@@ -140,24 +55,48 @@ export interface FileIconProps {
   filePath?: string | null;
   className?: string;
   style?: React.CSSProperties;
+  /**
+   * If true, treat as a folder.
+   * Currently FileIcon is mostly for files, but we support folder defaults.
+   */
+  isFolder?: boolean;
 }
 
-export const FileIcon: React.FC<FileIconProps> = ({ fileName, filePath, className, style }) => {
+export const FileIcon: React.FC<FileIconProps> = ({
+  fileName,
+  filePath,
+  className,
+  style,
+  isFolder,
+}) => {
   const targetName = fileName ?? (filePath ? (filePath.split("/").pop() ?? "") : "");
 
-  const icon = useMemo(() => getSetiIconForFile(targetName ?? ""), [targetName]);
+  const iconSrc = useMemo(() => {
+    if (isFolder) {
+      // TODO: Handle folder open/closed states if needed, for now just default folder
+      const folderIcon = iconMapping.defaultFolder;
+      return folderIcon ? getIconUrl(folderIcon) : undefined;
+    }
 
-  if (!icon.character.trim()) {
+    const iconName = resolveIconName(targetName);
+    return iconName ? getIconUrl(iconName) : undefined;
+  }, [targetName, isFolder]);
+
+  if (!iconSrc) {
     return null;
   }
 
   return (
-    <span
-      aria-hidden="true"
-      className={className ?? undefined}
-      style={{ ...BASE_ICON_STYLE, color: icon.color, ...style }}
-    >
-      {icon.character}
-    </span>
+    <img
+      src={iconSrc}
+      alt={targetName}
+      className={cn("select-none w-[1em] h-[1em]", className)}
+      style={{
+        // Ensure it behaves like an icon
+        display: "inline-block",
+        verticalAlign: "middle",
+        ...style,
+      }}
+    />
   );
 };

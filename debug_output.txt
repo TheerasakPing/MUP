@@ -1,0 +1,34 @@
+Ensure assets directory exists...
+Fetching fileIcons.ts...
+--- CONTENT START ---
+/**
+ * Default file icon associations
+ * Keys are icon file basenames
+ */
+
+type FileIcons = Record<string, {
+  languageIds?: Array<string>
+  fileExtensions?: Array<string>
+  fileNames?: Array<string>
+}>
+
+// @keep-sorted
+const fileIcons: FileIcons = {
+  '3d': {
+    fileExtensions: ['fbx', 'glb', 'gltf', 'ma', 'mb', 'obj', 'prc', 'stl', 'u3d', 'usd'],
+  },
+  'adobe-ae': {
+    fileExtensions: ['aep'],
+  },
+  'adobe-ai': {
+    fileExtensions: ['ai'],
+  },
+  'adobe-id': {
+    fileExtensions: [
+      
+--- CONTENT END ---
+Fetching folderIcons.ts...
+Processing mappings...
+Found 621 icons to download.
+Downloaded 0 icons.
+Mapping written to /Volumes/Data/_2026_projects/MUP/src/browser/assets/catppuccin-icons/mapping.json

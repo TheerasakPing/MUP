@@ -18,14 +18,6 @@
   font-display: swap;
 }
 
-/* Used for file icons */
-@font-face {
-  font-family: "Seti";
-  src: url("../../../public/seti.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 /* Used for terminal Nerd Font icons (yazi, etc.). */
 @font-face {
   font-family: "Nerd Font Symbols";
@@ -245,7 +237,7 @@
     --color-border-subtle: hsl(0 0% 40%); /* #666 - subtle border */
     --color-border-gray: hsl(240 1% 31%); /* #4e4e52 - gray border */
 
-    --color-dark: #1D1D1D; /* dark backgrounds */
+    --color-dark: #1d1d1d; /* dark backgrounds */
     --color-darker: hsl(0 0% 8.6%); /* #161616 - darker backgrounds */
     --color-hover: hsl(0 0% 16.5%); /* #2a2a2b - hover states */
     --color-bg-medium: hsl(0 0% 27%); /* #454545 - medium bg */
@@ -256,7 +248,9 @@
     --color-separator: #262626; /* neutral-800 - dividers/separators */
     --color-separator-light: hsl(0 0% 27%); /* #464647 - lighter separator */
     --color-modal-bg: hsl(0 0% 18%); /* #2d2d30 - modal backgrounds */
-    --color-inline-code-dark-bg: hsl(0 0% 18%); /* #2d2d30 - always dark, for inline code that should stay dark in all themes */
+    --color-inline-code-dark-bg: hsl(
+      0 0% 18%
+    ); /* #2d2d30 - always dark, for inline code that should stay dark in all themes */
 
     --color-accent: hsl(207 100% 40%); /* #007acc - VS Code blue */
     --color-accent-hover: hsl(207 100% 45%); /* #1177bb - accent hover */
@@ -301,7 +295,9 @@
 
     /* Toast and notification backgrounds */
     /* Use solid colors to avoid transparency bleed from underlying elements */
-    --color-toast-success-bg: hsl(207 42% 18%); /* solid approximation of #0e639c @ 13% on dark bg */
+    --color-toast-success-bg: hsl(
+      207 42% 18%
+    ); /* solid approximation of #0e639c @ 13% on dark bg */
     --color-toast-success-text: hsl(207 100% 60%); /* #3794ff */
     --color-toast-error-bg: hsl(5 35% 20%); /* solid approximation of #f14836 @ 15% on dark bg */
     --color-toast-error-text: hsl(5 89% 60%); /* #f14836 */
@@ -600,7 +596,11 @@
   --color-plan-mode-light: color-mix(in srgb, var(--color-plan-mode), white 42%);
   --color-plan-mode-alpha: hsl(from var(--color-plan-mode) h s l / 0.08);
 
-  --color-ask-mode: color-mix(in srgb, var(--color-exec-mode) 62%, var(--color-plan-mode)); /* Blend between plan and exec */
+  --color-ask-mode: color-mix(
+    in srgb,
+    var(--color-exec-mode) 62%,
+    var(--color-plan-mode)
+  ); /* Blend between plan and exec */
   --color-ask-mode-hover: color-mix(in srgb, var(--color-ask-mode), white 18%);
   --color-ask-mode-light: color-mix(in srgb, var(--color-ask-mode), white 42%);
   --color-ask-mode-alpha: hsl(from var(--color-ask-mode) h s l / 0.08);
@@ -814,7 +814,11 @@
   --color-plan-mode-light: color-mix(in srgb, var(--color-plan-mode), white 22%);
   --color-plan-mode-alpha: hsl(from var(--color-plan-mode) h s l / 0.12);
 
-  --color-ask-mode: color-mix(in srgb, var(--color-exec-mode) 62%, var(--color-plan-mode)); /* Blend between plan and exec */
+  --color-ask-mode: color-mix(
+    in srgb,
+    var(--color-exec-mode) 62%,
+    var(--color-plan-mode)
+  ); /* Blend between plan and exec */
   --color-ask-mode-hover: color-mix(in srgb, var(--color-ask-mode), white 10%);
   --color-ask-mode-light: color-mix(in srgb, var(--color-ask-mode), white 22%);
   --color-ask-mode-alpha: hsl(from var(--color-ask-mode) h s l / 0.12);
@@ -1210,7 +1214,6 @@ body,
    meta tag to include 'interactive-widget=resizes-content' which is handled
    in index.html */
 
-
 @utility plan-surface {
   background: var(--surface-plan-gradient);
   border: 1px solid var(--surface-plan-border);
@@ -1528,7 +1531,6 @@ code {
   list-style-type: decimal;
 }
 
-
 .markdown-content.user-message-markdown ul,
 .markdown-content.user-message-markdown ol {
   margin: 0;
@@ -1542,7 +1544,6 @@ code {
   padding: 0 0 4px 0;
   display: list-item;
 }
-
 
 .markdown-content code {
   background: rgba(0, 0, 0, 0);
@@ -1801,7 +1802,6 @@ span.search-highlight {
   transition: opacity 0.2s;
 }
 
-
 .code-run-button {
   position: absolute;
   bottom: 8px;
@@ -1831,7 +1831,6 @@ span.search-highlight {
   transform: translateY(-50%);
   padding: 2px 4px;
 }
-
 
 .code-block-single-line .code-run-button .copy-icon {
   width: 12px;
@@ -2087,8 +2086,6 @@ input[type="checkbox"] {
 .titlebar-no-drag {
   -webkit-app-region: no-drag;
 }
-
-
 
 /* Titlebar inset for WorkspaceHeader when left sidebar is collapsed.
  * The sidebar collapse state is synced to a data attribute on :root by App.tsx.
