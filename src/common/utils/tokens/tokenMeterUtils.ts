@@ -1,6 +1,7 @@
 import type { ChatUsageDisplay } from "./usageAggregator";
 import { getModelStats } from "./modelStats";
 import { supports1MContext } from "../ai/models";
+import { CustomModelMetadata } from "../../orpc/schemas/api";
 
 // NOTE: Provide theme-matching fallbacks so token meters render consistently
 // even if a host environment doesn't define the CSS variables (e.g., an embedded UI).
@@ -59,11 +60,12 @@ export function calculateTokenMeterData(
   usage: ChatUsageDisplay | undefined,
   model: string,
   use1M: boolean,
-  verticalProportions = false
+  verticalProportions = false,
+  customConfig?: CustomModelMetadata
 ): TokenMeterData {
   if (!usage) return { segments: [], totalTokens: 0, totalPercentage: 0 };
 
-  const modelStats = getModelStats(model);
+  const modelStats = getModelStats(model, customConfig);
   const maxTokens = use1M && supports1MContext(model) ? 1_000_000 : modelStats?.max_input_tokens;
 
   // Total tokens used in the request.

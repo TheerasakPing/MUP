@@ -5,6 +5,7 @@ import type { Result } from "@/common/types/result";
 import type {
   AWSCredentialStatus,
   ProviderConfigInfo,
+  CustomModelMetadata,
   ProvidersConfigMap,
 } from "@/common/orpc/types";
 import { log } from "@/node/services/log";
@@ -197,6 +198,44 @@ export class ProviderService {
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       return { success: false, error: `Failed to set models: ${message}` };
+    }
+  }
+
+  /**
+   * Set custom metadata for a specific model
+   */
+  public setModelMetadata(
+    provider: string,
+    modelId: string,
+    metadata: CustomModelMetadata
+  ): Result<void, string> {
+    try {
+      if (this.policyService?.isEnforced()) {
+        if (!this.policyService.isProviderAllowed(provider as ProviderName)) {
+          return { success: false, error: `Provider ${provider} is not allowed by policy` };
+        }
+      }
+
+      const providersConfig = this.config.loadProvidersConfig() ?? {};
+
+      if (!providersConfig[provider]) {
+        providersConfig[provider] = {};
+      }
+
+      const providerConfig = providersConfig[provider] as Record<string, any>;
+      if (!providerConfig.modelMetadata) {
+        providerConfig.modelMetadata = {};
+      }
+
+      providerConfig.modelMetadata[modelId] = metadata;
+
+      this.config.saveProvidersConfig(providersConfig);
+      this.emitConfigChanged();
+
+      return { success: true, data: undefined };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return { success: false, error: `Failed to set model metadata: ${message}` };
     }
   }
 

@@ -92,25 +92,76 @@ function generateLookupKeys(modelString: string): string[] {
  * @param modelString - Format: "provider:model-name" (e.g., "anthropic:claude-opus-4-1", "ollama:gpt-oss:20b")
  * @returns ModelStats or null if model not found
  */
-export function getModelStats(modelString: string): ModelStats | null {
+export function getModelStats(
+  modelString: string,
+  customConfig?: {
+    maxInputTokens?: number;
+    maxOutputTokens?: number;
+    inputCostPerToken?: number;
+    outputCostPerToken?: number;
+    cacheCreationInputTokenCost?: number;
+    cacheReadInputTokenCost?: number;
+  }
+): ModelStats | null {
   const normalized = normalizeGatewayModel(modelString);
   const lookupKeys = generateLookupKeys(normalized);
 
-  // Check models-extra.ts first (overrides for models with incorrect upstream data)
+  let stats: ModelStats | null = null;
+
+  // 1. Check models-extra.ts
   for (const key of lookupKeys) {
     const data = (modelsExtra as Record<string, RawModelData>)[key];
     if (data && isValidModelData(data)) {
-      return extractModelStats(data);
+      stats = extractModelStats(data);
+      break;
     }
   }
 
-  // Fall back to main models.json
-  for (const key of lookupKeys) {
-    const data = (modelsData as Record<string, RawModelData>)[key];
-    if (data && isValidModelData(data)) {
-      return extractModelStats(data);
+  // 2. Fall back to main models.json
+  if (!stats) {
+    for (const key of lookupKeys) {
+      const data = (modelsData as Record<string, RawModelData>)[key];
+      if (data && isValidModelData(data)) {
+        stats = extractModelStats(data);
+        break;
+      }
     }
   }
 
-  return null;
+  // 3. Apply custom config overrides
+  if (customConfig) {
+    if (!stats) {
+      // If we don't have base stats, we can construct one if custom config is sufficient
+      if (
+        typeof customConfig.maxInputTokens === "number" &&
+        typeof customConfig.inputCostPerToken === "number" &&
+        typeof customConfig.outputCostPerToken === "number"
+      ) {
+        return {
+          max_input_tokens: customConfig.maxInputTokens,
+          max_output_tokens: customConfig.maxOutputTokens,
+          input_cost_per_token: customConfig.inputCostPerToken,
+          output_cost_per_token: customConfig.outputCostPerToken,
+          cache_creation_input_token_cost: customConfig.cacheCreationInputTokenCost,
+          cache_read_input_token_cost: customConfig.cacheReadInputTokenCost,
+        };
+      }
+      return null;
+    }
+
+    // Override existing stats
+    return {
+      ...stats,
+      max_input_tokens: customConfig.maxInputTokens ?? stats.max_input_tokens,
+      max_output_tokens: customConfig.maxOutputTokens ?? stats.max_output_tokens,
+      input_cost_per_token: customConfig.inputCostPerToken ?? stats.input_cost_per_token,
+      output_cost_per_token: customConfig.outputCostPerToken ?? stats.output_cost_per_token,
+      cache_creation_input_token_cost:
+        customConfig.cacheCreationInputTokenCost ?? stats.cache_creation_input_token_cost,
+      cache_read_input_token_cost:
+        customConfig.cacheReadInputTokenCost ?? stats.cache_read_input_token_cost,
+    };
+  }
+
+  return stats;
 }

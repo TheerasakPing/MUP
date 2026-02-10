@@ -121,6 +121,17 @@ export const AWSCredentialStatusSchema = z.object({
   secretAccessKeySet: z.boolean(),
 });
 
+export const CustomModelMetadataSchema = z.object({
+  maxInputTokens: z.number().int().positive().optional(),
+  maxOutputTokens: z.number().int().positive().optional(),
+  inputCostPerToken: z.number().nonnegative().optional(),
+  outputCostPerToken: z.number().nonnegative().optional(),
+  cacheCreationInputTokenCost: z.number().nonnegative().optional(),
+  cacheReadInputTokenCost: z.number().nonnegative().optional(),
+});
+
+export type CustomModelMetadata = z.infer<typeof CustomModelMetadataSchema>;
+
 export const ProviderConfigInfoSchema = z.object({
   apiKeySet: z.boolean(),
   /** Whether this provider is configured and ready to use */
@@ -140,6 +151,8 @@ export const ProviderConfigInfoSchema = z.object({
   aws: AWSCredentialStatusSchema.optional(),
   /** Mux Gateway-specific fields */
   couponCodeSet: z.boolean().optional(),
+  /** Custom model metadata (overrides defaults layer) */
+  modelMetadata: z.record(z.string(), CustomModelMetadataSchema).optional(),
 });
 
 export const ProvidersConfigMapSchema = z.record(z.string(), ProviderConfigInfoSchema);
@@ -156,6 +169,14 @@ export const providers = {
   getConfig: {
     input: z.void(),
     output: ProvidersConfigMapSchema,
+  },
+  setModelMetadata: {
+    input: z.object({
+      provider: z.string(),
+      modelId: z.string(),
+      metadata: CustomModelMetadataSchema,
+    }),
+    output: ResultSchema(z.void(), z.string()),
   },
   setModels: {
     input: z.object({

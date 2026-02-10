@@ -1,5 +1,4 @@
-import { Check, Eye, Info, Pencil, Star, Trash2, X } from "lucide-react";
-import { createEditKeyHandler } from "@/browser/utils/ui/keybinds";
+import { Eye, Info, Pencil, Star, Trash2 } from "lucide-react";
 import { GatewayToggleButton } from "@/browser/components/GatewayToggleButton";
 import { cn } from "@/common/lib/utils";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/browser/components/ui/tooltip";
@@ -152,6 +151,8 @@ function ContextWindowSlider(props: {
   );
 }
 
+import { CustomModelMetadata } from "@/common/orpc/schemas/api";
+
 export interface ModelRowProps {
   provider: string;
   modelId: string;
@@ -159,11 +160,8 @@ export interface ModelRowProps {
   aliases?: string[];
   isCustom: boolean;
   isDefault: boolean;
-  isEditing: boolean;
-  editValue?: string;
-  editError?: string | null;
-  saving?: boolean;
-  hasActiveEdit?: boolean;
+  /** Custom metadata for display in tooltip */
+  customMetadata?: CustomModelMetadata;
   /** Whether gateway mode is enabled for this model */
   isGatewayEnabled?: boolean;
   /** Whether 1M context is enabled for this model */
@@ -172,9 +170,6 @@ export interface ModelRowProps {
   isHiddenFromSelector?: boolean;
   onSetDefault: () => void;
   onStartEdit?: () => void;
-  onSaveEdit?: () => void;
-  onCancelEdit?: () => void;
-  onEditChange?: (value: string) => void;
   onRemove?: () => void;
   /** Toggle gateway mode for this model */
   onToggleGateway?: () => void;
@@ -185,56 +180,9 @@ export interface ModelRowProps {
 }
 
 export function ModelRow(props: ModelRowProps) {
-  const stats = getModelStats(props.fullId);
+  const stats = getModelStats(props.fullId, props.customMetadata);
 
-  // Editing mode - render as a full-width row
-  if (props.isEditing) {
-    return (
-      <tr className="border-border-medium border-b">
-        <td colSpan={4} className="px-2 py-1.5 md:px-3">
-          <div className="flex items-center gap-2">
-            <ProviderWithIcon
-              provider={props.provider}
-              displayName
-              className="text-muted w-16 shrink-0 overflow-hidden text-xs md:w-20"
-            />
-            <input
-              type="text"
-              value={props.editValue ?? props.modelId}
-              onChange={(e) => props.onEditChange?.(e.target.value)}
-              onKeyDown={createEditKeyHandler({
-                onSave: () => props.onSaveEdit?.(),
-                onCancel: () => props.onCancelEdit?.(),
-              })}
-              className="bg-modal-bg border-border-medium focus:border-accent min-w-0 flex-1 rounded border px-2 py-0.5 font-mono text-xs focus:outline-none"
-              autoFocus
-            />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={props.onSaveEdit}
-              disabled={props.saving}
-              className="text-accent hover:text-accent-dark h-6 w-6"
-              title="Save changes (Enter)"
-            >
-              <Check className="h-3.5 w-3.5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={props.onCancelEdit}
-              disabled={props.saving}
-              className="text-muted hover:text-foreground h-6 w-6"
-              title="Cancel (Escape)"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
-          </div>
-          {props.editError && <div className="text-error mt-1 text-xs">{props.editError}</div>}
-        </td>
-      </tr>
-    );
-  }
+  // Editing mode is no longer handled inline in ModelRow
 
   return (
     <tr
@@ -358,7 +306,6 @@ export function ModelRow(props: ModelRowProps) {
                   e.stopPropagation();
                   props.onStartEdit?.();
                 }}
-                disabled={Boolean(props.saving) || Boolean(props.hasActiveEdit)}
                 className="text-muted hover:text-foreground p-0.5 transition-colors"
                 aria-label="Edit model"
               >
@@ -370,7 +317,6 @@ export function ModelRow(props: ModelRowProps) {
                   e.stopPropagation();
                   props.onRemove?.();
                 }}
-                disabled={Boolean(props.saving) || Boolean(props.hasActiveEdit)}
                 className="text-muted hover:text-error p-0.5 transition-colors"
                 aria-label="Remove model"
               >

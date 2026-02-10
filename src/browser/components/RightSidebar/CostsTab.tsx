@@ -26,6 +26,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
 import { PostCompactionSection } from "./PostCompactionSection";
 import { usePostCompactionState } from "@/browser/hooks/usePostCompactionState";
 import { useOptionalWorkspaceContext } from "@/browser/contexts/WorkspaceContext";
+import { useProvidersConfig } from "@/browser/hooks/useProvidersConfig";
 
 /**
  * Calculate cost with elevated pricing for 1M context (200k-1M tokens)
@@ -40,6 +41,17 @@ const calculateElevatedCost = (tokens: number, standardRate: number, isInput: bo
   const elevatedMultiplier = isInput ? 2.0 : 1.5;
   const elevatedCost = elevatedTokens * standardRate * elevatedMultiplier;
   return baseCost + elevatedCost;
+};
+
+const resolveMetadata = (modelId: string | undefined, config: any) => {
+  if (!config || !modelId) return undefined;
+  const colonIndex = modelId.indexOf(":");
+  if (colonIndex !== -1) {
+    const provider = modelId.slice(0, colonIndex);
+    const id = modelId.slice(colonIndex + 1);
+    return config[provider]?.modelMetadata?.[id];
+  }
+  return undefined;
 };
 
 type ViewMode = "last-request" | "session";
@@ -61,6 +73,7 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
     listener: true,
   });
   const { has1MContext } = useProviderOptions();
+  const { config } = useProvidersConfig();
   const pendingSendOptions = useSendMessageOptions(workspaceId);
 
   // Post-compaction context state for UI display
@@ -73,9 +86,21 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
   // Token counts come from usage metadata, but context limits/1M eligibility should
   // follow the currently selected model unless a stream is actively running.
   const contextDisplayModel = usage.liveUsage?.model ?? pendingSendOptions.baseModel;
+
+  // Resolve custom model metadata if available
+  const customMetadata = React.useMemo(
+    () => resolveMetadata(contextDisplayModel, config),
+    [config, contextDisplayModel]
+  );
+
   // Align warning with /compact model resolution so it matches actual compaction behavior.
   const effectiveCompactionModel =
     resolveCompactionModel(preferredCompactionModel) ?? contextDisplayModel;
+
+  const compactionModelMetadata = React.useMemo(
+    () => resolveMetadata(effectiveCompactionModel, config),
+    [config, effectiveCompactionModel]
+  );
 
   // Auto-compaction settings: threshold per-model (100 = disabled)
   const { threshold: autoCompactThreshold, setThreshold: setAutoCompactThreshold } =
@@ -129,7 +154,8 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
                     contextUsage,
                     contextDisplayModel,
                     has1MContext(contextDisplayModel),
-                    false
+                    false,
+                    customMetadata
                   )
                 : { segments: [], totalTokens: 0, totalPercentage: 0 };
 
@@ -140,7 +166,10 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
                   return undefined;
 
                 const thresholdTokens = Math.round((autoCompactThreshold / 100) * maxTokens);
-                const compactionStats = getModelStats(effectiveCompactionModel);
+                const compactionStats = getModelStats(
+                  effectiveCompactionModel,
+                  compactionModelMetadata
+                );
                 const compactionMaxTokens =
                   has1MContext(effectiveCompactionModel) &&
                   supports1MContext(effectiveCompactionModel)
