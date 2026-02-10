@@ -1,0 +1,104 @@
+{
+  "name": "mup",
+  "displayName": "mup",
+  "description": "Open mup workspaces directly from VS Code",
+  "version": "0.1.0",
+  "publisher": "coder",
+  "icon": "icon.png",
+  "extensionKind": [
+    "ui"
+  ],
+  "engines": {
+    "vscode": "^1.106.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "mup",
+    "workspace",
+    "remote",
+    "ssh",
+    "development"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:mup.chatView",
+    "onCommand:mup.openWorkspace",
+    "onCommand:mup.configureConnection",
+    "onCommand:mup.debugConnection"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mup.openWorkspace",
+        "title": "mup: Open Workspace"
+      },
+      {
+        "command": "mup.configureConnection",
+        "title": "mup: Configure Connection"
+      },
+      {
+        "command": "mup.debugConnection",
+        "title": "mup: Debug Connection"
+      }
+    ],
+    "viewsContainers": {
+      "secondarySidebar": [
+        {
+          "id": "mupSecondary",
+          "title": "mup",
+          "icon": "icon.png"
+        }
+      ]
+    },
+    "views": {
+      "mupSecondary": [
+        {
+          "id": "mup.chatView",
+          "name": "Chat (Preview)",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "mup",
+      "properties": {
+        "mup.connectionMode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "server-only",
+            "file-only"
+          ],
+          "default": "auto",
+          "scope": "machine",
+          "description": "How the mup VS Code extension connects to mup (prefer server, require server, or use local files)."
+        },
+        "mup.serverUrl": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "Override the mup server URL (leave empty to auto-discover). Example: http://127.0.0.1:3000"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "bun run compile",
+    "compile": "node esbuild.config.js",
+    "watch": "node esbuild.config.js --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.106.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.27.0",
+    "typescript": "^5.3.0"
+  },
+  "license": "AGPL-3.0-only",
+  "packageManager": "bun@1.1.42"
+}
+
