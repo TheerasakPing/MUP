@@ -280,7 +280,8 @@
       "artifactName": "${productName}-${version}-${arch}.${ext}",
       "hardenedRuntime": false,
       "gatekeeperAssess": false,
-      "notarize": false
+      "notarize": false,
+      "identity": null
     },
     "linux": {
       "target": "AppImage",

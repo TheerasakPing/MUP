@@ -4,6 +4,10 @@
   "description": "Open mup workspaces directly from VS Code",
   "version": "0.1.0",
   "publisher": "coder",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheerasakPing/MUP.git"
+  },
   "icon": "icon.png",
   "extensionKind": [
     "ui"
@@ -101,4 +105,3 @@
   "license": "AGPL-3.0-only",
   "packageManager": "bun@1.1.42"
 }
-
