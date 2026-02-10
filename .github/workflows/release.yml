@@ -114,6 +114,10 @@ jobs:
       - uses: ./.github/actions/setup-mux
 
       - uses: ./.github/actions/build-vscode-extension
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
+
+      - name: Wait for GitHub release
 
       - name: Wait for GitHub release
         env:
