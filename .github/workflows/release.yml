@@ -58,11 +58,15 @@ jobs:
       - name: Build application
         run: bun run build
 
+      - name: Debug - List build directory
+        run: ls -R build/
+
       - name: Package and publish for macOS (Unsigned)
         # Using standard electron-builder command instead of make target to skip signing logic
         run: bun x electron-builder --mac --x64 --arm64 --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: electron-builder
 
   build-linux:
     name: Build and Release Linux
@@ -77,6 +81,11 @@ jobs:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0 # Required for git describe to find tags
           persist-credentials: false
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libfuse2
 
       - uses: ./.github/actions/setup-mux
 
