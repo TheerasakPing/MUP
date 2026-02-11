@@ -400,7 +400,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
               data-tutorial="terminal-button"
             >
               <img
-                src={getCatppuccinIconUrl("bash.svg")}
+                src={getCatppuccinIconUrl("terminal.svg")}
                 alt="New terminal"
                 className="h-4 w-4 shrink-0 select-none"
                 draggable={false}
