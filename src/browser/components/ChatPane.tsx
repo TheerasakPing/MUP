@@ -7,8 +7,8 @@ import React, {
   useDeferredValue,
   useMemo,
 } from "react";
-import { Lightbulb } from "lucide-react";
-import { getCatppuccinIconUrl } from "./FileIcon";
+
+import { getRootIconUrl } from "./FileIcon";
 import { MessageListProvider } from "./Messages/MessageListContext";
 import { cn } from "@/common/lib/utils";
 import { MessageRenderer } from "./Messages/MessageRenderer";
@@ -595,7 +595,7 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
                 <p>Send a message below to begin</p>
                 <p className="text-muted mt-5 flex items-start gap-2 text-xs">
                   <img
-                    src={getCatppuccinIconUrl("readme.svg")}
+                    src={getRootIconUrl("readme.svg")}
                     alt="Tip"
                     className="mt-0.5 h-4 w-4 shrink-0 select-none"
                     draggable={false}

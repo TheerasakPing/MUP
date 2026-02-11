@@ -10,7 +10,7 @@
 import React from "react";
 import { ExternalLink, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
-import { FileIcon, getCatppuccinIconUrl } from "../../FileIcon";
+import { FileIcon, getRootIconUrl } from "../../FileIcon";
 import { formatTabDuration, type ReviewStats } from "./registry";
 import { formatKeybind, KEYBINDS } from "@/browser/utils/ui/keybinds";
 import { cn } from "@/common/lib/utils";
@@ -134,7 +134,7 @@ export const MonitorTabLabel: React.FC<MonitorTabLabelProps> = ({ workspaceId })
 export const ExplorerTabLabel: React.FC = () => (
   <span className="inline-flex items-center gap-1">
     <img
-      src={getCatppuccinIconUrl("_folder.svg")}
+      src={getRootIconUrl("folder.svg")}
       alt="Explorer"
       className="h-3 w-3 shrink-0 select-none"
       draggable={false}
@@ -205,7 +205,7 @@ export const TerminalTabLabel: React.FC<TerminalTabLabelProps> = ({
   return (
     <span className="inline-flex items-center gap-1">
       <img
-        src={getCatppuccinIconUrl("bash.svg")}
+        src={getRootIconUrl("bash.svg")}
         alt="Terminal"
         className="h-3 w-3 shrink-0 select-none"
         draggable={false}

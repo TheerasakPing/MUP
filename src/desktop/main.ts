@@ -658,7 +658,7 @@ async function loadServices(): Promise<void> {
         const loadedConfig = config.loadConfigOrDefault();
         const configuredBindHost =
           typeof loadedConfig.apiServerBindHost === "string" &&
-          loadedConfig.apiServerBindHost.trim()
+            loadedConfig.apiServerBindHost.trim()
             ? loadedConfig.apiServerBindHost.trim()
             : undefined;
         const serveStatic = loadedConfig.apiServerServeWebUi === true;
@@ -743,6 +743,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
+      devTools: true,
       preload: path.join(__dirname, "../preload.js"),
     },
     title: "mux - coder multiplexer",
@@ -780,6 +781,7 @@ function createWindow() {
   mainWindow.once("ready-to-show", () => {
     console.log(`[${timestamp()}] Main window ready to show`);
     mainWindow?.show();
+    mainWindow?.webContents.openDevTools();
     closeSplashScreen();
     console.timeEnd("main window startup");
   });
@@ -820,6 +822,11 @@ function createWindow() {
     const htmlPath = path.join(__dirname, "../index.html");
     console.log(`[${timestamp()}] [window] Loading from file: ${htmlPath}`);
     void mainWindow.loadFile(htmlPath);
+
+    // Open DevTools in production too (per user request)
+    mainWindow.webContents.once("did-finish-load", () => {
+      mainWindow?.webContents.openDevTools();
+    });
   }
 
   // Track when content finishes loading
