@@ -25,7 +25,7 @@ export interface TokenPredictionInput {
  * Uses ai-tokenizer for counting and model pricing for cost estimation
  */
 export function predictTokenUsage(params: TokenPredictionInput): TokenPrediction {
-  const { messageContent, attachedFiles, currentContext, model, historicalAvgOutput } = params;
+  const { messageContent, attachedFiles, currentContext, model: _model, historicalAvgOutput } = params;
 
   // Simple estimation (actual implementation would use ai-tokenizer)
   const messageTokens = Math.ceil(messageContent.length / 4);

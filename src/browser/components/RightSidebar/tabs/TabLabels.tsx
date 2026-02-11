@@ -8,9 +8,9 @@
  */
 
 import React from "react";
-import { ExternalLink, FolderTree, Terminal as TerminalIcon, X } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
-import { FileIcon } from "../../FileIcon";
+import { FileIcon, getCatppuccinIconUrl } from "../../FileIcon";
 import { formatTabDuration, type ReviewStats } from "./registry";
 import { formatKeybind, KEYBINDS } from "@/browser/utils/ui/keybinds";
 import { cn } from "@/common/lib/utils";
@@ -107,10 +107,14 @@ export const StatsTabLabel: React.FC<StatsTabLabelProps> = ({ workspaceId }) => 
   );
 };
 
-/** Explorer tab label with folder tree icon */
 export const ExplorerTabLabel: React.FC = () => (
   <span className="inline-flex items-center gap-1">
-    <FolderTree className="h-3 w-3 shrink-0" />
+    <img
+      src={getCatppuccinIconUrl("_folder.svg")}
+      alt="Explorer"
+      className="h-3 w-3 shrink-0 select-none"
+      draggable={false}
+    />
     Explorer
   </span>
 );
@@ -176,7 +180,12 @@ export const TerminalTabLabel: React.FC<TerminalTabLabelProps> = ({
 
   return (
     <span className="inline-flex items-center gap-1">
-      <TerminalIcon className="h-3 w-3 shrink-0" />
+      <img
+        src={getCatppuccinIconUrl("bash.svg")}
+        alt="Terminal"
+        className="h-3 w-3 shrink-0 select-none"
+        draggable={false}
+      />
       <span className="max-w-[20ch] min-w-0 truncate">{displayName}</span>
       <Tooltip>
         <TooltipTrigger asChild>

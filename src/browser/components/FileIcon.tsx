@@ -10,7 +10,7 @@ const iconUrls = import.meta.glob("@/browser/assets/catppuccin-icons/*.svg", {
 });
 
 // Helper to get URL from relative icon name (e.g., "angular.svg")
-const getIconUrl = (iconName: string): string | undefined => {
+export const getCatppuccinIconUrl = (iconName: string): string | undefined => {
   const key = `@/browser/assets/catppuccin-icons/${iconName}`;
   return iconUrls[key] as string;
 };
@@ -75,11 +75,11 @@ export const FileIcon: React.FC<FileIconProps> = ({
     if (isFolder) {
       // TODO: Handle folder open/closed states if needed, for now just default folder
       const folderIcon = iconMapping.defaultFolder;
-      return folderIcon ? getIconUrl(folderIcon) : undefined;
+      return folderIcon ? getCatppuccinIconUrl(folderIcon) : undefined;
     }
 
     const iconName = resolveIconName(targetName);
-    return iconName ? getIconUrl(iconName) : undefined;
+    return iconName ? getCatppuccinIconUrl(iconName) : undefined;
   }, [targetName, isFolder]);
 
   if (!iconSrc) {

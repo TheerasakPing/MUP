@@ -8,6 +8,7 @@ import React, {
   useMemo,
 } from "react";
 import { Lightbulb } from "lucide-react";
+import { getCatppuccinIconUrl } from "./FileIcon";
 import { MessageListProvider } from "./Messages/MessageListContext";
 import { cn } from "@/common/lib/utils";
 import { MessageRenderer } from "./Messages/MessageRenderer";
@@ -465,11 +466,11 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
   // Uses same logic as useResumeManager for DRY
   const interruption = workspaceState
     ? getInterruptionContext(
-        workspaceState.messages,
-        workspaceState.pendingStreamStartTime,
-        workspaceState.runtimeStatus,
-        workspaceState.lastAbortReason
-      )
+      workspaceState.messages,
+      workspaceState.pendingStreamStartTime,
+      workspaceState.runtimeStatus,
+      workspaceState.lastAbortReason
+    )
     : null;
 
   const showRetryBarrier = workspaceState
@@ -527,17 +528,17 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
   // When editing, find the cutoff point
   const editCutoffHistoryId = editingMessage
     ? transformedMessages.find(
-        (
-          msg
-        ): msg is Exclude<
-          DisplayedMessage,
-          { type: "history-hidden" | "workspace-init" | "compaction-boundary" }
-        > =>
-          msg.type !== "history-hidden" &&
-          msg.type !== "workspace-init" &&
-          msg.type !== "compaction-boundary" &&
-          msg.historyId === editingMessage.id
-      )?.historyId
+      (
+        msg
+      ): msg is Exclude<
+        DisplayedMessage,
+        { type: "history-hidden" | "workspace-init" | "compaction-boundary" }
+      > =>
+        msg.type !== "history-hidden" &&
+        msg.type !== "workspace-init" &&
+        msg.type !== "compaction-boundary" &&
+        msg.historyId === editingMessage.id
+    )?.historyId
     : undefined;
 
   // Find the ID of the latest propose_plan tool call for external edit detection
@@ -593,7 +594,12 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
                 <h3>No Messages Yet</h3>
                 <p>Send a message below to begin</p>
                 <p className="text-muted mt-5 flex items-start gap-2 text-xs">
-                  <Lightbulb aria-hidden="true" className="mt-0.5 h-3 w-3 shrink-0" />
+                  <img
+                    src={getCatppuccinIconUrl("readme.svg")}
+                    alt="Tip"
+                    className="mt-0.5 h-4 w-4 shrink-0 select-none"
+                    draggable={false}
+                  />
                   <span>
                     Tip: Add a{" "}
                     <code className="bg-inline-code-dark-bg text-code-string rounded-[3px] px-1.5 py-0.5 font-mono text-[11px]">
@@ -636,8 +642,8 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
                           data-testid="chat-message"
                           data-message-id={
                             msg.type !== "history-hidden" &&
-                            msg.type !== "workspace-init" &&
-                            msg.type !== "compaction-boundary"
+                              msg.type !== "workspace-init" &&
+                              msg.type !== "compaction-boundary"
                               ? msg.historyId
                               : undefined
                           }
@@ -658,10 +664,10 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
                             userMessageNavigation={
                               msg.type === "user" && userMessageNavMap
                                 ? {
-                                    prevUserMessageId: userMessageNavMap.get(msg.historyId)?.prev,
-                                    nextUserMessageId: userMessageNavMap.get(msg.historyId)?.next,
-                                    onNavigate: handleNavigateToMessage,
-                                  }
+                                  prevUserMessageId: userMessageNavMap.get(msg.historyId)?.prev,
+                                  nextUserMessageId: userMessageNavMap.get(msg.historyId)?.next,
+                                  onNavigate: handleNavigateToMessage,
+                                }
                                 : undefined
                             }
                           />
