@@ -49,7 +49,7 @@ export class CostTrackingService {
     private readonly filePath: string;
 
     constructor(config: Config) {
-        this.filePath = path.join(config.mupDir, "cost-history.json");
+        this.filePath = path.join(config.rootDir, "cost-history.json");
     }
 
     // -- Read / Write ---------------------------------------------------------

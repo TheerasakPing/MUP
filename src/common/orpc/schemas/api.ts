@@ -1773,6 +1773,7 @@ export const DailySummarySchema = z.object({
   totalCost: z.number(),
   requestCount: z.number(),
   byModel: z.record(
+    z.string(),
     z.object({ cost: z.number(), requests: z.number(), tokens: z.number() }),
   ),
 });
@@ -1795,6 +1796,7 @@ export const CostSummaryTotalsSchema = z.object({
 export type CostSummaryTotalsType = z.infer<typeof CostSummaryTotalsSchema>;
 
 export const ModelCostBreakdownSchema = z.record(
+  z.string(),
   z.object({ cost: z.number(), requests: z.number(), tokens: z.number() }),
 );
 

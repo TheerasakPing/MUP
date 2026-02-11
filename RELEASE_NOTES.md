@@ -1,13 +1,13 @@
 # Mux Release Notes
 
-## [0.17.3] - 2026-02-11
+## [0.17.4] - 2026-02-11
 
 ### ✨ New Features
 
 #### 1. Custom Model Presets
 - Full-stack system to save and load model configurations.
 - Import/Export presets as JSON for easy sharing.
-- Persistent storage for custom model sets.
+- Persistent storage for cost tracking.
 
 #### 2. Model Health & Validation
 - Automated health check service to ping and validate model endpoints.
@@ -22,6 +22,7 @@
 ### 🐛 Bug Fixes
 - Fixed build system stability across Linux, macOS, and Windows.
 - Resolved styling glitches in settings modal.
+- Fixed TypeScript build errors in cost tracking service and release workflow.
 
 ---
 

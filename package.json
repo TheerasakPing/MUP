@@ -1,6 +1,6 @@
 {
   "name": "mup",
-  "version": "0.17.3",
+  "version": "0.17.4",
   "description": "mup - coder multiplexer",
   "author": "Coder",
   "main": "dist/cli/index.js",

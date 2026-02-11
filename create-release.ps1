@@ -3,8 +3,8 @@ $ErrorActionPreference = "Stop"
 # Configuration
 $owner = "TheerasakPing"
 $repo = "MUP"
-$tag = "v0.17.3"
-$branch = "main" # Or the branch you want to release from
+$tag = "v0.17.4"
+$branch = "main"
 $token = $env:GITHUB_TOKEN
 
 # Validation
@@ -27,14 +27,9 @@ try {
     Write-Host "✅ Release '$tag' already exists!"
     Write-Host "Release URL: $($existingRelease.html_url)"
     Write-Host "Status: $(if($existingRelease.draft) {'Draft'} else {'Published'})"
-    
-    # Optional: If it's a draft, publish it?
-    # For now, we assume if it exists, we are good.
     exit 0
 }
 catch {
-    # 404 means it doesn't exist, proceed.
-    # Other errors are real errors.
     if ($_.Exception.Response.StatusCode -ne 404) {
         Write-Host "❌ Error checking for existing release:"
         Write-Host "Status Code: $($_.Exception.Response.StatusCode.value__)"
@@ -44,20 +39,18 @@ catch {
 }
 
 # 2. Prepare Release Body
-# Read from RELEASE_NOTES.md or use a generated one.
-# For simplicity, using the notes we drafted earlier.
 $releaseNotes = @"
 ## 🚀 Features
 
-- **Custom Model Presets**: Define and save your own model configurations for quick access.
-- **Model Health & Validation**: Built-in checks to ensure model parameters are valid and endpoints are reachable.
-- **Realtime Agent Status Monitor**: Visual indicator of agent activity and status in the sidebar.
+- **Custom Model Presets**: Save and load model configurations.
+- **Model Health & Validation**: Built-in checks for model endpoints.
+- **Realtime Agent Status Monitor**: Visual dashboard of agent activity.
 
 ## 🐛 Bug Fixes
 
 - Fixed build system stability across Linux, macOS, and Windows.
-- Fixed an issue where the model list wouldn't update after adding a new provider.
-- Resolved styling glitches in the settings modal.
+- Fixed TypeScript build errors in cost tracking service.
+- Resolved styling glitches in settings modal.
 "@
 
 $body = @{
