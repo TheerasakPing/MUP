@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-// Direct icon imports from /icons directory
-import workflowIcon from "@/../icons/workflow.svg";
-import searchIcon from "@/../icons/search.svg";
-import serverlessIcon from "@/../icons/serverless.svg";
-import editorconfigIcon from "@/../icons/editorconfig.svg";
-import terminalIcon from "@/../icons/terminal.svg";
+// Direct icon imports from /icons directory (3 levels up from src/browser/components/)
+import workflowIcon from "../../../icons/workflow.svg";
+import searchIcon from "../../../icons/search.svg";
+import serverlessIcon from "../../../icons/serverless.svg";
+import editorconfigIcon from "../../../icons/editorconfig.svg";
+import terminalIcon from "../../../icons/terminal.svg";
 import { CUSTOM_EVENTS } from "@/common/constants/events";
 import { cn } from "@/common/lib/utils";
 
