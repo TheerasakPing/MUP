@@ -69,7 +69,6 @@ import { AgentModePicker } from "../AgentModePicker";
 import { ContextUsageIndicatorButton } from "../ContextUsageIndicatorButton";
 import { useWorkspaceUsage } from "@/browser/stores/WorkspaceStore";
 import { useProviderOptions } from "@/browser/hooks/useProviderOptions";
-import { useProvidersConfig } from "@/browser/hooks/useProvidersConfig";
 import { useAutoCompactionSettings } from "@/browser/hooks/useAutoCompactionSettings";
 import { useIdleCompactionHours } from "@/browser/hooks/useIdleCompactionHours";
 import { calculateTokenMeterData } from "@/common/utils/tokens/tokenMeterUtils";
@@ -132,6 +131,7 @@ import {
   filePartsToChatAttachments,
   type SkillResolutionTarget,
 } from "./utils";
+import { TokenPredictor } from "./TokenPredictor";
 
 // localStorage quotas are environment-dependent and relatively small.
 // Be conservative here so we can warn the user before writes start failing.
@@ -2403,6 +2403,14 @@ const ChatInputInner: React.FC<ChatInputProps> = (props) => {
 
           {/* Attachments */}
           <ChatAttachments attachments={attachments} onRemove={handleRemoveAttachment} />
+
+          {/* Token Usage Predictor */}
+          <TokenPredictor
+            text={input}
+            attachments={attachments}
+            reviews={reviewData}
+            model={baseModel}
+          />
 
           <div className="flex flex-col gap-0.5" data-component="ChatModeToggles">
             {/* Editing indicator - workspace only */}
