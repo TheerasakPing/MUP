@@ -68,10 +68,16 @@ TSGO := bun run node_modules/@typescript/native-preview/bin/tsgo.js
 
 # Node.js version check
 REQUIRED_NODE_VERSION := 20
-NODE_VERSION := $(shell node --version | sed 's/v\([0-9]*\).*/\1/')
+# ImageMagick command detection (magick for v7/Windows, convert for v6/Linux/Mac)
+MAGICK := $(shell command -v magick >/dev/null 2>&1 && echo magick || echo convert)
+
+# Node.js version check
+REQUIRED_NODE_VERSION := 20
+# Skip check if node is missing (we largely use Bun)
+NODE_VERSION := $(shell node --version 2>/dev/null | awk -Fv '{print $$2}' | awk -F. '{print $$1}' || echo "0")
 
 define check_node_version
-	@if [ "$(NODE_VERSION)" -lt "$(REQUIRED_NODE_VERSION)" ]; then \
+	@if [ "$(NODE_VERSION)" != "0" ] && [ "$(NODE_VERSION)" -lt "$(REQUIRED_NODE_VERSION)" ]; then \
 		echo "Error: Node.js v$(REQUIRED_NODE_VERSION) or higher is required"; \
 		echo "Current version: v$(NODE_VERSION)"; \
 		echo ""; \
@@ -256,7 +262,7 @@ build-static: ## Copy static assets to dist
 
 # Always regenerate version file (marked as .PHONY above)
 version: ## Generate version file
-	@./scripts/generate-version.sh
+	@bun scripts/generate-version.ts
 
 src/version.ts: version
 

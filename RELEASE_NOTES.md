@@ -1,6 +1,6 @@
 # Mux Release Notes
 
-## [0.17.2] - 2026-02-11
+## [0.17.3] - 2026-02-11
 
 ### ✨ New Features
 
@@ -18,6 +18,10 @@
 - Live dashboard in the sidebar showing agent activity.
 - Visual streaming metrics (TPS, token counts, elapsed time).
 - Session cost tracking and per-model performance breakdown.
+
+### 🐛 Bug Fixes
+- Fixed build system stability across Linux, macOS, and Windows.
+- Resolved styling glitches in settings modal.
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "mup",
-  "version": "0.17.2",
+  "version": "0.17.3",
   "description": "mup - coder multiplexer",
   "author": "Coder",
   "main": "dist/cli/index.js",
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "make dev",
-    "prebuild:main": "./scripts/generate-version.sh",
+    "prebuild:main": "bun scripts/generate-version.ts",
     "build": "make build",
     "start": "make start",
     "typecheck": "make typecheck",
