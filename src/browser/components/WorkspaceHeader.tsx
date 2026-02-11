@@ -6,6 +6,7 @@ import searchIcon from "../../../icons/search.svg";
 import serverlessIcon from "../../../icons/serverless.svg";
 import editorconfigIcon from "../../../icons/editorconfig.svg";
 import terminalIcon from "../../../icons/terminal.svg";
+import explorerIcon from "../../../icons/explorer.svg";
 import { CUSTOM_EVENTS } from "@/common/constants/events";
 import { cn } from "@/common/lib/utils";
 
@@ -226,8 +227,8 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
                 className="mobile-menu-btn text-muted hover:text-foreground hidden h-6 w-6 shrink-0"
               >
                 <img
-                  src={workflowIcon}
-                  alt="Menu"
+                  src={explorerIcon}
+                  alt="Explorer"
                   className="h-3.5 w-3.5 shrink-0 select-none"
                   draggable={false}
                 />

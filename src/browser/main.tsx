@@ -34,9 +34,13 @@ window.addEventListener("unhandledrejection", (event) => {
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  import.meta.env.MODE === "development" ? (
+    <React.StrictMode>
+      <AppLoader />
+    </React.StrictMode>
+  ) : (
     <AppLoader />
-  </React.StrictMode>
+  )
 );
 
 // Register service worker for PWA support

@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
-import App from "../App";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { AuthTokenModal } from "./AuthTokenModal";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import { LoadingScreen } from "./LoadingScreen";
 import { StartupConnectionError } from "./StartupConnectionError";
+
+// Lazy load main App for better initial load performance
+const App = lazy(() => import("../App"));
 import { useWorkspaceStoreRaw, workspaceStore } from "../stores/WorkspaceStore";
 import { useGitStatusStoreRaw } from "../stores/GitStatusStore";
 import { useBackgroundBashStoreRaw } from "../stores/BackgroundBashStore";
@@ -152,7 +154,9 @@ function AppLoaderInner() {
   return (
     <TelemetryEnabledProvider>
       <TerminalRouterProvider>
-        <App />
+        <Suspense fallback={<LoadingScreen statusText="Loading application..." />}>
+          <App />
+        </Suspense>
       </TerminalRouterProvider>
     </TelemetryEnabledProvider>
   );

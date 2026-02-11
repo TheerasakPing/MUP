@@ -5,6 +5,7 @@ import svgr from "vite-plugin-svgr";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import { visualizer } from "rollup-plugin-visualizer";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const disableMermaid = process.env.VITE_DISABLE_MERMAID === "1";
@@ -100,6 +101,30 @@ const basePlugins = [
   tailwindcss(),
 ];
 
+// Conditional plugins
+const getPlugins = (mode: string) => {
+  const plugins = [...basePlugins];
+
+  // Add visualizer in analyze mode
+  if (process.env.ANALYZE === "true") {
+    plugins.push(
+      visualizer({
+        open: true,
+        filename: "dist/stats.html",
+        gzipSize: true,
+        brotliSize: true,
+      })
+    );
+  }
+
+  // Add top-level await in development
+  if (mode === "development") {
+    plugins.push(topLevelAwait());
+  }
+
+  return plugins;
+};
+
 export default defineConfig(({ mode }) => {
   const isProfiling = mode === "profiling";
   const aliasMap: Record<string, string> = { ...alias };
@@ -110,8 +135,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    // This prevents mermaid initialization errors in production while allowing dev to work
-    plugins: mode === "development" ? [...basePlugins, topLevelAwait()] : basePlugins,
+    plugins: getPlugins(mode),
     resolve: {
       alias: aliasMap,
     },
@@ -124,7 +148,7 @@ export default defineConfig(({ mode }) => {
       outDir: "dist",
       assetsDir: ".",
       emptyOutDir: false,
-      sourcemap: true,
+      sourcemap: mode === "development" || isProfiling, // Only in dev/profiling for debugging
       minify: "esbuild",
       rollupOptions: {
         input: {
@@ -135,17 +159,6 @@ export default defineConfig(({ mode }) => {
           format: "es",
           inlineDynamicImports: false,
           sourcemapExcludeSources: false,
-          manualChunks(id) {
-            const normalizedId = id.split(path.sep).join("/");
-            if (normalizedId.includes("node_modules/ai-tokenizer/encoding/")) {
-              const chunkName = path.basename(id, path.extname(id));
-              return `tokenizer-encoding-${chunkName}`;
-            }
-            if (normalizedId.includes("node_modules/ai-tokenizer/")) {
-              return "tokenizer-base";
-            }
-            return undefined;
-          },
         },
       },
       chunkSizeWarningLimit: 2000,
