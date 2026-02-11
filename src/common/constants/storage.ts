@@ -301,6 +301,12 @@ export const PREFERRED_COMPACTION_MODEL_KEY = "preferredCompactionModel";
 export const DIFF_VIEW_MODE_KEY = "diffViewMode";
 
 /**
+ * Code snippets library storage key (global)
+ * Format: "codeSnippets:list"
+ */
+export const CODE_SNIPPETS_KEY = "codeSnippets:list";
+
+/**
  * Get the localStorage key for the preferred System 1 model (global)
  * Format: "preferredSystem1Model"
  */
