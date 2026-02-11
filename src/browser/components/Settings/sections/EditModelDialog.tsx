@@ -34,6 +34,8 @@ export function EditModelDialog({
   const [maxOutputTokens, setMaxOutputTokens] = useState<string>("");
   const [inputCost, setInputCost] = useState<string>("");
   const [outputCost, setOutputCost] = useState<string>("");
+  const [cacheCreationCost, setCacheCreationCost] = useState<string>("");
+  const [cacheReadCost, setCacheReadCost] = useState<string>("");
 
   useEffect(() => {
     if (open) {
@@ -42,6 +44,8 @@ export function EditModelDialog({
       setMaxOutputTokens(initialMetadata?.maxOutputTokens?.toString() ?? "");
       setInputCost(initialMetadata?.inputCostPerToken?.toString() ?? "");
       setOutputCost(initialMetadata?.outputCostPerToken?.toString() ?? "");
+      setCacheCreationCost(initialMetadata?.cacheCreationInputTokenCost?.toString() ?? "");
+      setCacheReadCost(initialMetadata?.cacheReadInputTokenCost?.toString() ?? "");
     }
   }, [open, modelId, initialMetadata]);
 
@@ -51,6 +55,8 @@ export function EditModelDialog({
       maxOutputTokens: maxOutputTokens ? parseInt(maxOutputTokens, 10) : undefined,
       inputCostPerToken: inputCost ? parseFloat(inputCost) : undefined,
       outputCostPerToken: outputCost ? parseFloat(outputCost) : undefined,
+      cacheCreationInputTokenCost: cacheCreationCost ? parseFloat(cacheCreationCost) : undefined,
+      cacheReadInputTokenCost: cacheReadCost ? parseFloat(cacheReadCost) : undefined,
     };
 
     onSave(editedModelId, metadata);
@@ -125,6 +131,34 @@ export function EditModelDialog({
               step="0.0000001"
               value={outputCost}
               onChange={(e) => setOutputCost(e.target.value)}
+              placeholder="$/token"
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="cacheCreationCost" className="text-right">
+              Cache Create
+            </Label>
+            <Input
+              id="cacheCreationCost"
+              type="number"
+              step="0.0000001"
+              value={cacheCreationCost}
+              onChange={(e) => setCacheCreationCost(e.target.value)}
+              placeholder="$/token"
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="cacheReadCost" className="text-right">
+              Cache Read
+            </Label>
+            <Input
+              id="cacheReadCost"
+              type="number"
+              step="0.0000001"
+              value={cacheReadCost}
+              onChange={(e) => setCacheReadCost(e.target.value)}
               placeholder="$/token"
               className="col-span-3"
             />

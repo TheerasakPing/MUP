@@ -12,7 +12,17 @@ const iconUrls = import.meta.glob("@/browser/assets/catppuccin-icons/*.svg", {
 // Helper to get URL from relative icon name (e.g., "angular.svg")
 export const getCatppuccinIconUrl = (iconName: string): string | undefined => {
   const key = `@/browser/assets/catppuccin-icons/${iconName}`;
-  return iconUrls[key] as string;
+  const url = iconUrls[key] as string;
+
+  // Debug logging
+  if (!url) {
+    console.warn(`[FileIcon] Icon not found: ${iconName}`);
+    console.log('[FileIcon] Available keys:', Object.keys(iconUrls).slice(0, 10));
+  } else {
+    console.log(`[FileIcon] Loaded icon: ${iconName} -> ${url}`);
+  }
+
+  return url;
 };
 
 // Types from mapping.json
