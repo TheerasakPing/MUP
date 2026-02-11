@@ -1,5 +1,26 @@
 # Mux Release Notes
 
+## [0.17.2] - 2026-02-11
+
+### ✨ New Features
+
+#### 1. Custom Model Presets
+- Full-stack system to save and load model configurations.
+- Import/Export presets as JSON for easy sharing.
+- Persistent storage for custom model sets.
+
+#### 2. Model Health & Validation
+- Automated health check service to ping and validate model endpoints.
+- Visual health indicators in the model settings UI.
+- Detailed health reports with error diagnostics.
+
+#### 3. Realtime Agent Status Monitor
+- Live dashboard in the sidebar showing agent activity.
+- Visual streaming metrics (TPS, token counts, elapsed time).
+- Session cost tracking and per-model performance breakdown.
+
+---
+
 ## [0.17.0] - 2026-02-11
 
 ### ✨ New Features
