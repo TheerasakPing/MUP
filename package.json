@@ -13,9 +13,12 @@
   },
   "scripts": {
     "dev": "make dev",
+    "dev:win": "bun scripts/start-dev.ts",
     "prebuild:main": "bun scripts/generate-version.ts",
     "build": "make build",
+    "build:win": "bun scripts/generate-version.ts && node scripts/build-main-watch.js && bun build src/desktop/preload.ts --format=cjs --target=node --external=electron --sourcemap=inline --outfile=dist/preload.js && bun x vite build && bun scripts/copy-static.ts",
     "start": "make start",
+    "start:win": "bun scripts/generate-version.ts && node scripts/build-main-watch.js && bun build src/desktop/preload.ts --format=cjs --target=node --external=electron --sourcemap=inline --outfile=dist/preload.js && bun x vite build && bun scripts/copy-static.ts && set MUX_E2E_LOAD_DIST=1&& bunx electron --remote-debugging-port=9222 .",
     "typecheck": "make typecheck",
     "debug": "bun src/cli/debug/index.ts",
     "lint": "make lint",
@@ -38,7 +41,7 @@
     "storybook": "make storybook",
     "storybook:build": "make storybook-build",
     "test:storybook": "make test-storybook",
-    "postinstall": "sh scripts/postinstall.sh"
+    "postinstall": "bun scripts/postinstall.ts"
   },
   "dependencies": {
     "@ai-sdk/amazon-bedrock": "^4.0.49",
