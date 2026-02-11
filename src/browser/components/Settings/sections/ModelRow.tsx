@@ -1,4 +1,4 @@
-import { Eye, Info, Pencil, Star, Trash2 } from "lucide-react";
+import { Activity, Eye, Info, Pencil, Star, Trash2 } from "lucide-react";
 import { GatewayToggleButton } from "@/browser/components/GatewayToggleButton";
 import { cn } from "@/common/lib/utils";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/browser/components/ui/tooltip";
@@ -177,6 +177,8 @@ export interface ModelRowProps {
   onToggle1MContext?: () => void;
   /** Toggle visibility in model selector */
   onToggleVisibility?: () => void;
+  /** Launch health check for this model */
+  onHealthCheck?: () => void;
 }
 
 export function ModelRow(props: ModelRowProps) {
@@ -245,6 +247,20 @@ export function ModelRow(props: ModelRowProps) {
               <ModelTooltipContent fullId={props.fullId} aliases={props.aliases} stats={stats} />
             </TooltipContent>
           </Tooltip>
+          {/* Health check button */}
+          {props.onHealthCheck && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                props.onHealthCheck?.();
+              }}
+              className="text-muted hover:text-accent p-0.5 transition-colors"
+              aria-label="Run health check"
+            >
+              <Activity className="h-3.5 w-3.5" />
+            </button>
+          )}
           {/* Visibility toggle button */}
           {props.onToggleVisibility && (
             <button

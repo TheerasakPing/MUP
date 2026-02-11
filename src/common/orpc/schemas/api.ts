@@ -1695,3 +1695,124 @@ export const modelPresets = {
     output: ResultSchema(z.array(ModelPresetSchema), z.string()),
   },
 };
+
+// --- Model Health Check ---
+
+export const CheckStatusSchema = z.enum(["pass", "warn", "fail", "skip"]);
+export const OverallStatusSchema = z.enum(["healthy", "warning", "error"]);
+
+export const CheckResultSchema = z.object({
+  status: CheckStatusSchema,
+  message: z.string(),
+  details: z.string().optional(),
+});
+
+export const HealthCheckResultSchema = z.object({
+  modelId: z.string(),
+  provider: z.string(),
+  timestamp: z.number(),
+  status: OverallStatusSchema,
+  checks: z.object({
+    authentication: CheckResultSchema,
+    modelExists: CheckResultSchema,
+    tokenLimits: CheckResultSchema,
+    pricing: CheckResultSchema,
+    connectivity: CheckResultSchema,
+  }),
+});
+
+export type HealthCheckResultType = z.infer<typeof HealthCheckResultSchema>;
+
+export const modelHealth = {
+  checkModel: {
+    input: z.object({
+      provider: z.string(),
+      modelId: z.string(),
+      metadata: CustomModelMetadataSchema.optional(),
+    }),
+    output: HealthCheckResultSchema,
+  },
+  checkAll: {
+    input: z.object({
+      models: z.array(
+        z.object({
+          provider: z.string(),
+          modelId: z.string(),
+          metadata: CustomModelMetadataSchema.optional(),
+        }),
+      ),
+    }),
+    output: z.array(HealthCheckResultSchema),
+  },
+  getLastResults: {
+    input: z.void(),
+    output: z.array(HealthCheckResultSchema),
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Cost Tracking
+// ---------------------------------------------------------------------------
+
+export const CostEntrySchema = z.object({
+  timestamp: z.number(),
+  workspaceId: z.string(),
+  model: z.string(),
+  inputTokens: z.number(),
+  outputTokens: z.number(),
+  cachedTokens: z.number(),
+  cacheCreateTokens: z.number(),
+  reasoningTokens: z.number(),
+  cost: z.number(),
+});
+
+export type CostEntryType = z.infer<typeof CostEntrySchema>;
+
+export const DailySummarySchema = z.object({
+  date: z.string(),
+  totalCost: z.number(),
+  requestCount: z.number(),
+  byModel: z.record(
+    z.object({ cost: z.number(), requests: z.number(), tokens: z.number() }),
+  ),
+});
+
+export type DailySummaryType = z.infer<typeof DailySummarySchema>;
+
+export const CostHistoryRangeSchema = z
+  .object({ start: z.number().optional(), end: z.number().optional() })
+  .optional();
+
+export const CostSummaryTotalsSchema = z.object({
+  today: z.number(),
+  thisWeek: z.number(),
+  thisMonth: z.number(),
+  previousDay: z.number(),
+  previousWeek: z.number(),
+  previousMonth: z.number(),
+});
+
+export type CostSummaryTotalsType = z.infer<typeof CostSummaryTotalsSchema>;
+
+export const ModelCostBreakdownSchema = z.record(
+  z.object({ cost: z.number(), requests: z.number(), tokens: z.number() }),
+);
+
+export const costTracking = {
+  getSummary: {
+    input: z.void(),
+    output: CostSummaryTotalsSchema,
+  },
+  getDailySummaries: {
+    input: z.object({ startDate: z.string().optional(), endDate: z.string().optional() }),
+    output: z.array(DailySummarySchema),
+  },
+  getModelBreakdown: {
+    input: CostHistoryRangeSchema,
+    output: ModelCostBreakdownSchema,
+  },
+  prune: {
+    input: z.object({ retentionDays: z.number().optional() }),
+    output: z.object({ pruned: z.number() }),
+  },
+};

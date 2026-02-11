@@ -27,6 +27,7 @@ import {
 import { ModelRow } from "./ModelRow";
 import { EditModelDialog } from "./EditModelDialog";
 import { ModelPresetsDialog } from "./ModelPresetsDialog";
+import { HealthCheckDialog } from "./HealthCheckDialog";
 import { CustomModelMetadata } from "@/common/orpc/schemas/api";
 
 // Providers to exclude from the custom models UI (handled specially or internal)
@@ -71,6 +72,11 @@ export function ModelsSection() {
   const [editing, setEditing] = useState<EditingState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [presetsOpen, setPresetsOpen] = useState(false);
+  const [healthCheckTarget, setHealthCheckTarget] = useState<{
+    provider: string;
+    modelId: string;
+    metadata?: CustomModelMetadata;
+  } | null>(null);
 
   const selectableProviders = visibleProviders.filter(
     (provider) => !HIDDEN_PROVIDERS.has(provider)
@@ -418,6 +424,13 @@ export function ModelsSection() {
                         ? () => toggle1MContext(model.fullId)
                         : undefined
                     }
+                    onHealthCheck={() =>
+                      setHealthCheckTarget({
+                        provider: model.provider,
+                        modelId: model.modelId,
+                        metadata: model.metadata,
+                      })
+                    }
                   />
                 ))}
               </tbody>
@@ -470,6 +483,15 @@ export function ModelsSection() {
         }}
       />
 
+      {healthCheckTarget && (
+        <HealthCheckDialog
+          open={!!healthCheckTarget}
+          onOpenChange={(open) => !open && setHealthCheckTarget(null)}
+          provider={healthCheckTarget.provider}
+          modelId={healthCheckTarget.modelId}
+          metadata={healthCheckTarget.metadata}
+        />
+      )}
       {/* Built-in Models */}
       <div className="space-y-3">
         <div className="text-muted text-xs font-medium tracking-wide uppercase">
@@ -506,6 +528,12 @@ export function ModelsSection() {
                     supports1MContext(model.fullId)
                       ? () => toggle1MContext(model.fullId)
                       : undefined
+                  }
+                  onHealthCheck={() =>
+                    setHealthCheckTarget({
+                      provider: model.provider,
+                      modelId: model.modelId,
+                    })
                   }
                 />
               ))}

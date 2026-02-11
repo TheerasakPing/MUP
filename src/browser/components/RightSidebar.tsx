@@ -18,6 +18,7 @@ import { CostsTab } from "./RightSidebar/CostsTab";
 import { ReviewPanel } from "./RightSidebar/CodeReview/ReviewPanel";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { StatsTab } from "./RightSidebar/StatsTab";
+import { AgentMonitor } from "./RightSidebar/AgentMonitor";
 
 import { matchesKeybind, KEYBINDS, formatKeybind } from "@/browser/utils/ui/keybinds";
 import { SidebarCollapseButton } from "./ui/SidebarCollapseButton";
@@ -70,6 +71,7 @@ import {
   CostsTabLabel,
   ExplorerTabLabel,
   FileTabLabel,
+  MonitorTabLabel,
   ReviewTabLabel,
   StatsTabLabel,
   TerminalTabLabel,
@@ -345,6 +347,8 @@ const RightSidebarTabsetNode: React.FC<RightSidebarTabsetNodeProps> = (props) =>
       label = <ExplorerTabLabel />;
     } else if (tab === "stats") {
       label = <StatsTabLabel workspaceId={props.workspaceId} />;
+    } else if (tab === "monitor") {
+      label = <MonitorTabLabel workspaceId={props.workspaceId} />;
     } else if (isTerminal) {
       const terminalIndex = terminalTabs.indexOf(tab);
       label = (
@@ -507,6 +511,17 @@ const RightSidebarTabsetNode: React.FC<RightSidebarTabsetNodeProps> = (props) =>
           >
             <ErrorBoundary workspaceInfo="Stats tab">
               <StatsTab workspaceId={props.workspaceId} />
+            </ErrorBoundary>
+          </div>
+        )}
+
+        {props.node.tabs.includes("monitor") && (
+          <div
+            role="tabpanel"
+            hidden={props.node.activeTab !== "monitor"}
+          >
+            <ErrorBoundary workspaceInfo="Monitor tab">
+              <AgentMonitor workspaceId={props.workspaceId} />
             </ErrorBoundary>
           </div>
         )}

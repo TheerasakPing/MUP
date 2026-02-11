@@ -211,5 +211,13 @@ export {
   voice,
   window,
   workspace,
+  modelPresets,
+  ModelPresetSchema,
+  modelHealth,
+  HealthCheckResultSchema,
+  CheckResultSchema,
+  CheckStatusSchema,
+  OverallStatusSchema,
+  type HealthCheckResultType,
 } from "./schemas/api";
 export type { WorkspaceSendMessageOutput } from "./schemas/api";

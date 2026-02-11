@@ -25,6 +25,7 @@ export {
   CostsTabLabel,
   ExplorerTabLabel,
   FileTabLabel,
+  MonitorTabLabel,
   ReviewTabLabel,
   StatsTabLabel,
   TerminalTabLabel,

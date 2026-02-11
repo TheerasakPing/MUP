@@ -107,6 +107,30 @@ export const StatsTabLabel: React.FC<StatsTabLabelProps> = ({ workspaceId }) => 
   );
 };
 
+interface MonitorTabLabelProps {
+  workspaceId: string;
+}
+
+/**
+ * Monitor tab label with live status dot.
+ * Shows a green pulsing dot when the agent is actively streaming.
+ */
+export const MonitorTabLabel: React.FC<MonitorTabLabelProps> = ({ workspaceId }) => {
+  const statsSnapshot = useWorkspaceStatsSnapshot(workspaceId);
+  const isActive = statsSnapshot?.active != null;
+
+  return (
+    <>
+      Monitor
+      {isActive && (
+        <span className="relative ml-0.5 inline-flex h-1.5 w-1.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
+        </span>
+      )}
+    </>
+  );
+};
 export const ExplorerTabLabel: React.FC = () => (
   <span className="inline-flex items-center gap-1">
     <img

@@ -3784,6 +3784,24 @@ export const router = (authToken?: string) => {
           context.modelPresetsService.importPresets(input.json)
         ),
     },
+    modelHealth: {
+      checkModel: t
+        .input(schemas.modelHealth.checkModel.input)
+        .output(schemas.modelHealth.checkModel.output)
+        .handler(({ context, input }) =>
+          context.modelHealthService.checkModel(input.provider, input.modelId, input.metadata)
+        ),
+      checkAll: t
+        .input(schemas.modelHealth.checkAll.input)
+        .output(schemas.modelHealth.checkAll.output)
+        .handler(({ context, input }) =>
+          context.modelHealthService.checkAllModels(input.models)
+        ),
+      getLastResults: t
+        .input(schemas.modelHealth.getLastResults.input)
+        .output(schemas.modelHealth.getLastResults.output)
+        .handler(({ context }) => context.modelHealthService.getLastResults()),
+    },
   });
 };
 
