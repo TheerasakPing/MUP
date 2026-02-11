@@ -416,6 +416,12 @@ interface DiffRendererProps {
   maxHeight?: string;
   /** Additional className for container (e.g., "rounded-none" to remove rounding) */
   className?: string;
+  /** View mode: inline (current), split (side-by-side), unified (combined) */
+  viewMode?: "inline" | "split" | "unified";
+  /** Callback when view mode changes */
+  onViewModeChange?: (mode: "inline" | "split" | "unified") => void;
+  /** Show view mode switcher */
+  showViewModeSwitcher?: boolean;
 }
 
 /**

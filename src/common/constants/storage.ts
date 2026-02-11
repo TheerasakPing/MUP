@@ -295,6 +295,12 @@ export const HIDDEN_MODELS_KEY = "hidden-models";
 export const PREFERRED_COMPACTION_MODEL_KEY = "preferredCompactionModel";
 
 /**
+ * Get the localStorage key for diff view mode preference (global)
+ * Format: "diffViewMode"
+ */
+export const DIFF_VIEW_MODE_KEY = "diffViewMode";
+
+/**
  * Get the localStorage key for the preferred System 1 model (global)
  * Format: "preferredSystem1Model"
  */
