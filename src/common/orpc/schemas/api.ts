@@ -1636,3 +1636,62 @@ export const debug = {
     output: z.boolean(), // true if error was triggered on an active stream
   },
 };
+
+// --- Model Presets ---
+
+export const PresetModelEntrySchema = z.object({
+  provider: z.string(),
+  modelId: z.string(),
+  metadata: CustomModelMetadataSchema.optional(),
+});
+
+export const ModelPresetSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+  models: z.array(PresetModelEntrySchema),
+});
+
+export type ModelPresetType = z.infer<typeof ModelPresetSchema>;
+
+export const modelPresets = {
+  list: {
+    input: z.void(),
+    output: z.array(ModelPresetSchema),
+  },
+  save: {
+    input: z.object({
+      name: z.string().min(1),
+      models: z.array(PresetModelEntrySchema),
+      description: z.string().optional(),
+    }),
+    output: ModelPresetSchema,
+  },
+  get: {
+    input: z.object({ id: z.string() }),
+    output: ModelPresetSchema.nullable(),
+  },
+  delete: {
+    input: z.object({ id: z.string() }),
+    output: ResultSchema(z.void(), z.string()),
+  },
+  update: {
+    input: z.object({
+      id: z.string(),
+      name: z.string().optional(),
+      description: z.string().optional(),
+      models: z.array(PresetModelEntrySchema).optional(),
+    }),
+    output: ResultSchema(ModelPresetSchema, z.string()),
+  },
+  export: {
+    input: z.object({ ids: z.array(z.string()).optional() }),
+    output: z.string(),
+  },
+  import: {
+    input: z.object({ json: z.string() }),
+    output: ResultSchema(z.array(ModelPresetSchema), z.string()),
+  },
+};

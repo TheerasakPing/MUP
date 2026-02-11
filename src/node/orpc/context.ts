@@ -29,6 +29,7 @@ import type { SessionUsageService } from "@/node/services/sessionUsageService";
 import type { TaskService } from "@/node/services/taskService";
 import type { PolicyService } from "@/node/services/policyService";
 import type { CoderService } from "@/node/services/coderService";
+import type { ModelPresetsService } from "@/node/services/modelPresetsService";
 
 export interface ORPCContext {
   config: Config;
@@ -61,5 +62,6 @@ export interface ORPCContext {
   policyService: PolicyService;
   signingService: SigningService;
   coderService: CoderService;
+  modelPresetsService: ModelPresetsService;
   headers?: IncomingHttpHeaders;
 }

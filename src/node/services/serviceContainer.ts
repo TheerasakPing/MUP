@@ -52,6 +52,7 @@ import {
 } from "@/node/runtime/coderLifecycleHooks";
 import { setGlobalCoderService } from "@/node/runtime/runtimeFactory";
 import { PolicyService } from "@/node/services/policyService";
+import { ModelPresetsService } from "@/node/services/modelPresetsService";
 import type { ORPCContext } from "@/node/orpc/context";
 
 const MUX_HELP_CHAT_WELCOME_MESSAGE_ID = "mux-chat-welcome";
@@ -114,6 +115,7 @@ export class ServiceContainer {
   public readonly coderService: CoderService;
   private readonly ptyService: PTYService;
   public readonly idleCompactionService: IdleCompactionService;
+  public readonly modelPresetsService: ModelPresetsService;
 
   constructor(config: Config) {
     this.config = config;
@@ -155,6 +157,7 @@ export class ServiceContainer {
     this.backgroundProcessManager = core.backgroundProcessManager;
 
     this.projectService = new ProjectService(config);
+    this.modelPresetsService = new ModelPresetsService(config);
 
     // Idle compaction service - auto-compacts workspaces after configured idle period
     this.idleCompactionService = new IdleCompactionService(
@@ -390,6 +393,7 @@ export class ServiceContainer {
       policyService: this.policyService,
       signingService: this.signingService,
       coderService: this.coderService,
+      modelPresetsService: this.modelPresetsService,
     };
   }
 

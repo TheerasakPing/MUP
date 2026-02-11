@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Loader2, Plus, ShieldCheck } from "lucide-react";
+import { Loader2, Plus, ShieldCheck, Bookmark } from "lucide-react";
 import { useProviderOptions } from "@/browser/hooks/useProviderOptions";
 import { Button } from "@/browser/components/ui/button";
 import { ProviderWithIcon } from "@/browser/components/ProviderIcon";
@@ -26,6 +26,7 @@ import {
 } from "@/common/constants/storage";
 import { ModelRow } from "./ModelRow";
 import { EditModelDialog } from "./EditModelDialog";
+import { ModelPresetsDialog } from "./ModelPresetsDialog";
 import { CustomModelMetadata } from "@/common/orpc/schemas/api";
 
 // Providers to exclude from the custom models UI (handled specially or internal)
@@ -69,6 +70,7 @@ export function ModelsSection() {
   const [newModelId, setNewModelId] = useState("");
   const [editing, setEditing] = useState<EditingState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [presetsOpen, setPresetsOpen] = useState(false);
 
   const selectableProviders = visibleProviders.filter(
     (provider) => !HIDDEN_PROVIDERS.has(provider)
@@ -328,7 +330,18 @@ export function ModelsSection() {
 
       {/* Custom Models */}
       <div className="space-y-3">
-        <div className="text-muted text-xs font-medium tracking-wide uppercase">Custom Models</div>
+        <div className="flex items-center justify-between">
+          <div className="text-muted text-xs font-medium tracking-wide uppercase">Custom Models</div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-6 gap-1 px-2 text-[10px]"
+            onClick={() => setPresetsOpen(true)}
+          >
+            <Bookmark className="h-3 w-3" />
+            Presets
+          </Button>
+        </div>
 
         {/* Add new model form - styled to match table */}
         <div className="border-border-medium overflow-hidden rounded-md border">
@@ -423,6 +436,39 @@ export function ModelsSection() {
           onSave={handleSaveEdit}
         />
       )}
+
+      <ModelPresetsDialog
+        open={presetsOpen}
+        onOpenChange={setPresetsOpen}
+        currentModels={customModels.map((m) => ({
+          provider: m.provider,
+          modelId: m.modelId,
+          metadata: m.metadata,
+        }))}
+        onApplyPreset={(presetModels) => {
+          if (!api) return;
+          // Apply preset — set models for each provider
+          const byProvider = new Map<string, { modelId: string; metadata?: CustomModelMetadata }[]>();
+          for (const m of presetModels) {
+            const list = byProvider.get(m.provider) ?? [];
+            list.push({ modelId: m.modelId, metadata: m.metadata });
+            byProvider.set(m.provider, list);
+          }
+          for (const [provider, entries] of byProvider) {
+            const modelIds = entries.map((e) => e.modelId);
+            void api.providers.setModels({ provider, models: modelIds });
+            for (const entry of entries) {
+              if (entry.metadata) {
+                void api.providers.setModelMetadata({
+                  provider,
+                  modelId: entry.modelId,
+                  metadata: entry.metadata,
+                });
+              }
+            }
+          }
+        }}
+      />
 
       {/* Built-in Models */}
       <div className="space-y-3">

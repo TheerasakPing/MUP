@@ -1090,8 +1090,7 @@ export const router = (authToken?: string) => {
             }
             const prefix = body.trim().slice(0, 200);
             return Err(
-              `Mux Gateway balance request failed (HTTP ${response.status}): ${
-                prefix || response.statusText
+              `Mux Gateway balance request failed (HTTP ${response.status}): ${prefix || response.statusText
               }`
             );
           }
@@ -1468,10 +1467,10 @@ export const router = (authToken?: string) => {
 
           const configuredTransport = input.name
             ? (
-                await context.mcpConfigService.listServers(
-                  projectPathProvided ? resolvedProjectPath : undefined
-                )
-              )[input.name]?.transport
+              await context.mcpConfigService.listServers(
+                projectPathProvided ? resolvedProjectPath : undefined
+              )
+            )[input.name]?.transport
             : undefined;
 
           const transport =
@@ -1907,7 +1906,7 @@ export const router = (authToken?: string) => {
 
             const configuredTransport = input.name
               ? (await context.mcpConfigService.listServers(input.projectPath))[input.name]
-                  ?.transport
+                ?.transport
               : undefined;
 
             const transport =
@@ -2581,9 +2580,9 @@ export const router = (authToken?: string) => {
               : null;
             const messages = params.chatPath
               ? await readChatJsonlAllowMissing({
-                  chatPath: params.chatPath,
-                  logLabel: params.logLabel,
-                })
+                chatPath: params.chatPath,
+                logLabel: params.logLabel,
+              })
               : null;
 
             // If we only archived partial.json (e.g. interrupted stream), still allow viewing.
@@ -2630,8 +2629,8 @@ export const router = (authToken?: string) => {
               const metaResult = await context.aiService.getWorkspaceMetadata(taskId);
               const model =
                 metaResult.success &&
-                typeof metaResult.data.taskModelString === "string" &&
-                metaResult.data.taskModelString.trim().length > 0
+                  typeof metaResult.data.taskModelString === "string" &&
+                  metaResult.data.taskModelString.trim().length > 0
                   ? metaResult.data.taskModelString.trim()
                   : undefined;
               const thinkingLevel = metaResult.success
@@ -3307,10 +3306,10 @@ export const router = (authToken?: string) => {
         .handler(({ context, input }) => {
           const thinkingLevel =
             input.thinkingLevel === "off" ||
-            input.thinkingLevel === "low" ||
-            input.thinkingLevel === "medium" ||
-            input.thinkingLevel === "high" ||
-            input.thinkingLevel === "xhigh"
+              input.thinkingLevel === "low" ||
+              input.thinkingLevel === "medium" ||
+              input.thinkingLevel === "high" ||
+              input.thinkingLevel === "xhigh"
               ? input.thinkingLevel
               : undefined;
 
@@ -3739,6 +3738,51 @@ export const router = (authToken?: string) => {
           context.signingService.clearIdentityCache();
           return { success: true };
         }),
+    },
+    modelPresets: {
+      list: t
+        .input(schemas.modelPresets.list.input)
+        .output(schemas.modelPresets.list.output)
+        .handler(({ context }) => context.modelPresetsService.listPresets()),
+      save: t
+        .input(schemas.modelPresets.save.input)
+        .output(schemas.modelPresets.save.output)
+        .handler(({ context, input }) =>
+          context.modelPresetsService.savePreset(input.name, input.models, input.description)
+        ),
+      get: t
+        .input(schemas.modelPresets.get.input)
+        .output(schemas.modelPresets.get.output)
+        .handler(async ({ context, input }) => {
+          const preset = await context.modelPresetsService.getPreset(input.id);
+          return preset ?? null;
+        }),
+      delete: t
+        .input(schemas.modelPresets.delete.input)
+        .output(schemas.modelPresets.delete.output)
+        .handler(({ context, input }) => context.modelPresetsService.deletePreset(input.id)),
+      update: t
+        .input(schemas.modelPresets.update.input)
+        .output(schemas.modelPresets.update.output)
+        .handler(({ context, input }) =>
+          context.modelPresetsService.updatePreset(input.id, {
+            name: input.name,
+            description: input.description,
+            models: input.models,
+          })
+        ),
+      export: t
+        .input(schemas.modelPresets.export.input)
+        .output(schemas.modelPresets.export.output)
+        .handler(({ context, input }) =>
+          context.modelPresetsService.exportPresets(input.ids)
+        ),
+      import: t
+        .input(schemas.modelPresets.import.input)
+        .output(schemas.modelPresets.import.output)
+        .handler(({ context, input }) =>
+          context.modelPresetsService.importPresets(input.json)
+        ),
     },
   });
 };
