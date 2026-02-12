@@ -1,5 +1,34 @@
 # Mux Release Notes
 
+## [0.17.5] - 2026-02-12
+
+### ✨ New Features
+
+#### 1. VS Code-Compatible Icon Theme System
+- Integrated a full-blown icon theme engine that supports standard VS Code `.vsix` extensions.
+- Users can now import custom icon themes (like Material Icon Theme, Catppuccin, etc.) directly.
+- Implemented a unified resolution algorithm that handles file names, extensions, language IDs, and folder states with VS Code parity.
+
+#### 2. Enhanced Appearance Settings
+- Added a dedicated "Appearance" section in the Settings UI.
+- Direct management of installed themes: activate, delete, or import new ones.
+- Interactive feedback for extension imports and theme switching.
+
+#### 3. Optimized Default Icon Set
+- Migrated all previous hardcoded icons into a structured, theme-compliant format.
+- Significant reduction in `FileIcon` component complexity and bundle overhead.
+
+### 🔧 Improvements
+- Unified icon resolution logic across the entire application.
+- Added Express-based serving for custom icon assets to ensure security and performance.
+- Improved fallback mechanisms for missing icons in custom themes.
+
+### 🐛 Bug Fixes
+- Fixed port conflicts in development mode scripts.
+- Resolved various TypeScript inconsistencies between frontend and backend icon services.
+
+---
+
 ## [0.17.4] - 2026-02-11
 
 ### ✨ New Features
