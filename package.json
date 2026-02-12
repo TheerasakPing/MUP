@@ -103,6 +103,7 @@
     "jsdom": "^27.2.0",
     "json-schema-to-typescript": "^15.0.4",
     "jsonc-parser": "^3.3.1",
+    "jszip": "^3.10.1",
     "lru-cache": "^11.2.2",
     "lucide-react": "^0.553.0",
     "markdown-it": "^14.1.0",
