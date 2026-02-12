@@ -87,6 +87,8 @@ async function createTestServer(authToken?: string): Promise<TestServerHandle> {
     sessionUsageService: services.sessionUsageService,
     signingService: services.signingService,
     coderService: services.coderService,
+    modelPresetsService: services.modelPresetsService,
+    modelHealthService: services.modelHealthService,
   };
 
   // Use the actual createOrpcServer function
@@ -124,7 +126,7 @@ function createCliRunner(baseUrl: string, authToken?: string) {
         argv: args,
         process: { exit: () => void 0 as never },
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        logger: { info: () => {}, error: () => {} },
+        logger: { info: () => { }, error: () => { } },
       })
       .catch((err) => {
         // Extract the result or re-throw the actual error

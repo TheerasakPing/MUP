@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-// Direct icon imports from /icons directory (3 levels up from src/browser/components/)
-import workflowIcon from "../../../icons/workflow.svg";
-import searchIcon from "../../../icons/search.svg";
-import serverlessIcon from "../../../icons/serverless.svg";
-import editorconfigIcon from "../../../icons/editorconfig.svg";
-import terminalIcon from "../../../icons/terminal.svg";
-import explorerIcon from "../../../icons/explorer.svg";
+import {
+  GitBranch,
+  Search,
+  Zap,
+  Settings,
+  Terminal,
+  Files,
+} from "lucide-react";
 import { CUSTOM_EVENTS } from "@/common/constants/events";
 import { cn } from "@/common/lib/utils";
 
@@ -226,12 +227,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
                 aria-label="Open sidebar menu"
                 className="mobile-menu-btn text-muted hover:text-foreground hidden h-6 w-6 shrink-0"
               >
-                <img
-                  src={explorerIcon}
-                  alt="Explorer"
-                  className="h-3.5 w-3.5 shrink-0 select-none"
-                  draggable={false}
-                />
+                <Files className="h-3.5 w-3.5 shrink-0 select-none" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Open sidebar ({formatKeybind(KEYBINDS.TOGGLE_SIDEBAR)})</TooltipContent>
@@ -274,12 +270,9 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
                   data-testid="notify-on-response-button"
                   aria-pressed={notifyOnResponse}
                 >
-                  <img
-                    src={searchIcon}
-                    alt={notifyOnResponse ? "Notifications enabled" : "Notifications disabled"}
+                  <Search
                     className="h-3.5 w-3.5 shrink-0 select-none"
                     style={{ opacity: notifyOnResponse ? 1 : 0.5 }}
-                    draggable={false}
                   />
                 </button>
               </PopoverTrigger>
@@ -379,12 +372,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
               className="text-muted hover:text-foreground h-6 w-6 shrink-0"
               data-testid="workspace-mcp-button"
             >
-              <img
-                src={serverlessIcon}
-                alt="MCP Server"
-                className="h-3.5 w-3.5 shrink-0 select-none"
-                draggable={false}
-              />
+              <Zap className="h-3.5 w-3.5 shrink-0 select-none" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom" align="center">
@@ -400,12 +388,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
                 onClick={() => void handleOpenInEditor()}
                 className="text-muted hover:text-foreground ml-1 h-6 w-6 shrink-0"
               >
-                <img
-                  src={editorconfigIcon}
-                  alt="Edit in editor"
-                  className="h-3.5 w-3.5 shrink-0 select-none"
-                  draggable={false}
-                />
+                <Settings className="h-3.5 w-3.5 shrink-0 select-none" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom" align="center">
@@ -422,12 +405,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
               className="text-muted hover:text-foreground ml-1 h-6 w-6 shrink-0 [&_svg]:h-4 [&_svg]:w-4"
               data-tutorial="terminal-button"
             >
-              <img
-                src={terminalIcon}
-                alt="New terminal"
-                className="h-4 w-4 shrink-0 select-none"
-                draggable={false}
-              />
+              <Terminal className="h-4 w-4 shrink-0 select-none" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom" align="center">

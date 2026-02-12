@@ -433,6 +433,7 @@ async function main(): Promise<number> {
     mcpServerManager,
     providerService,
     workspaceService,
+    costTrackingService,
   } = createCoreServices({
     config,
     extensionMetadataPath: path.join(tempDir.path, "extensionMetadata.json"),
@@ -481,6 +482,7 @@ async function main(): Promise<number> {
     partialService,
     aiService,
     initStateManager,
+    costTrackingService,
     backgroundProcessManager,
     keepBackgroundProcesses,
   });
@@ -540,7 +542,7 @@ async function main(): Promise<number> {
     if (!initResult.success) {
       // Clean up orphaned container
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await runtime.deleteWorkspace(projectDir, branchName, true).catch(() => {});
+      await runtime.deleteWorkspace(projectDir, branchName, true).catch(() => { });
       console.error(
         `Failed to initialize Docker workspace: ${initResult.error ?? "unknown error"}`
       );
@@ -887,11 +889,11 @@ async function main(): Promise<number> {
           const cost = getTotalCost(totalUsage);
           const hasTokens = totalUsage
             ? totalUsage.input.tokens +
-                totalUsage.output.tokens +
-                totalUsage.cached.tokens +
-                totalUsage.cacheCreate.tokens +
-                totalUsage.reasoning.tokens >
-              0
+            totalUsage.output.tokens +
+            totalUsage.cached.tokens +
+            totalUsage.cacheCreate.tokens +
+            totalUsage.reasoning.tokens >
+            0
             : false;
 
           if (hasTokens && cost === undefined) {
@@ -978,11 +980,11 @@ async function main(): Promise<number> {
         const hasTokens =
           displayUsage &&
           displayUsage.input.tokens +
-            displayUsage.output.tokens +
-            displayUsage.cached.tokens +
-            displayUsage.cacheCreate.tokens +
-            displayUsage.reasoning.tokens >
-            0;
+          displayUsage.output.tokens +
+          displayUsage.cached.tokens +
+          displayUsage.cacheCreate.tokens +
+          displayUsage.reasoning.tokens >
+          0;
         if (hasTokens && cost === undefined) {
           const errMsg = `Cannot enforce budget: unknown pricing for model "${model}"`;
           emitJsonLine({ type: "budget-error", error: errMsg, model });
@@ -1055,12 +1057,12 @@ async function main(): Promise<number> {
         type: "run-complete",
         usage: totalUsage
           ? {
-              inputTokens: totalUsage.input.tokens,
-              outputTokens: totalUsage.output.tokens,
-              cachedTokens: totalUsage.cached.tokens,
-              cacheCreateTokens: totalUsage.cacheCreate.tokens,
-              reasoningTokens: totalUsage.reasoning.tokens,
-            }
+            inputTokens: totalUsage.input.tokens,
+            outputTokens: totalUsage.output.tokens,
+            cachedTokens: totalUsage.cached.tokens,
+            cacheCreateTokens: totalUsage.cacheCreate.tokens,
+            reasoningTokens: totalUsage.reasoning.tokens,
+          }
           : null,
         cost_usd: totalCost ?? null,
       });

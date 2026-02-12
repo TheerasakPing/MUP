@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import { getRootIconUrl } from "./FileIcon";
+import { ChatPaneMCPStatus } from "./ChatPaneMCPStatus";
 import { MessageListProvider } from "./Messages/MessageListContext";
 import { cn } from "@/common/lib/utils";
 import { MessageRenderer } from "./Messages/MessageRenderer";
@@ -610,6 +611,7 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
                     (e.g., install dependencies, build) when creating new workspaces
                   </span>
                 </p>
+                <ChatPaneMCPStatus projectPath={projectPath} />
               </div>
             ) : (
               <MessageListProvider value={messageListContextValue}>

@@ -112,6 +112,8 @@ export async function createTestEnvironment(): Promise<TestEnvironment> {
     signingService: services.signingService,
     coderService: services.coderService,
     policyService: services.policyService,
+    modelPresetsService: services.modelPresetsService,
+    modelHealthService: services.modelHealthService,
   };
   const orpc = createOrpcTestClient(orpcContext);
 
@@ -159,7 +161,7 @@ export async function cleanupTestEnvironment(env: TestEnvironment): Promise<void
  */
 export async function setupProviders(
   source: OrpcSource,
-  providers: Record<string, { apiKey?: string; baseUrl?: string; [key: string]: unknown }>
+  providers: Record<string, { apiKey?: string; baseUrl?: string;[key: string]: unknown }>
 ): Promise<void> {
   const client = resolveOrpcClient(source);
   for (const [providerName, providerConfig] of Object.entries(providers)) {

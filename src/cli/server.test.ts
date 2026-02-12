@@ -90,6 +90,8 @@ async function createTestServer(): Promise<TestServerHandle> {
     sessionUsageService: services.sessionUsageService,
     signingService: services.signingService,
     coderService: services.coderService,
+    modelPresetsService: services.modelPresetsService,
+    modelHealthService: services.modelHealthService,
   };
 
   // Use the actual createOrpcServer function
