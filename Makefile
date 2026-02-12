@@ -46,7 +46,7 @@ MAKEFLAGS += -j
 endif
 
 # Common esbuild flags for CLI API bundle (ESM format for trpc-cli)
-ESBUILD_CLI_FLAGS := --bundle --format=esm --platform=node --target=node20 --outfile=dist/cli/api.mjs --external:zod --external:commander --external:jsonc-parser --external:@trpc/server --external:ssh2 --external:cpu-features --banner:js="import{createRequire}from'module';globalThis.require=createRequire(import.meta.url);"
+ESBUILD_CLI_FLAGS := --bundle --format=esm --platform=node --target=node20 --outfile=build_out/cli/api.mjs --external:zod --external:commander --external:jsonc-parser --external:@trpc/server --external:ssh2 --external:cpu-features --banner:js="import{createRequire}from'module';globalThis.require=createRequire(import.meta.url);"
 
 # Include formatting rules
 include fmt.mk
@@ -125,8 +125,8 @@ rebuild-native: node_modules/.installed ## Rebuild native modules (node-pty) for
 
 # Run compiled CLI with trailing arguments (builds only if missing)
 mux: ## Run the compiled mux CLI (e.g., make mux server --port 3000)
-	@test -f dist/cli/index.js -a -f dist/cli/api.mjs || $(MAKE) build-main
-	@node dist/cli/index.js $(filter-out $@,$(MAKECMDGOALS))
+	@test -f build_out/cli/index.js -a -f build_out/cli/api.mjs || $(MAKE) build-main
+	@node build_out/cli/index.js $(filter-out $@,$(MAKECMDGOALS))
 
 # Catch unknown targets passed to mux (prevents "No rule to make target" errors)
 ifneq ($(filter mux,$(MAKECMDGOALS)),)
@@ -149,7 +149,7 @@ dev: node_modules/.installed build-main ## Start development server (Vite + node
 	# https://github.com/oven-sh/bun/issues/18275
 	@NODE_OPTIONS="--max-old-space-size=4096" \
 		npm x concurrently -k --raw \
-		"bun x nodemon --watch src --watch tsconfig.main.json --watch tsconfig.json --ext ts,tsx,json --ignore dist --ignore node_modules --exec node scripts/build-main-watch.js" \
+		"bun x nodemon --watch src --watch tsconfig.main.json --watch tsconfig.json --ext ts,tsx,json --ignore build_out --ignore node_modules --exec node scripts/build-main-watch.js" \
 		'npx esbuild src/cli/api.ts $(ESBUILD_CLI_FLAGS) --watch' \
 		"vite"
 else
@@ -169,9 +169,9 @@ dev-server: node_modules/.installed build-main ## Start server mode with hot rel
 	@echo "For remote access: make dev-server VITE_HOST=0.0.0.0 VITE_ALLOWED_HOSTS=<public-host>"
 	@# On Windows, use npm run because bunx doesn't correctly pass arguments
 	@npm x concurrently -k \
-		"nodemon --watch src --watch tsconfig.main.json --watch tsconfig.json --ext ts,tsx,json --ignore dist --ignore node_modules scripts/build-main-watch.js" \
+		"nodemon --watch src --watch tsconfig.main.json --watch tsconfig.json --ext ts,tsx,json --ignore build_out --ignore node_modules scripts/build-main-watch.js" \
 		'npx esbuild src/cli/api.ts $(ESBUILD_CLI_FLAGS) --watch' \
-		"set NODE_ENV=development&& nodemon --watch dist/cli/index.js --watch dist/cli/server.js --delay 500ms dist/cli/index.js server --host $(or $(BACKEND_HOST),127.0.0.1) --port $(or $(BACKEND_PORT),3000)" \
+		"set NODE_ENV=development&& nodemon --watch build_out/cli/index.js --watch build_out/cli/server.js --delay 500ms build_out/cli/index.js server --host $(or $(BACKEND_HOST),127.0.0.1) --port $(or $(BACKEND_PORT),3000)" \
 		"set MUX_VITE_HOST=$(or $(VITE_HOST),127.0.0.1)&& set MUX_VITE_PORT=$(or $(VITE_PORT),5173)&& set MUX_VITE_ALLOWED_HOSTS=$(VITE_ALLOWED_HOSTS)&& set MUX_BACKEND_PORT=$(or $(BACKEND_PORT),3000)&& vite"
 else
 dev-server: node_modules/.installed build-main ## Start server mode with hot reload (backend :3000 + frontend :5173). Use VITE_HOST=0.0.0.0 VITE_ALLOWED_HOSTS=<public-host> for remote access
@@ -183,7 +183,7 @@ dev-server: node_modules/.installed build-main ## Start server mode with hot rel
 	@bun x concurrently -k \
 		"bun x concurrently \"$(TSGO) -w -p tsconfig.main.json\" \"bun x tsc-alias -w -p tsconfig.main.json\"" \
 		'bun x esbuild src/cli/api.ts $(ESBUILD_CLI_FLAGS) --watch' \
-		"bun x nodemon --watch dist/cli/index.js --watch dist/cli/server.js --delay 500ms --exec 'NODE_ENV=development node dist/cli/index.js server --host $(or $(BACKEND_HOST),127.0.0.1) --port $(or $(BACKEND_PORT),3000)'" \
+		"bun x nodemon --watch build_out/cli/index.js --watch build_out/cli/server.js --delay 500ms --exec 'NODE_ENV=development node build_out/cli/index.js server --host $(or $(BACKEND_HOST),127.0.0.1) --port $(or $(BACKEND_PORT),3000)'" \
 		"MUX_VITE_HOST=$(or $(VITE_HOST),127.0.0.1) MUX_VITE_PORT=$(or $(VITE_PORT),5173) MUX_VITE_ALLOWED_HOSTS=$(VITE_ALLOWED_HOSTS) MUX_BACKEND_PORT=$(or $(BACKEND_PORT),3000) vite"
 endif
 
@@ -199,9 +199,9 @@ start: node_modules/.installed build-main build-preload build-static ## Build an
 	@NODE_ENV=development bunx electron --remote-debugging-port=9222 .
 
 ## Build targets (can run in parallel)
-build: node_modules/.installed src/version.ts build-renderer build-main build-preload build-icons build-static ## Build all targets
+build: node_modules/.installed src/version_gen.ts build-renderer build-main build-preload build-icons build-static ## Build all targets
 
-build-main: node_modules/.installed dist/cli/index.js dist/cli/api.mjs ## Build main process
+build-main: node_modules/.installed build_out/cli/index.js build_out/cli/api.mjs ## Build main process
 
 BUILTIN_AGENTS_GENERATED := src/node/services/agentDefinitions/builtInAgentContent.generated.ts
 BUILTIN_SKILLS_GENERATED := src/node/services/agentSkills/builtInSkillContent.generated.ts
@@ -212,41 +212,41 @@ $(BUILTIN_AGENTS_GENERATED): src/node/builtinAgents/*.md scripts/generate-builti
 $(BUILTIN_SKILLS_GENERATED): src/node/builtinSkills/*.md $(DOCS_SOURCES) scripts/generate-builtin-skills.sh scripts/gen_builtin_skills.ts
 	@./scripts/generate-builtin-skills.sh
 
-dist/cli/index.js: src/cli/index.ts src/desktop/main.ts src/cli/server.ts src/version.ts tsconfig.main.json tsconfig.json $(TS_SOURCES) $(BUILTIN_AGENTS_GENERATED) $(BUILTIN_SKILLS_GENERATED)
+build_out/cli/index.js: src/cli/index.ts src/desktop/main.ts src/cli/server.ts src/version_gen.ts tsconfig.main.json tsconfig.json $(TS_SOURCES) $(BUILTIN_AGENTS_GENERATED) $(BUILTIN_SKILLS_GENERATED)
 	@echo "Building main process..."
 	@NODE_ENV=production $(TSGO) -p tsconfig.main.json
 	@NODE_ENV=production bun x tsc-alias -p tsconfig.main.json
 
 # Build API CLI as ESM bundle (trpc-cli requires ESM with top-level await)
-dist/cli/api.mjs: src/cli/api.ts src/cli/proxifyOrpc.ts $(TS_SOURCES)
+build_out/cli/api.mjs: src/cli/api.ts src/cli/proxifyOrpc.ts $(TS_SOURCES)
 	@echo "Building API CLI (ESM)..."
 	@bun x esbuild src/cli/api.ts $(ESBUILD_CLI_FLAGS)
 
-build-preload: node_modules/.installed dist/preload.js ## Build preload script
+build-preload: node_modules/.installed build_out/preload.js ## Build preload script
 
-dist/preload.js: src/desktop/preload.ts $(TS_SOURCES)
+build_out/preload.js: src/desktop/preload.ts $(TS_SOURCES)
 	@echo "Building preload script..."
 	@NODE_ENV=production bun build src/desktop/preload.ts \
 		--format=cjs \
 		--target=node \
 		--external=electron \
 		--sourcemap=inline \
-		--outfile=dist/preload.js
+		--outfile=build_out/preload.js
 
-build-renderer: node_modules/.installed src/version.ts ## Build renderer process
+build-renderer: node_modules/.installed src/version_gen.ts ## Build renderer process
 	@echo "Building renderer..."
-	@bun x vite build
+	@bun x vite build --outDir build_out --emptyOutDir false
 
-build-static: ## Copy static assets to dist
+build-static: ## Copy static assets to build_out
 	@echo "Copying static assets..."
-	@mkdir -p dist
-	@cp static/splash.html dist/splash.html
-	@cp -r public/* dist/
+	@mkdir -p build_out
+	@cp static/splash.html build_out/splash.html
+	@cp -r public/* build_out/
 	@# Copy TypeScript lib files for PTC runtime type validation (es5 through es2023).
 	@# electron-builder ignores .d.ts files by default and this cannot be overridden:
 	@# https://github.com/electron-userland/electron-builder/issues/5064
 	@# Workaround: rename to .d.ts.txt extension to bypass the filter.
-	@mkdir -p dist/typescript-lib
+	@mkdir -p build_out/typescript-lib
 	@for f in node_modules/typescript/lib/lib.es5.d.ts \
 	          node_modules/typescript/lib/lib.es2015*.d.ts \
 	          node_modules/typescript/lib/lib.es2016*.d.ts \
@@ -257,14 +257,14 @@ build-static: ## Copy static assets to dist
 	          node_modules/typescript/lib/lib.es2021*.d.ts \
 	          node_modules/typescript/lib/lib.es2022*.d.ts \
 	          node_modules/typescript/lib/lib.es2023*.d.ts; do \
-		cp "$$f" "dist/typescript-lib/$$(basename $$f).txt"; \
+		cp "$$f" "build_out/typescript-lib/$$(basename $$f).txt"; \
 	done
 
 # Always regenerate version file (marked as .PHONY above)
 version: ## Generate version file
 	@bun scripts/generate-version.ts
 
-src/version.ts: version
+src/version_gen.ts: version
 
 # Platform-specific icon targets
 ifeq ($(shell uname), Darwin)
@@ -284,13 +284,13 @@ build/icon.png: docs/img/logo-white.svg scripts/generate-icons.ts
 ## Quality checks (can run in parallel)
 static-check: lint typecheck fmt-check check-eager-imports check-bench-agent check-docs-links check-code-docs-links lint-shellcheck flake-hash-check ## Run all static checks (lint + typecheck + fmt-check)
 
-check-bench-agent: node_modules/.installed src/version.ts $(BUILTIN_SKILLS_GENERATED) ## Verify terminal-bench agent configuration and imports
+check-bench-agent: node_modules/.installed src/version_gen.ts $(BUILTIN_SKILLS_GENERATED) ## Verify terminal-bench agent configuration and imports
 	@./scripts/check-bench-agent.sh
 
-lint: node_modules/.installed src/version.ts $(BUILTIN_SKILLS_GENERATED) ## Run ESLint (typecheck runs in separate target)
+lint: node_modules/.installed src/version_gen.ts $(BUILTIN_SKILLS_GENERATED) ## Run ESLint (typecheck runs in separate target)
 	@./scripts/lint.sh
 
-lint-fix: node_modules/.installed src/version.ts $(BUILTIN_SKILLS_GENERATED) ## Run linter with --fix
+lint-fix: node_modules/.installed src/version_gen.ts $(BUILTIN_SKILLS_GENERATED) ## Run linter with --fix
 	@./scripts/lint.sh --fix
 
 lint-actions: lint-actionlint lint-zizmor ## Lint GitHub Actions workflows
@@ -302,7 +302,7 @@ lint-zizmor: ## Run zizmor security analysis on GitHub Actions workflows
 	@./scripts/zizmor.sh --min-confidence high .
 
 # Shell files to lint (excludes node_modules, build artifacts, .git)
-SHELL_SRC_FILES := $(shell find . -not \( -path '*/.git/*' -o -path './node_modules/*' -o -path './build/*' -o -path './dist/*' -o -path './release/*' -o -path './benchmarks/terminal_bench/.leaderboard_cache/*' \) -type f -name '*.sh' 2>/dev/null)
+SHELL_SRC_FILES := $(shell find . -not \( -path '*/.git/*' -o -path './node_modules/*' -o -path './build/*' -o -path './build_out/*' -o -path './release/*' -o -path './benchmarks/terminal_bench/.leaderboard_cache/*' \) -type f -name '*.sh' 2>/dev/null)
 
 lint-shellcheck: ## Run shellcheck on shell scripts
 	shellcheck --external-sources $(SHELL_SRC_FILES)
@@ -311,13 +311,13 @@ pin-actions: ## Pin GitHub Actions to SHA hashes (requires GH_TOKEN or gh CLI)
 	./scripts/pin-actions.sh .github/workflows/*.yml .github/actions/*/action.yml
 
 ifeq ($(OS),Windows_NT)
-typecheck: node_modules/.installed src/version.ts $(BUILTIN_AGENTS_GENERATED) $(BUILTIN_SKILLS_GENERATED) ## Run TypeScript type checking (uses tsgo for 10x speedup)
+typecheck: node_modules/.installed src/version_gen.ts $(BUILTIN_AGENTS_GENERATED) $(BUILTIN_SKILLS_GENERATED) ## Run TypeScript type checking (uses tsgo for 10x speedup)
 	@# On Windows, use npm run because bun x doesn't correctly pass arguments
 	@npm x concurrently -g \
 		"$(TSGO) --noEmit" \
 		"$(TSGO) --noEmit -p tsconfig.main.json"
 else
-typecheck: node_modules/.installed src/version.ts $(BUILTIN_AGENTS_GENERATED) $(BUILTIN_SKILLS_GENERATED)
+typecheck: node_modules/.installed src/version_gen.ts $(BUILTIN_AGENTS_GENERATED) $(BUILTIN_SKILLS_GENERATED)
 	@bun x concurrently -g \
 		"$(TSGO) --noEmit" \
 		"$(TSGO) --noEmit -p tsconfig.main.json"
@@ -430,11 +430,11 @@ check-code-docs-links: ## Validate code references to docs paths
 	@./scripts/check-code-docs-links.sh
 
 ## Storybook
-storybook: node_modules/.installed src/version.ts ## Start Storybook development server
+storybook: node_modules/.installed src/version_gen.ts ## Start Storybook development server
 	$(check_node_version)
 	@bun x storybook dev -p 6006 $(STORYBOOK_OPEN_FLAG)
 
-storybook-build: node_modules/.installed src/version.ts ## Build static Storybook
+storybook-build: node_modules/.installed src/version_gen.ts ## Build static Storybook
 	$(check_node_version)
 	@bun x storybook build
 
@@ -475,7 +475,7 @@ benchmark-terminal: ## Run Terminal-Bench 2.0 with Harbor (use TB_DATASET/TB_CON
 ## Clean
 clean: ## Clean build artifacts
 	@echo "Cleaning build artifacts..."
-	@rm -rf dist release build/icon.icns build/icon.png
+	@rm -rf build_out release build/icon.icns build/icon.png
 	@echo "Done!"
 
 ## Startup Performance Checks

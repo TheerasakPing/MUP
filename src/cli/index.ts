@@ -21,7 +21,7 @@
  * process.defaultApp is true in dev mode and undefined in packaged apps.
  */
 import { Command } from "commander";
-import { VERSION } from "../version";
+import { VERSION } from "../version_gen";
 import {
   CLI_GLOBAL_FLAGS,
   detectCliEnvironment,

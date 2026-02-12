@@ -110,7 +110,7 @@ const getPlugins = (mode: string) => {
     plugins.push(
       visualizer({
         open: true,
-        filename: "dist/stats.html",
+        filename: "build_out/stats.html",
         gzipSize: true,
         brotliSize: true,
       })
@@ -145,7 +145,7 @@ export default defineConfig(({ mode }) => {
     },
     base: "./",
     build: {
-      outDir: "dist",
+      outDir: "build_out",
       assetsDir: ".",
       emptyOutDir: false,
       sourcemap: mode === "development" || isProfiling, // Only in dev/profiling for debugging
@@ -203,7 +203,7 @@ export default defineConfig(({ mode }) => {
 
       watch: {
         // Ignore node_modules to drastically reduce file handle usage
-        ignored: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
+        ignored: ["**/node_modules/**", "**/build_out/**", "**/.git/**"],
 
         // Use polling on Windows to avoid file handle exhaustion
         // This is slightly less efficient but much more stable

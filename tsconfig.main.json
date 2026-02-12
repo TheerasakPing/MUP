@@ -3,12 +3,12 @@
   "compilerOptions": {
     "module": "CommonJS",
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "build_out",
     "noEmit": false,
     "sourceMap": true
   },
   "watchOptions": {
-    "excludeDirectories": ["**/node_modules", "**/dist", "**/build", "**/.git"],
+    "excludeDirectories": ["**/node_modules", "**/build_out", "**/build", "**/.git"],
     "excludeFiles": ["**/*.d.ts.map"]
   },
   "include": [

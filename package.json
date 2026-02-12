@@ -3,9 +3,9 @@
   "version": "0.17.5",
   "description": "mup - coder multiplexer",
   "author": "Coder",
-  "main": "dist/cli/index.js",
+  "main": "build_out/cli/index.js",
   "bin": {
-    "mup": "dist/cli/index.js"
+    "mup": "build_out/cli/index.js"
   },
   "license": "AGPL-3.0-only",
   "publishConfig": {
@@ -16,9 +16,9 @@
     "dev:win": "bun scripts/start-dev.ts",
     "prebuild:main": "bun scripts/generate-version.ts",
     "build": "make build",
-    "build:win": "bun scripts/generate-version.ts && node scripts/build-main-watch.js && bun build src/desktop/preload.ts --format=cjs --target=node --external=electron --sourcemap=inline --outfile=dist/preload.js && bun x vite build && bun scripts/copy-static.ts",
+    "build:win": "bun scripts/generate-version.ts && node scripts/build-main-watch.js && bun build src/desktop/preload.ts --format=cjs --target=node --external=electron --sourcemap=inline --outfile=build_out/preload.js && bun x vite build && bun scripts/copy-static.ts",
     "start": "make start",
-    "start:win": "bun scripts/generate-version.ts && node scripts/build-main-watch.js && bun build src/desktop/preload.ts --format=cjs --target=node --external=electron --sourcemap=inline --outfile=dist/preload.js && bun x vite build && bun scripts/copy-static.ts && set MUX_E2E_LOAD_DIST=1&& bunx electron --remote-debugging-port=9222 .",
+    "start:win": "bun scripts/generate-version.ts && node scripts/build-main-watch.js && bun build src/desktop/preload.ts --format=cjs --target=node --external=electron --sourcemap=inline --outfile=build_out/preload.js && bun x vite build && bun scripts/copy-static.ts && set MUX_E2E_LOAD_DIST=1&& bunx electron --remote-debugging-port=9222 .",
     "analyze:bundle": "cross-env ANALYZE=true bun run build:win",
     "typecheck": "make typecheck",
     "debug": "bun src/cli/debug/index.ts",
@@ -235,17 +235,17 @@
     "node-pty": "1.1.0-beta39"
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.mjs",
-    "dist/**/*.js.map",
-    "dist/**/*.wasm",
-    "dist/**/*.html",
-    "dist/**/*.css",
-    "dist/**/*.woff",
-    "dist/**/*.woff2",
-    "dist/**/*.json",
-    "dist/**/*.png",
-    "dist/assets/**/*",
+    "build_out/**/*.js",
+    "build_out/**/*.mjs",
+    "build_out/**/*.js.map",
+    "build_out/**/*.wasm",
+    "build_out/**/*.html",
+    "build_out/**/*.css",
+    "build_out/**/*.woff",
+    "build_out/**/*.woff2",
+    "build_out/**/*.json",
+    "build_out/**/*.png",
+    "build_out/assets/**/*",
     "scripts/postinstall.sh",
     "npm-shrinkwrap.json",
     "README.md",
@@ -270,11 +270,11 @@
       "output": "release"
     },
     "files": [
-      "dist/**/*"
+      "build_out/**/*"
     ],
     "asarUnpack": [
-      "dist/**/*.wasm",
-      "dist/**/*.map",
+      "build_out/**/*.wasm",
+      "build_out/**/*.map",
       "**/node_modules/node-pty/build/**/*"
     ],
     "mac": {

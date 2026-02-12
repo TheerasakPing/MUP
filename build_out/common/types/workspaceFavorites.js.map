@@ -1,0 +1,1 @@
+{"version":3,"file":"workspaceFavorites.js","sourceRoot":"","sources":["../../../src/common/types/workspaceFavorites.ts"],"names":[],"mappings":";AAAA;;;GAGG","sourcesContent":["/**\n * Workspace Favorites Types\n * Defines structure for pinning workspaces\n */\n\nexport interface WorkspaceFavorite {\n  workspaceId: string;\n  pinnedAt: number; // timestamp for ordering\n}\n"]}

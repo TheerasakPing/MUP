@@ -186,6 +186,7 @@ export class Config {
           muxGovernorToken?: unknown;
           stopCoderWorkspaceOnArchive?: unknown;
           customModelPrices?: unknown;
+        iconThemeConfig?: unknown;
         };
 
         // Config is stored as array of [path, config] pairs
@@ -260,6 +261,7 @@ export class Config {
             muxGovernorToken: parseOptionalNonEmptyString(parsed.muxGovernorToken),
             stopCoderWorkspaceOnArchive,
             customModelPrices: parsed.customModelPrices as Record<string, CustomModelConfig> | undefined,
+            iconThemeConfig: parsed.iconThemeConfig as IconThemeConfig | undefined,
           };
         }
       }

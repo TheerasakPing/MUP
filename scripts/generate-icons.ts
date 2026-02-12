@@ -29,7 +29,7 @@ const SOURCE_BLACK = path.join(ROOT, "docs", "img", "logo-black.svg");
 const SOURCE_WHITE = path.join(ROOT, "docs", "img", "logo-white.svg");
 
 // Build outputs
-const BUILD_DIR = path.join(ROOT, "build");
+const BUILD_DIR = path.join(ROOT, "build_out");
 const ICONSET_DIR = path.join(BUILD_DIR, "icon.iconset");
 const PNG_OUTPUT = path.join(BUILD_DIR, "icon.png");
 const ICNS_OUTPUT = path.join(BUILD_DIR, "icon.icns");

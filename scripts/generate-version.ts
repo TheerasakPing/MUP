@@ -3,41 +3,43 @@ import fs from "fs";
 import path from "path";
 
 function runCommand(command: string): string {
-    try {
-        return execSync(command, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
-    } catch (error) {
-        return "";
-    }
+  try {
+    return execSync(command, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch (error) {
+    return "";
+  }
 }
 
 function getGitCommit(): string {
-    const commit = runCommand("git rev-parse --short HEAD");
-    return commit || "unknown";
+  const commit = runCommand("git rev-parse --short HEAD");
+  return commit || "unknown";
 }
 
 function getGitDescribe(): string {
-    // Check if RELEASE_TAG is set (CI environment)
-    const releaseTag = process.env.RELEASE_TAG;
-    if (releaseTag) {
-        console.log(`Release build: using RELEASE_TAG=${releaseTag}`);
-        return releaseTag;
-    }
+  // Check if RELEASE_TAG is set (CI environment)
+  const releaseTag = process.env.RELEASE_TAG;
+  if (releaseTag) {
+    console.log(`Release build: using RELEASE_TAG=${releaseTag}`);
+    return releaseTag;
+  }
 
-    // Local/dev build: use git describe with dirty detection
-    const describe = runCommand("git describe --tags --always --dirty");
+  // Local/dev build: use git describe with dirty detection
+  const describe = runCommand("git describe --tags --always --dirty");
 
-    if (describe.includes("-dirty")) {
-        console.log("⚠️  Git checkout is dirty; version will be stamped with '-dirty'.");
-        try {
-            const dirtyFiles = execSync("git diff-index --name-only HEAD --", { encoding: "utf8" }).trim().split("\n");
-            if (dirtyFiles.length > 0) {
-                console.log("Tracked dirty files:");
-                dirtyFiles.forEach(f => console.log(`  - ${f}`));
-            }
-        } catch (e) { }
-    }
+  if (describe.includes("-dirty")) {
+    console.log("⚠️  Git checkout is dirty; version will be stamped with '-dirty'.");
+    try {
+      const dirtyFiles = execSync("git diff-index --name-only HEAD --", { encoding: "utf8" })
+        .trim()
+        .split("\n");
+      if (dirtyFiles.length > 0) {
+        console.log("Tracked dirty files:");
+        dirtyFiles.forEach((f) => console.log(`  - ${f}`));
+      }
+    } catch (e) {}
+  }
 
-    return describe || "unknown";
+  return describe || "unknown";
 }
 
 const gitCommit = getGitCommit();
@@ -54,7 +56,7 @@ export const VERSION = {
 };
 `;
 
-const outputPath = path.join(process.cwd(), "src", "version.ts");
+const outputPath = path.join(process.cwd(), "src", "version_gen.ts");
 fs.writeFileSync(outputPath, content);
 
 console.log(`Generated version.ts: ${gitDescribe} (${gitCommit}) at ${timestamp}`);

@@ -22,7 +22,7 @@
     }
   },
   "watchOptions": {
-    "excludeDirectories": ["**/node_modules", "**/dist", "**/build", "**/.git"],
+    "excludeDirectories": ["**/node_modules", "**/build_out", "**/build", "**/.git"],
     "excludeFiles": ["**/*.d.ts.map"]
   },
   "include": [
@@ -32,5 +32,5 @@
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "build_out"]
 }
