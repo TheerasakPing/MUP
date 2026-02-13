@@ -2,7 +2,7 @@ import { asyncEventIterator, createAsyncEventQueue } from "./asyncEventIterator"
 
 describe("asyncEventIterator", () => {
   it("yields events emitted after subscription", async () => {
-    let handler: (value: number) => void = () => {};
+    let handler: (value: number) => void = () => { /* noop */ };
     const subscribe = jest.fn((h: (v: number) => void) => {
       handler = h;
     });
@@ -31,7 +31,7 @@ describe("asyncEventIterator", () => {
   });
 
   it("yields initial value if provided", async () => {
-    let handler: (value: number) => void = () => {};
+    let handler: (value: number) => void = () => { /* noop */ };
     const subscribe = (h: (v: number) => void) => {
       handler = h;
     };
@@ -60,7 +60,7 @@ describe("asyncEventIterator", () => {
   });
 
   it("handles multiple queued events", async () => {
-    let handler: (value: number) => void = () => {};
+    let handler: (value: number) => void = () => { /* noop */ };
     const subscribe = jest.fn((h: (v: number) => void) => {
       handler = h;
     });
@@ -89,7 +89,7 @@ describe("asyncEventIterator", () => {
 
   it("calls unsubscribe on cleanup", async () => {
     const unsubscribe = jest.fn();
-    const iterator = asyncEventIterator<number>(() => {}, unsubscribe, { initialValue: 1 });
+    const iterator = asyncEventIterator<number>(() => { /* noop */ }, unsubscribe, { initialValue: 1 });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const _ of iterator) {
@@ -100,7 +100,7 @@ describe("asyncEventIterator", () => {
   });
 
   it("does not yield events after being closed", async () => {
-    let handler: (value: number) => void = () => {};
+    let handler: (value: number) => void = () => { /* noop */ };
     const subscribe = (h: (v: number) => void) => {
       handler = h;
     };
@@ -118,10 +118,12 @@ describe("asyncEventIterator", () => {
     handler(1);
     const first = await nextPromise;
     expect(first.value).toBe(1);
-    results.push(first.value);
+    if (first.value !== undefined) {
+      results.push(first.value);
+    }
 
     // Close it
-    await it.return!();
+    await it.return(undefined);
 
     handler(2); // Should be ignored because 'ended' is true
 
@@ -185,7 +187,9 @@ describe("createAsyncEventQueue", () => {
     const first = await iterator.next();
     const second = await iterator.next();
 
-    results.push(first.value, second.value);
+    if (first.value !== undefined && second.value !== undefined) {
+      results.push(first.value, second.value);
+    }
     expect(results).toEqual([1, 2]);
   });
 
