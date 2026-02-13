@@ -93,7 +93,7 @@ function MetricCard({
 }) {
   return (
     <div className={cn("bg-panel rounded-lg border border-border-light px-3 py-2", className)}>
-      <div className="text-muted mb-0.5 flex items-center gap-1.5 text-[10px] uppercase tracking-wider">
+      <div className="text-muted mb-0.5 flex items-center gap-1.5 text-[10px] tracking-wider uppercase">
         <Icon className="h-3 w-3" />
         {label}
       </div>
@@ -176,7 +176,7 @@ function AgentMonitorComponent({ workspaceId }: AgentMonitorProps) {
   return (
     <div className="space-y-4">
       {/* Status Header */}
-      <div className="bg-panel rounded-lg border border-border-light p-3">
+      <div className="bg-panel border-border-light rounded-lg border p-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <StatusIcon className={cn("h-4 w-4", config.color)} />
@@ -192,7 +192,7 @@ function AgentMonitorComponent({ workspaceId }: AgentMonitorProps) {
 
         {/* Active stream info */}
         {isActive && (
-          <div className="mt-2 grid grid-cols-3 gap-2 border-t border-border-light pt-2">
+          <div className="border-border-light mt-2 grid grid-cols-3 gap-2 border-t pt-2">
             <div className="text-center">
               <div className="text-muted text-[10px] uppercase">TPS</div>
               <div className="text-foreground text-sm font-medium tabular-nums">
@@ -218,9 +218,9 @@ function AgentMonitorComponent({ workspaceId }: AgentMonitorProps) {
 
         {/* Runtime status detail */}
         {state.runtimeStatus && state.runtimeStatus.phase !== "ready" && (
-          <div className="mt-2 border-t border-border-light pt-2">
+          <div className="border-border-light mt-2 border-t pt-2">
             <div className="text-muted flex items-center gap-1.5 text-[11px]">
-              <Cpu className="h-3 w-3 flex-shrink-0" />
+              <Cpu className="h-3 w-3 shrink-0" />
               <span className="truncate">
                 {state.runtimeStatus.detail ?? `Runtime: ${state.runtimeStatus.phase}`}
               </span>
@@ -261,8 +261,8 @@ function AgentMonitorComponent({ workspaceId }: AgentMonitorProps) {
 
       {/* Per-Model Breakdown */}
       {statsSnapshot?.session?.byModel && Object.keys(statsSnapshot.session.byModel).length > 0 && (
-        <div className="bg-panel rounded-lg border border-border-light p-3">
-          <h4 className="text-muted mb-2 text-[10px] uppercase tracking-wider">Model Breakdown</h4>
+        <div className="bg-panel border-border-light rounded-lg border p-3">
+          <h4 className="text-muted mb-2 text-[10px] tracking-wider uppercase">Model Breakdown</h4>
           <div className="space-y-1.5">
             {Object.entries(statsSnapshot.session.byModel).map(([model, stats]) => (
               <div key={model} className="flex items-center justify-between text-xs">
@@ -281,8 +281,8 @@ function AgentMonitorComponent({ workspaceId }: AgentMonitorProps) {
 
       {/* Active Stream Timing */}
       {statsSnapshot?.active && (
-        <div className="bg-panel rounded-lg border border-border-light p-3">
-          <h4 className="text-muted mb-2 text-[10px] uppercase tracking-wider">Active Stream</h4>
+        <div className="bg-panel border-border-light rounded-lg border p-3">
+          <h4 className="text-muted mb-2 text-[10px] tracking-wider uppercase">Active Stream</h4>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
             <div className="text-muted">Model</div>
             <div className="text-foreground truncate text-right font-medium">

@@ -58,32 +58,32 @@ export function TemplateManager({ isOpen, onClose, onSelectTemplate }: TemplateM
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-background p-6 shadow-lg overflow-y-auto">
-          <div className="flex items-center justify-between mb-4">
+        <Dialog.Content className="border-border bg-background fixed top-1/2 left-1/2 max-h-[85vh] w-[90vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border p-6 shadow-lg">
+          <div className="mb-4 flex items-center justify-between">
             <Dialog.Title className="text-lg font-semibold">Workspace Templates</Dialog.Title>
             <Dialog.Close asChild>
-              <button className="rounded-sm opacity-70 hover:opacity-100 transition">
+              <button className="rounded-sm opacity-70 transition hover:opacity-100">
                 <X className="h-4 w-4" />
               </button>
             </Dialog.Close>
           </div>
 
-          <div className="flex gap-2 mb-4">
+          <div className="mb-4 flex gap-2">
             <button
               onClick={() => setShowCreateForm(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2 rounded-md px-3 py-1.5 text-sm"
             >
               <Plus className="h-4 w-4" />
               New Template
             </button>
             <button
               onClick={handleExport}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md border border-border hover:bg-secondary/50"
+              className="border-border hover:bg-secondary/50 flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm"
             >
               <Download className="h-4 w-4" />
               Export
             </button>
-            <label className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md border border-border hover:bg-secondary/50 cursor-pointer">
+            <label className="border-border hover:bg-secondary/50 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm">
               <Upload className="h-4 w-4" />
               Import
               <input type="file" accept=".json" onChange={handleImport} className="hidden" />
@@ -94,21 +94,21 @@ export function TemplateManager({ isOpen, onClose, onSelectTemplate }: TemplateM
             {templates.map((template) => (
               <div
                 key={template.id}
-                className="flex items-center justify-between p-3 rounded-md border border-border hover:bg-secondary/30 transition"
+                className="border-border hover:bg-secondary/30 flex items-center justify-between rounded-md border p-3 transition"
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-medium">{template.name}</h3>
                     {template.isDefault && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-accent/20 text-accent">
+                      <span className="bg-accent/20 text-accent rounded-full px-2 py-0.5 text-xs">
                         Default
                       </span>
                     )}
                   </div>
                   {template.description && (
-                    <p className="text-sm text-muted-foreground mt-1">{template.description}</p>
+                    <p className="text-muted-foreground mt-1 text-sm">{template.description}</p>
                   )}
-                  <div className="flex gap-2 mt-2 text-xs text-muted-foreground">
+                  <div className="text-muted-foreground mt-2 flex gap-2 text-xs">
                     <span>Runtime: {template.runtime}</span>
                     {template.model && <span>Model: {template.model}</span>}
                     {template.thinkingLevel !== undefined && (
@@ -123,14 +123,14 @@ export function TemplateManager({ isOpen, onClose, onSelectTemplate }: TemplateM
                         onSelectTemplate(template.id);
                         onClose();
                       }}
-                      className="px-3 py-1.5 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-3 py-1.5 text-sm"
                     >
                       Use
                     </button>
                   )}
                   <button
                     onClick={() => setEditingId(template.id)}
-                    className="p-2 rounded-md hover:bg-secondary/50"
+                    className="hover:bg-secondary/50 rounded-md p-2"
                   >
                     <Edit className="h-4 w-4" />
                   </button>
@@ -141,7 +141,7 @@ export function TemplateManager({ isOpen, onClose, onSelectTemplate }: TemplateM
                           deleteTemplate(template.id);
                         }
                       }}
-                      className="p-2 rounded-md hover:bg-danger/10 text-danger"
+                      className="hover:bg-danger/10 text-danger rounded-md p-2"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

@@ -189,7 +189,7 @@ export class ModelPresetsService {
 
       const preset: ModelPreset = {
         id: crypto.randomUUID(), // new ID to avoid collision
-        name: p.name as string,
+        name: p.name,
         description: typeof p.description === "string" ? p.description : undefined,
         createdAt: now,
         updatedAt: now,

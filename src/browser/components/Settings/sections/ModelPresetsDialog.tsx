@@ -42,7 +42,7 @@ interface ModelPresetsDialogProps {
   onApplyPreset: (models: PresetModelEntry[]) => void;
 }
 
-const tabItems: { id: Tab; label: string; icon: React.ElementType }[] = [
+const tabItems: Array<{ id: Tab; label: string; icon: React.ElementType }> = [
   { id: "save", label: "Save", icon: Save },
   { id: "load", label: "Load", icon: FolderOpen },
   { id: "export", label: "Export", icon: Download },

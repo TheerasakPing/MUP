@@ -266,7 +266,7 @@ function ThemeCard({
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-muted hover:text-red-400"
+            className="text-muted h-7 w-7 hover:text-red-400"
             onClick={onDelete}
             aria-label={`Delete ${label}`}
           >

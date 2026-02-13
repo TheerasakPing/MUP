@@ -1,7 +1,7 @@
 import type { ChatUsageDisplay } from "./usageAggregator";
 import { getModelStats } from "./modelStats";
 import { supports1MContext } from "../ai/models";
-import { CustomModelMetadata } from "../../orpc/schemas/api";
+import type { CustomModelMetadata } from "../../orpc/schemas/api";
 
 // NOTE: Provide theme-matching fallbacks so token meters render consistently
 // even if a host environment doesn't define the CSS variables (e.g., an embedded UI).

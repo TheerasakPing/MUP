@@ -28,7 +28,7 @@ import { ModelRow } from "./ModelRow";
 import { EditModelDialog } from "./EditModelDialog";
 import { ModelPresetsDialog } from "./ModelPresetsDialog";
 import { HealthCheckDialog } from "./HealthCheckDialog";
-import { CustomModelMetadata } from "@/common/orpc/schemas/api";
+import type { CustomModelMetadata } from "@/common/orpc/schemas/api";
 
 // Providers to exclude from the custom models UI (handled specially or internal)
 const HIDDEN_PROVIDERS = new Set(["mux-gateway"]);
@@ -465,7 +465,7 @@ export function ModelsSection() {
           // Apply preset — set models for each provider
           const byProvider = new Map<
             string,
-            { modelId: string; metadata?: CustomModelMetadata }[]
+            Array<{ modelId: string; metadata?: CustomModelMetadata }>
           >();
           for (const m of presetModels) {
             const list = byProvider.get(m.provider) ?? [];

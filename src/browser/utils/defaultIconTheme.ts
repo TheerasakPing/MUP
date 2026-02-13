@@ -1,4 +1,4 @@
-import { IconThemeDocument } from "@/common/types/iconTheme";
+import type { IconThemeDocument } from "@/common/types/iconTheme";
 
 /**
  * MUP Default Icon Theme

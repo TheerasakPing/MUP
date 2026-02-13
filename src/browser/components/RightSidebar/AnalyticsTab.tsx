@@ -30,41 +30,41 @@ export function AnalyticsTab({ workspaceId }: AnalyticsTabProps) {
   ];
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-border">
-        <h2 className="text-lg font-semibold mb-3">Performance Analytics</h2>
+    <div className="flex h-full flex-col">
+      <div className="border-border border-b p-4">
+        <h2 className="mb-3 text-lg font-semibold">Performance Analytics</h2>
 
         <ToggleGroup.Root
           type="single"
           value={timeRange}
           onValueChange={(val) => val && setTimeRange(val)}
-          className="inline-flex rounded-lg border border-border bg-secondary/30 p-0.5"
+          className="border-border bg-secondary/30 inline-flex rounded-lg border p-0.5"
         >
           <ToggleGroup.Item
             value="all"
-            className="px-3 py-1.5 text-xs rounded-md data-[state=on]:bg-background data-[state=on]:shadow-sm"
+            className="data-[state=on]:bg-background rounded-md px-3 py-1.5 text-xs data-[state=on]:shadow-sm"
           >
             All Time
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="30d"
-            className="px-3 py-1.5 text-xs rounded-md data-[state=on]:bg-background data-[state=on]:shadow-sm"
+            className="data-[state=on]:bg-background rounded-md px-3 py-1.5 text-xs data-[state=on]:shadow-sm"
           >
             30 Days
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="7d"
-            className="px-3 py-1.5 text-xs rounded-md data-[state=on]:bg-background data-[state=on]:shadow-sm"
+            className="data-[state=on]:bg-background rounded-md px-3 py-1.5 text-xs data-[state=on]:shadow-sm"
           >
             7 Days
           </ToggleGroup.Item>
         </ToggleGroup.Root>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div className="flex-1 space-y-6 overflow-y-auto p-4">
         {/* Agent Performance */}
         <section>
-          <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+          <h3 className="mb-3 flex items-center gap-2 text-sm font-medium">
             <BarChart className="h-4 w-4" />
             Agent Success Rates
           </h3>
@@ -72,19 +72,19 @@ export function AnalyticsTab({ workspaceId }: AnalyticsTabProps) {
             {mockAgentMetrics.map((agent) => (
               <div
                 key={agent.agentId}
-                className="p-3 rounded-md bg-secondary/20 border border-border"
+                className="bg-secondary/20 border-border rounded-md border p-3"
               >
-                <div className="flex items-center justify-between mb-2">
+                <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm font-medium">{agent.agentId}</span>
-                  <span className="text-sm text-success">{agent.successRate}%</span>
+                  <span className="text-success text-sm">{agent.successRate}%</span>
                 </div>
-                <div className="w-full bg-secondary rounded-full h-2">
+                <div className="bg-secondary h-2 w-full rounded-full">
                   <div
                     className="bg-success h-2 rounded-full"
                     style={{ width: `${agent.successRate}%` }}
                   />
                 </div>
-                <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
+                <div className="text-muted-foreground mt-2 flex gap-4 text-xs">
                   <span>{agent.requests} requests</span>
                   <span>{agent.avgTime}ms avg</span>
                 </div>
@@ -95,14 +95,14 @@ export function AnalyticsTab({ workspaceId }: AnalyticsTabProps) {
 
         {/* Model Performance */}
         <section>
-          <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+          <h3 className="mb-3 flex items-center gap-2 text-sm font-medium">
             <TrendingUp className="h-4 w-4" />
             Model Performance
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="border-b border-border">
-                <tr className="text-left text-muted-foreground">
+              <thead className="border-border border-b">
+                <tr className="text-muted-foreground text-left">
                   <th className="pb-2 font-medium">Model</th>
                   <th className="pb-2 font-medium">TTFT</th>
                   <th className="pb-2 font-medium">TPS</th>
@@ -110,7 +110,7 @@ export function AnalyticsTab({ workspaceId }: AnalyticsTabProps) {
                   <th className="pb-2 font-medium">Cost</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody className="divide-border divide-y">
                 {mockModelMetrics.map((model) => (
                   <tr key={model.model}>
                     <td className="py-2">{model.model}</td>
@@ -126,8 +126,8 @@ export function AnalyticsTab({ workspaceId }: AnalyticsTabProps) {
         </section>
 
         {/* Export */}
-        <div className="pt-4 border-t border-border">
-          <button className="w-full px-4 py-2 text-sm rounded-md border border-border hover:bg-secondary/50">
+        <div className="border-border border-t pt-4">
+          <button className="border-border hover:bg-secondary/50 w-full rounded-md border px-4 py-2 text-sm">
             Export Analytics CSV
           </button>
         </div>

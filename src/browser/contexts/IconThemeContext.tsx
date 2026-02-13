@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useAPI } from "@/browser/contexts/API";
-import { IconThemeDocument, DEFAULT_MUP_THEME_ID } from "@/common/types/iconTheme";
+import type { IconThemeDocument} from "@/common/types/iconTheme";
+import { DEFAULT_MUP_THEME_ID } from "@/common/types/iconTheme";
 import { getBrowserBackendBaseUrl } from "@/browser/utils/backendBaseUrl";
 import { MUP_DEFAULT_THEME } from "@/browser/utils/defaultIconTheme";
 import { getRootIconUrl } from "@/browser/components/FileIcon";

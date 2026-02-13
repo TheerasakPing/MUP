@@ -2,10 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import JSZip from "jszip";
 import { log } from "@/node/services/log";
-import { Config } from "@/node/config";
-import {
+import type { Config } from "@/node/config";
+import type {
   IconThemeDocument,
-  InstalledIconTheme,
+  InstalledIconTheme} from "@/common/types/iconTheme";
+import {
   DEFAULT_MUP_THEME_ID,
 } from "@/common/types/iconTheme";
 import { getMuxHome } from "@/common/constants/paths";
@@ -15,8 +16,8 @@ import { getMuxHome } from "@/common/constants/paths";
  * Handles loading, activating, and listing icon themes.
  */
 export class IconThemeService {
-  private config: Config;
-  private iconThemesDir: string;
+  private readonly config: Config;
+  private readonly iconThemesDir: string;
 
   constructor(config: Config) {
     this.config = config;
@@ -367,7 +368,7 @@ export class IconThemeService {
   ): Promise<{ data: string; mimeType: string } | null> {
     const themes = this.getInstalledThemes();
     const theme = themes.find((t) => t.id === themeId);
-    if (!theme || !theme.themeDir) return null;
+    if (!theme?.themeDir) return null;
 
     // Resolve and validate path (prevent traversal)
     const fullPath = path.resolve(theme.themeDir, iconPath);

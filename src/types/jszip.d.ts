@@ -9,9 +9,7 @@ declare module "jszip" {
     async(type: "blob"): Promise<Blob>;
   }
 
-  interface JSZipFiles {
-    [key: string]: JSZipObject;
-  }
+  type JSZipFiles = Record<string, JSZipObject>;
 
   interface JSZip {
     files: JSZipFiles;

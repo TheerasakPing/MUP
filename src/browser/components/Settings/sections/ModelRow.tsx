@@ -151,7 +151,7 @@ function ContextWindowSlider(props: {
   );
 }
 
-import { CustomModelMetadata } from "@/common/orpc/schemas/api";
+import type { CustomModelMetadata } from "@/common/orpc/schemas/api";
 
 export interface ModelRowProps {
   provider: string;

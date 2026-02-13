@@ -149,19 +149,19 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-5xl h-[80vh]">
+      <DialogContent className="h-[80vh] max-w-5xl">
         <DialogHeader>
           <DialogTitle>Code Snippet Library</DialogTitle>
           <DialogDescription>Save and manage your frequently used code snippets</DialogDescription>
         </DialogHeader>
 
-        <div className="flex gap-4 h-full">
+        <div className="flex h-full gap-4">
           {/* Left Panel - Snippet List */}
-          <div className="flex-1 flex flex-col gap-3">
+          <div className="flex flex-1 flex-col gap-3">
             {/* Search and Filters */}
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
                 <Input
                   placeholder="Search snippets..."
                   value={searchQuery}
@@ -207,15 +207,15 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
                   setEditForm({ name: "", code: "", language: "typescript" });
                 }}
               >
-                <Plus className="h-4 w-4 mr-1" />
+                <Plus className="mr-1 h-4 w-4" />
                 New Snippet
               </Button>
               <Button size="sm" variant="outline" onClick={exportSnippets}>
-                <Download className="h-4 w-4 mr-1" />
+                <Download className="mr-1 h-4 w-4" />
                 Export
               </Button>
               <Button size="sm" variant="outline" onClick={handleImport}>
-                <Upload className="h-4 w-4 mr-1" />
+                <Upload className="mr-1 h-4 w-4" />
                 Import
               </Button>
             </div>
@@ -224,7 +224,7 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
             <ScrollArea className="flex-1">
               <div className="space-y-2">
                 {filteredSnippets.length === 0 ? (
-                  <div className="text-center text-muted-foreground py-8">No snippets found</div>
+                  <div className="text-muted-foreground py-8 text-center">No snippets found</div>
                 ) : (
                   filteredSnippets.map((snippet) => (
                     <div
@@ -236,20 +236,20 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
                       onClick={() => setSelectedSnippet(snippet)}
                     >
                       <div className="flex items-start justify-between gap-2">
-                        <div className="flex-1 min-w-0">
+                        <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <Code className="h-4 w-4 flex-shrink-0" />
-                            <span className="font-medium truncate">{snippet.name}</span>
+                            <Code className="h-4 w-4 shrink-0" />
+                            <span className="truncate font-medium">{snippet.name}</span>
                             {snippet.isFavorite && (
-                              <Star className="h-3 w-3 fill-yellow-400 stroke-yellow-400 flex-shrink-0" />
+                              <Star className="h-3 w-3 shrink-0 fill-yellow-400 stroke-yellow-400" />
                             )}
                           </div>
                           {snippet.description && (
-                            <p className="text-sm text-muted-foreground truncate mt-1">
+                            <p className="text-muted-foreground mt-1 truncate text-sm">
                               {snippet.description}
                             </p>
                           )}
-                          <div className="flex gap-1 mt-2 flex-wrap">
+                          <div className="mt-2 flex flex-wrap gap-1">
                             <Badge variant="outline" className="text-xs">
                               {snippet.language}
                             </Badge>
@@ -265,7 +265,7 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
                             ))}
                           </div>
                         </div>
-                        <div className="flex gap-1 flex-shrink-0">
+                        <div className="flex shrink-0 gap-1">
                           <Button
                             size="icon"
                             variant="ghost"
@@ -291,10 +291,10 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
           </div>
 
           {/* Right Panel - Snippet Details/Editor */}
-          <div className="flex-1 flex flex-col gap-3">
+          <div className="flex flex-1 flex-col gap-3">
             {isEditing ? (
               // Edit Form
-              <div className="flex flex-col gap-3 h-full">
+              <div className="flex h-full flex-col gap-3">
                 <Label>Name *</Label>
                 <Input
                   value={editForm.name}
@@ -366,12 +366,12 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
                       Add
                     </Button>
                   </div>
-                  <div className="flex gap-1 flex-wrap mt-2">
+                  <div className="mt-2 flex flex-wrap gap-1">
                     {editForm.tags?.map((tag) => (
                       <Badge key={tag} variant="secondary">
                         {tag}
                         <X
-                          className="h-3 w-3 ml-1 cursor-pointer"
+                          className="ml-1 h-3 w-3 cursor-pointer"
                           onClick={() => handleRemoveTag(tag)}
                         />
                       </Badge>
@@ -402,12 +402,12 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
               </div>
             ) : selectedSnippet ? (
               // Snippet Details
-              <div className="flex flex-col gap-3 h-full">
+              <div className="flex h-full flex-col gap-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="font-semibold">{selectedSnippet.name}</h3>
                     {selectedSnippet.description && (
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <p className="text-muted-foreground mt-1 text-sm">
                         {selectedSnippet.description}
                       </p>
                     )}
@@ -452,7 +452,7 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
                   </div>
                 </div>
 
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex flex-wrap gap-2">
                   <Badge>{selectedSnippet.language}</Badge>
                   {selectedSnippet.category && (
                     <Badge variant="secondary">{selectedSnippet.category}</Badge>
@@ -465,7 +465,7 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
                 </div>
 
                 <ScrollArea className="flex-1">
-                  <pre className="bg-muted p-4 rounded text-sm font-mono overflow-x-auto">
+                  <pre className="bg-muted overflow-x-auto rounded p-4 font-mono text-sm">
                     <code>{selectedSnippet.code}</code>
                   </pre>
                 </ScrollArea>
@@ -475,7 +475,7 @@ export function SnippetLibrary({ isOpen, onClose, onInsert }: SnippetLibraryProp
                 )}
               </div>
             ) : (
-              <div className="flex items-center justify-center h-full text-muted-foreground">
+              <div className="text-muted-foreground flex h-full items-center justify-center">
                 Select a snippet to view details
               </div>
             )}

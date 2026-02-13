@@ -10,7 +10,7 @@ import {
 import { Button } from "@/browser/components/ui/button";
 import { Input } from "@/browser/components/ui/input";
 import { Label } from "@/browser/components/ui/label";
-import { CustomModelMetadata } from "@/common/orpc/schemas/api";
+import type { CustomModelMetadata } from "@/common/orpc/schemas/api";
 
 interface EditModelDialogProps {
   open: boolean;

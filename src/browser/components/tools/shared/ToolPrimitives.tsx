@@ -109,7 +109,7 @@ export const McpToolName: React.FC<{ toolName: string; className?: string }> = (
 
   return (
     <span className={cn("inline-flex items-center gap-1.5 font-medium", className)}>
-      <span className="inline-flex items-center gap-1 rounded-sm bg-pink-500/15 px-1.5 py-0.5 text-[10px] text-pink-400 font-semibold uppercase tracking-wide">
+      <span className="inline-flex items-center gap-1 rounded-sm bg-pink-500/15 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-pink-400 uppercase">
         <Plug className="size-2.5" />
         {parsed.server}
       </span>

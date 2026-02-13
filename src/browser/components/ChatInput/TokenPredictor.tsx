@@ -179,7 +179,7 @@ export const TokenPredictor: React.FC<TokenPredictorProps> = ({
   }
 
   if (!prediction || loading) {
-    return <div className="text-xs text-muted-foreground px-3 py-1">Calculating tokens...</div>;
+    return <div className="text-muted-foreground px-3 py-1 text-xs">Calculating tokens...</div>;
   }
 
   // Determine if we should show a warning
@@ -223,9 +223,9 @@ export const TokenPredictor: React.FC<TokenPredictorProps> = ({
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <button className="flex items-center gap-1 hover:text-foreground transition-colors">
+          <button className="hover:text-foreground flex items-center gap-1 transition-colors">
             <span className="text-muted-foreground">(~{formatCost(prediction.estimatedCost)})</span>
-            <Info className="h-3 w-3 text-muted-foreground" />
+            <Info className="text-muted-foreground h-3 w-3" />
           </button>
         </TooltipTrigger>
         <TooltipContent side="top" className="max-w-xs">
@@ -238,7 +238,7 @@ export const TokenPredictor: React.FC<TokenPredictorProps> = ({
               <span>Output (est.):</span>
               <span className="font-mono">{formatNumber(prediction.outputTokens)} tokens</span>
             </div>
-            <div className="flex justify-between gap-4 pt-1 border-t">
+            <div className="flex justify-between gap-4 border-t pt-1">
               <span>Total:</span>
               <span className="font-mono font-semibold">
                 {formatNumber(prediction.totalTokens)} tokens
@@ -251,11 +251,11 @@ export const TokenPredictor: React.FC<TokenPredictorProps> = ({
               </div>
             )}
             {isHighUsage && (
-              <div className="pt-2 border-t text-warning">
+              <div className="text-warning border-t pt-2">
                 ⚠️ High token usage - consider splitting message
               </div>
             )}
-            <div className="pt-1 text-muted-foreground">
+            <div className="text-muted-foreground pt-1">
               Confidence: {Math.round(prediction.confidence * 100)}%
             </div>
           </div>

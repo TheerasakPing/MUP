@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
-import { CostTrackingService, CostEntry } from "./costTrackingService";
+import type { CostEntry } from "./costTrackingService";
+import { CostTrackingService } from "./costTrackingService";
 import writeFileAtomic from "write-file-atomic";
 import type { Config } from "@/node/config";
 

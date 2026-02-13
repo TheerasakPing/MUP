@@ -31,7 +31,7 @@ export function DiffViewModeSelector({ value, onChange, className }: DiffViewMod
     >
       <ToggleGroup.Item
         value="inline"
-        className="px-3 py-1.5 text-xs rounded-md data-[state=on]:bg-background data-[state=on]:shadow-sm flex items-center gap-1.5 hover:bg-secondary/50 transition"
+        className="data-[state=on]:bg-background hover:bg-secondary/50 flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs transition data-[state=on]:shadow-sm"
         title="Inline view (Cmd+Shift+1)"
       >
         <Rows className="h-3.5 w-3.5" />
@@ -40,7 +40,7 @@ export function DiffViewModeSelector({ value, onChange, className }: DiffViewMod
 
       <ToggleGroup.Item
         value="split"
-        className="px-3 py-1.5 text-xs rounded-md data-[state=on]:bg-background data-[state=on]:shadow-sm flex items-center gap-1.5 hover:bg-secondary/50 transition"
+        className="data-[state=on]:bg-background hover:bg-secondary/50 flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs transition data-[state=on]:shadow-sm"
         title="Split view (Cmd+Shift+2)"
       >
         <Columns2 className="h-3.5 w-3.5" />
@@ -49,7 +49,7 @@ export function DiffViewModeSelector({ value, onChange, className }: DiffViewMod
 
       <ToggleGroup.Item
         value="unified"
-        className="px-3 py-1.5 text-xs rounded-md data-[state=on]:bg-background data-[state=on]:shadow-sm flex items-center gap-1.5 hover:bg-secondary/50 transition"
+        className="data-[state=on]:bg-background hover:bg-secondary/50 flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs transition data-[state=on]:shadow-sm"
         title="Unified view (Cmd+Shift+3)"
       >
         <FileDiff className="h-3.5 w-3.5" />

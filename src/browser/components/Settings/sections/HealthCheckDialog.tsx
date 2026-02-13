@@ -144,10 +144,10 @@ export function HealthCheckDialog({
             {/* Individual checks */}
             <div className="space-y-1.5">
               {(
-                Object.entries(result.checks) as [
+                Object.entries(result.checks) as Array<[
                   string,
                   { status: keyof typeof STATUS_CONFIG; message: string; details?: string },
-                ][]
+                ]>
               ).map(([key, check]) => {
                 const cfg = STATUS_CONFIG[check.status];
                 const Icon = cfg.icon;
