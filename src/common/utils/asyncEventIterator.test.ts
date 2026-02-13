@@ -91,7 +91,6 @@ describe("asyncEventIterator", () => {
     const unsubscribe = jest.fn();
     const iterator = asyncEventIterator<number>(() => { /* noop */ }, unsubscribe, { initialValue: 1 });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const _ of iterator) {
       break;
     }
@@ -118,7 +117,7 @@ describe("asyncEventIterator", () => {
     handler(1);
     const first = await nextPromise;
     expect(first.value).toBe(1);
-    if (first.value !== undefined) {
+    if (!first.done) {
       results.push(first.value);
     }
 
@@ -187,7 +186,7 @@ describe("createAsyncEventQueue", () => {
     const first = await iterator.next();
     const second = await iterator.next();
 
-    if (first.value !== undefined && second.value !== undefined) {
+    if (!first.done && !second.done) {
       results.push(first.value, second.value);
     }
     expect(results).toEqual([1, 2]);

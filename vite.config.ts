@@ -73,6 +73,7 @@ const backendProxyPort = Number(process.env.MUX_BACKEND_PORT ?? "3000");
 const backendProxyTarget = `http://${formatHostForUrl(backendProxyHost)}:${backendProxyPort}`;
 
 const alias: Record<string, string> = {
+  "@/version": path.resolve(__dirname, "./src/version_gen.ts"),
   "@": path.resolve(__dirname, "./src"),
 };
 

@@ -17,6 +17,7 @@
     "sourceMap": true,
     "inlineSources": true,
     "paths": {
+      "@/version": ["./src/version_gen.ts"],
       "@/*": ["./src/*"],
       "@shared/*": ["./src/*"]
     }
