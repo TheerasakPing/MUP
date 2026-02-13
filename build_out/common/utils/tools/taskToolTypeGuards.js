@@ -8,28 +8,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isTaskBashArgsFromUnknown = isTaskBashArgsFromUnknown;
 exports.isTaskBashArgs = isTaskBashArgs;
 function isTaskBashArgsFromUnknown(value) {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-  const args = value;
-  if (args.kind !== "bash") {
-    return false;
-  }
-  if (typeof args.script !== "string" || args.script.trim().length === 0) {
-    return false;
-  }
-  if (typeof args.timeout_secs !== "number" || !Number.isFinite(args.timeout_secs)) {
-    return false;
-  }
-  if (args.run_in_background !== undefined && typeof args.run_in_background !== "boolean") {
-    return false;
-  }
-  if (args.display_name !== undefined && typeof args.display_name !== "string") {
-    return false;
-  }
-  return true;
+    if (!value || typeof value !== "object") {
+        return false;
+    }
+    const args = value;
+    if (args.kind !== "bash") {
+        return false;
+    }
+    if (typeof args.script !== "string" || args.script.trim().length === 0) {
+        return false;
+    }
+    if (typeof args.timeout_secs !== "number" || !Number.isFinite(args.timeout_secs)) {
+        return false;
+    }
+    if (args.run_in_background !== undefined && typeof args.run_in_background !== "boolean") {
+        return false;
+    }
+    if (args.display_name !== undefined && typeof args.display_name !== "string") {
+        return false;
+    }
+    return true;
 }
 function isTaskBashArgs(value) {
-  return isTaskBashArgsFromUnknown(value);
+    return isTaskBashArgsFromUnknown(value);
 }
 //# sourceMappingURL=taskToolTypeGuards.js.map

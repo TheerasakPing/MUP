@@ -24,69 +24,69 @@ exports.isRestoreToInput = isRestoreToInput;
 exports.isRuntimeStatus = isRuntimeStatus;
 // Type guards for common chat message variants
 function isCaughtUpMessage(msg) {
-  return msg.type === "caught-up";
+    return msg.type === "caught-up";
 }
 function isStreamError(msg) {
-  return msg.type === "stream-error";
+    return msg.type === "stream-error";
 }
 function isDeleteMessage(msg) {
-  return msg.type === "delete";
+    return msg.type === "delete";
 }
 function isStreamStart(msg) {
-  return msg.type === "stream-start";
+    return msg.type === "stream-start";
 }
 function isStreamDelta(msg) {
-  return msg.type === "stream-delta";
+    return msg.type === "stream-delta";
 }
 function isStreamEnd(msg) {
-  return msg.type === "stream-end";
+    return msg.type === "stream-end";
 }
 function isStreamAbort(msg) {
-  return msg.type === "stream-abort";
+    return msg.type === "stream-abort";
 }
 function isToolCallStart(msg) {
-  return msg.type === "tool-call-start";
+    return msg.type === "tool-call-start";
 }
 function isToolCallDelta(msg) {
-  return msg.type === "tool-call-delta";
+    return msg.type === "tool-call-delta";
 }
 function isBashOutputEvent(msg) {
-  return msg.type === "bash-output";
+    return msg.type === "bash-output";
 }
 function isTaskCreatedEvent(msg) {
-  return msg.type === "task-created";
+    return msg.type === "task-created";
 }
 function isToolCallEnd(msg) {
-  return msg.type === "tool-call-end";
+    return msg.type === "tool-call-end";
 }
 function isReasoningDelta(msg) {
-  return msg.type === "reasoning-delta";
+    return msg.type === "reasoning-delta";
 }
 function isReasoningEnd(msg) {
-  return msg.type === "reasoning-end";
+    return msg.type === "reasoning-end";
 }
 function isUsageDelta(msg) {
-  return msg.type === "usage-delta";
+    return msg.type === "usage-delta";
 }
 function isMuxMessage(msg) {
-  return msg.type === "message";
+    return msg.type === "message";
 }
 function isInitStart(msg) {
-  return msg.type === "init-start";
+    return msg.type === "init-start";
 }
 function isInitOutput(msg) {
-  return msg.type === "init-output";
+    return msg.type === "init-output";
 }
 function isInitEnd(msg) {
-  return msg.type === "init-end";
+    return msg.type === "init-end";
 }
 function isQueuedMessageChanged(msg) {
-  return msg.type === "queued-message-changed";
+    return msg.type === "queued-message-changed";
 }
 function isRestoreToInput(msg) {
-  return msg.type === "restore-to-input";
+    return msg.type === "restore-to-input";
 }
 function isRuntimeStatus(msg) {
-  return msg.type === "runtime-status";
+    return msg.type === "runtime-status";
 }
 //# sourceMappingURL=types.js.map

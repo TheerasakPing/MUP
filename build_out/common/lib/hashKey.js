@@ -1,9 +1,7 @@
 "use strict";
-var __importDefault =
-  (this && this.__importDefault) ||
-  function (mod) {
-    return mod && mod.__esModule ? mod : { default: mod };
-  };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hashKey = hashKey;
 const xxhash_wasm_1 = __importDefault(require("xxhash-wasm"));
@@ -14,17 +12,17 @@ let xxhasher = null;
  * falls back to xxhash64 in insecure contexts (e.g., HTTP dev servers).
  */
 async function hashKey(input) {
-  // crypto.subtle is only available in secure contexts (HTTPS/localhost)
-  if (crypto.subtle) {
-    const data = new TextEncoder().encode(input);
-    const hash = await crypto.subtle.digest("SHA-256", data);
-    // Take first 8 bytes (64 bits) as hex
-    return Array.from(new Uint8Array(hash).slice(0, 8))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  }
-  // Fallback to xxhash64 for dev environments
-  xxhasher ?? (xxhasher = await (0, xxhash_wasm_1.default)());
-  return xxhasher.h64(input).toString(16);
+    // crypto.subtle is only available in secure contexts (HTTPS/localhost)
+    if (crypto.subtle) {
+        const data = new TextEncoder().encode(input);
+        const hash = await crypto.subtle.digest("SHA-256", data);
+        // Take first 8 bytes (64 bits) as hex
+        return Array.from(new Uint8Array(hash).slice(0, 8))
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
+    }
+    // Fallback to xxhash64 for dev environments
+    xxhasher ?? (xxhasher = await (0, xxhash_wasm_1.default)());
+    return xxhasher.h64(input).toString(16);
 }
 //# sourceMappingURL=hashKey.js.map

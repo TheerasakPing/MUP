@@ -25,44 +25,45 @@ exports.createAsyncMessageQueue = createAsyncMessageQueue;
  * ```
  */
 function createAsyncMessageQueue() {
-  const queue = [];
-  let resolveNext = null;
-  let ended = false;
-  const push = (msg) => {
-    if (ended) return;
-    queue.push(msg);
-    // Signal that new messages are available
-    if (resolveNext) {
-      const resolve = resolveNext;
-      resolveNext = null;
-      resolve();
+    const queue = [];
+    let resolveNext = null;
+    let ended = false;
+    const push = (msg) => {
+        if (ended)
+            return;
+        queue.push(msg);
+        // Signal that new messages are available
+        if (resolveNext) {
+            const resolve = resolveNext;
+            resolveNext = null;
+            resolve();
+        }
+    };
+    async function* iterate() {
+        while (!ended) {
+            // Yield all queued messages synchronously (no async boundaries)
+            // This ensures all messages from a batch are processed in the same
+            // event loop tick, preventing premature renders
+            while (queue.length > 0) {
+                yield queue.shift();
+            }
+            // Wait for more messages
+            await new Promise((resolve) => {
+                resolveNext = resolve;
+            });
+        }
+        // Yield any remaining messages after end() is called
+        while (queue.length > 0) {
+            yield queue.shift();
+        }
     }
-  };
-  async function* iterate() {
-    while (!ended) {
-      // Yield all queued messages synchronously (no async boundaries)
-      // This ensures all messages from a batch are processed in the same
-      // event loop tick, preventing premature renders
-      while (queue.length > 0) {
-        yield queue.shift();
-      }
-      // Wait for more messages
-      await new Promise((resolve) => {
-        resolveNext = resolve;
-      });
-    }
-    // Yield any remaining messages after end() is called
-    while (queue.length > 0) {
-      yield queue.shift();
-    }
-  }
-  const end = () => {
-    ended = true;
-    // Wake up the iterator so it can exit
-    if (resolveNext) {
-      resolveNext();
-    }
-  };
-  return { push, iterate, end };
+    const end = () => {
+        ended = true;
+        // Wake up the iterator so it can exit
+        if (resolveNext) {
+            resolveNext();
+        }
+    };
+    return { push, iterate, end };
 }
 //# sourceMappingURL=asyncMessageQueue.js.map

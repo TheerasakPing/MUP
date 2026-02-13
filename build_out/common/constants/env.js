@@ -6,13 +6,13 @@ exports.NON_INTERACTIVE_ENV_VARS = void 0;
  * These prevent tools from blocking on editor/credential prompts.
  */
 exports.NON_INTERACTIVE_ENV_VARS = {
-  // Prevent interactive editors from blocking execution
-  // Critical for git operations like rebase/commit that try to open editors
-  GIT_EDITOR: "true", // Git-specific editor (highest priority)
-  GIT_SEQUENCE_EDITOR: "true", // For interactive rebase sequences
-  EDITOR: "true", // General fallback for non-git commands
-  VISUAL: "true", // Another common editor environment variable
-  // Prevent git from prompting for credentials
-  GIT_TERMINAL_PROMPT: "0", // Disables git credential prompts
+    // Prevent interactive editors from blocking execution
+    // Critical for git operations like rebase/commit that try to open editors
+    GIT_EDITOR: "true", // Git-specific editor (highest priority)
+    GIT_SEQUENCE_EDITOR: "true", // For interactive rebase sequences
+    EDITOR: "true", // General fallback for non-git commands
+    VISUAL: "true", // Another common editor environment variable
+    // Prevent git from prompting for credentials
+    GIT_TERMINAL_PROMPT: "0", // Disables git credential prompts
 };
 //# sourceMappingURL=env.js.map

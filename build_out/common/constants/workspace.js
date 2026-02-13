@@ -7,7 +7,7 @@ exports.DEFAULT_RUNTIME_CONFIG = void 0;
  * Used when no runtime config is specified.
  */
 exports.DEFAULT_RUNTIME_CONFIG = {
-  type: "worktree",
-  srcBaseDir: "~/.mux/src",
+    type: "worktree",
+    srcBaseDir: "~/.mux/src",
 };
 //# sourceMappingURL=workspace.js.map

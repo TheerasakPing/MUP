@@ -7,8 +7,8 @@ exports.computeRecencyFromMessages = computeRecencyFromMessages;
  * when the workspace was "last used" by the user.
  */
 function isIdleCompactionRequest(msg) {
-  const muxMeta = msg.metadata?.muxMetadata;
-  return muxMeta?.type === "compaction-request" && muxMeta?.source === "idle-compaction";
+    const muxMeta = msg.metadata?.muxMetadata;
+    return muxMeta?.type === "compaction-request" && muxMeta?.source === "idle-compaction";
 }
 /**
  * Compute recency timestamp from messages.
@@ -21,18 +21,16 @@ function isIdleCompactionRequest(msg) {
  * @param unarchivedAt - When workspace was last unarchived (bumps to top of recency)
  */
 function computeRecencyFromMessages(messages, createdAt, unarchivedAt) {
-  const reversed = [...messages].reverse();
-  const lastUserMsg = reversed.find(
-    (m) => m.role === "user" && m.metadata?.timestamp && !isIdleCompactionRequest(m)
-  );
-  // Support both new enum ("user"|"idle") and legacy boolean (true)
-  const lastCompactedMsg = reversed.find((m) => m.metadata?.compacted && m.metadata?.timestamp);
-  const candidates = [
-    createdAt ?? null,
-    unarchivedAt ?? null,
-    lastUserMsg?.metadata?.timestamp ?? null,
-    lastCompactedMsg?.metadata?.timestamp ?? null,
-  ].filter((t) => t !== null);
-  return candidates.length > 0 ? Math.max(...candidates) : null;
+    const reversed = [...messages].reverse();
+    const lastUserMsg = reversed.find((m) => m.role === "user" && m.metadata?.timestamp && !isIdleCompactionRequest(m));
+    // Support both new enum ("user"|"idle") and legacy boolean (true)
+    const lastCompactedMsg = reversed.find((m) => m.metadata?.compacted && m.metadata?.timestamp);
+    const candidates = [
+        createdAt ?? null,
+        unarchivedAt ?? null,
+        lastUserMsg?.metadata?.timestamp ?? null,
+        lastCompactedMsg?.metadata?.timestamp ?? null,
+    ].filter((t) => t !== null);
+    return candidates.length > 0 ? Math.max(...candidates) : null;
 }
 //# sourceMappingURL=recency.js.map

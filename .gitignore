@@ -69,8 +69,9 @@ bun.lockb
 dist
 
 # Electron build output
-release
+release/
 build/
+build_out/
 !build/entitlements.mac.plist
 
 # Documentation

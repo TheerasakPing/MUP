@@ -19,30 +19,26 @@ exports.shutdownTelemetry = shutdownTelemetry;
  * since the browser process has limited env var access.
  */
 function isCIEnvironment() {
-  if (typeof process === "undefined") {
-    return false;
-  }
-  return (
-    process.env.CI === "true" ||
-    process.env.CI === "1" ||
-    process.env.GITHUB_ACTIONS === "true" ||
-    process.env.GITLAB_CI === "true" ||
-    process.env.JENKINS_URL !== undefined ||
-    process.env.CIRCLECI === "true"
-  );
+    if (typeof process === "undefined") {
+        return false;
+    }
+    return (process.env.CI === "true" ||
+        process.env.CI === "1" ||
+        process.env.GITHUB_ACTIONS === "true" ||
+        process.env.GITLAB_CI === "true" ||
+        process.env.JENKINS_URL !== undefined ||
+        process.env.CIRCLECI === "true");
 }
 /**
  * Check if we're running in a test or CI environment
  */
 function isTestEnvironment() {
-  return (
-    (typeof process !== "undefined" &&
-      (process.env.NODE_ENV === "test" ||
-        process.env.JEST_WORKER_ID !== undefined ||
-        process.env.VITEST !== undefined ||
-        process.env.TEST_INTEGRATION === "1")) ||
-    isCIEnvironment()
-  );
+    return ((typeof process !== "undefined" &&
+        (process.env.NODE_ENV === "test" ||
+            process.env.JEST_WORKER_ID !== undefined ||
+            process.env.VITEST !== undefined ||
+            process.env.TEST_INTEGRATION === "1")) ||
+        isCIEnvironment());
 }
 /**
  * Check if we're running under the Vite dev server.
@@ -51,17 +47,17 @@ function isTestEnvironment() {
  * renderer and the main-process builds (tsconfig.main uses module=CommonJS).
  */
 function isViteDevEnvironment() {
-  if (typeof document === "undefined") {
-    return false;
-  }
-  // Vite injects /@vite/client in dev for HMR.
-  return document.querySelector('script[src^="/@vite/client"]') !== null;
+    if (typeof document === "undefined") {
+        return false;
+    }
+    // Vite injects /@vite/client in dev for HMR.
+    return document.querySelector('script[src^="/@vite/client"]') !== null;
 }
 /**
  * Initialize telemetry (no-op, kept for API compatibility)
  */
 function initTelemetry() {
-  // No-op - backend handles initialization
+    // No-op - backend handles initialization
 }
 /**
  * Send a telemetry event via the backend
@@ -70,33 +66,31 @@ function initTelemetry() {
  * The backend decides whether to actually send to PostHog.
  */
 function trackEvent(payload) {
-  // Telemetry is a no-op in tests/CI/E2E, and also in SSR-ish test contexts
-  // where `window` isn't available.
-  //
-  // Under the Vite dev server we also require explicit opt-in from the preload
-  // script (window.api.enableTelemetryInDev) to avoid accidentally emitting data
-  // from local development.
-  if (
-    typeof window === "undefined" ||
-    isTestEnvironment() ||
-    window.api?.isE2E === true ||
-    (isViteDevEnvironment() && window.api?.enableTelemetryInDev !== true)
-  ) {
-    return;
-  }
-  const client = window.__ORPC_CLIENT__;
-  if (!client?.telemetry?.track) {
-    return;
-  }
-  // Fire and forget - don't block on telemetry
-  client.telemetry.track(payload).catch(() => {
-    // Silently ignore errors
-  });
+    // Telemetry is a no-op in tests/CI/E2E, and also in SSR-ish test contexts
+    // where `window` isn't available.
+    //
+    // Under the Vite dev server we also require explicit opt-in from the preload
+    // script (window.api.enableTelemetryInDev) to avoid accidentally emitting data
+    // from local development.
+    if (typeof window === "undefined" ||
+        isTestEnvironment() ||
+        window.api?.isE2E === true ||
+        (isViteDevEnvironment() && window.api?.enableTelemetryInDev !== true)) {
+        return;
+    }
+    const client = window.__ORPC_CLIENT__;
+    if (!client?.telemetry?.track) {
+        return;
+    }
+    // Fire and forget - don't block on telemetry
+    client.telemetry.track(payload).catch(() => {
+        // Silently ignore errors
+    });
 }
 /**
  * Shutdown telemetry (no-op, kept for API compatibility)
  */
 function shutdownTelemetry() {
-  // No-op - backend handles shutdown
+    // No-op - backend handles shutdown
 }
 //# sourceMappingURL=client.js.map

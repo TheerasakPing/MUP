@@ -11,31 +11,31 @@ exports.parseGitShowBranchForStatus = parseGitShowBranchForStatus;
  * @returns GitStatus object with ahead/behind counts, or null if parsing fails
  */
 function parseGitRevList(output) {
-  const trimmed = output.trim();
-  if (!trimmed) {
-    return null;
-  }
-  // Split by tab - expected format is "ahead\tbehind"
-  const parts = trimmed.split(/\s+/);
-  if (parts.length !== 2) {
-    return null;
-  }
-  const ahead = parseInt(parts[0], 10);
-  const behind = parseInt(parts[1], 10);
-  if (isNaN(ahead) || isNaN(behind)) {
-    return null;
-  }
-  // Note: dirty + line deltas + branch are computed separately in the caller
-  return {
-    branch: "",
-    ahead,
-    behind,
-    dirty: false,
-    outgoingAdditions: 0,
-    outgoingDeletions: 0,
-    incomingAdditions: 0,
-    incomingDeletions: 0,
-  };
+    const trimmed = output.trim();
+    if (!trimmed) {
+        return null;
+    }
+    // Split by tab - expected format is "ahead\tbehind"
+    const parts = trimmed.split(/\s+/);
+    if (parts.length !== 2) {
+        return null;
+    }
+    const ahead = parseInt(parts[0], 10);
+    const behind = parseInt(parts[1], 10);
+    if (isNaN(ahead) || isNaN(behind)) {
+        return null;
+    }
+    // Note: dirty + line deltas + branch are computed separately in the caller
+    return {
+        branch: "",
+        ahead,
+        behind,
+        dirty: false,
+        outgoingAdditions: 0,
+        outgoingDeletions: 0,
+        incomingAdditions: 0,
+        incomingDeletions: 0,
+    };
 }
 /**
  * Parse the output of `git show-branch --sha1-name HEAD origin/branch` to calculate ahead/behind counts.
@@ -59,54 +59,54 @@ function parseGitRevList(output) {
  * @returns GitStatus object with ahead/behind counts, or null if parsing fails
  */
 function parseGitShowBranchForStatus(output) {
-  const trimmed = output.trim();
-  if (!trimmed) {
-    return null;
-  }
-  const lines = trimmed.split("\n");
-  let inCommitSection = false;
-  let ahead = 0;
-  let behind = 0;
-  for (const line of lines) {
-    // Skip until we find the separator "--" or "---"
-    if (line.trim() === "--" || line.trim() === "---") {
-      inCommitSection = true;
-      continue;
+    const trimmed = output.trim();
+    if (!trimmed) {
+        return null;
     }
-    if (!inCommitSection) {
-      continue; // Skip header lines
+    const lines = trimmed.split("\n");
+    let inCommitSection = false;
+    let ahead = 0;
+    let behind = 0;
+    for (const line of lines) {
+        // Skip until we find the separator "--" or "---"
+        if (line.trim() === "--" || line.trim() === "---") {
+            inCommitSection = true;
+            continue;
+        }
+        if (!inCommitSection) {
+            continue; // Skip header lines
+        }
+        // Match commit lines: <indicators> [<hash>] <subject>
+        // We need at least 2 characters for the indicators (column 0 and column 1)
+        if (line.length < 2) {
+            continue;
+        }
+        // Check if this line has a hash (commit line)
+        if (!/\[[a-f0-9]+\]/.test(line)) {
+            continue;
+        }
+        // Extract indicators (first 2 characters represent HEAD and origin/branch)
+        const headIndicator = line[0];
+        const originIndicator = line[1];
+        // Check if in HEAD but not in origin (ahead)
+        if (headIndicator !== " " && originIndicator === " ") {
+            ahead++;
+        }
+        // Check if in origin but not in HEAD (behind)
+        else if (headIndicator === " " && originIndicator !== " ") {
+            behind++;
+        }
     }
-    // Match commit lines: <indicators> [<hash>] <subject>
-    // We need at least 2 characters for the indicators (column 0 and column 1)
-    if (line.length < 2) {
-      continue;
-    }
-    // Check if this line has a hash (commit line)
-    if (!/\[[a-f0-9]+\]/.test(line)) {
-      continue;
-    }
-    // Extract indicators (first 2 characters represent HEAD and origin/branch)
-    const headIndicator = line[0];
-    const originIndicator = line[1];
-    // Check if in HEAD but not in origin (ahead)
-    if (headIndicator !== " " && originIndicator === " ") {
-      ahead++;
-    }
-    // Check if in origin but not in HEAD (behind)
-    else if (headIndicator === " " && originIndicator !== " ") {
-      behind++;
-    }
-  }
-  // Note: dirty + line deltas + branch are computed separately in the caller
-  return {
-    branch: "",
-    ahead,
-    behind,
-    dirty: false,
-    outgoingAdditions: 0,
-    outgoingDeletions: 0,
-    incomingAdditions: 0,
-    incomingDeletions: 0,
-  };
+    // Note: dirty + line deltas + branch are computed separately in the caller
+    return {
+        branch: "",
+        ahead,
+        behind,
+        dirty: false,
+        outgoingAdditions: 0,
+        outgoingDeletions: 0,
+        incomingAdditions: 0,
+        incomingDeletions: 0,
+    };
 }
 //# sourceMappingURL=parseGitStatus.js.map

@@ -19,14 +19,14 @@ exports.arraysEqualByReference = arraysEqualByReference;
  * arraysEqualByReference(a, c); // false (different obj at index 2)
  */
 function arraysEqualByReference(a, b) {
-  if (a.length !== b.length) {
-    return false;
-  }
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) {
-      return false;
+    if (a.length !== b.length) {
+        return false;
     }
-  }
-  return true;
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 //# sourceMappingURL=arrays.js.map

@@ -341,7 +341,7 @@ class IconThemeService {
     async getIconFile(themeId, iconPath) {
         const themes = this.getInstalledThemes();
         const theme = themes.find((t) => t.id === themeId);
-        if (!theme || !theme.themeDir)
+        if (!theme?.themeDir)
             return null;
         // Resolve and validate path (prevent traversal)
         const fullPath = path.resolve(theme.themeDir, iconPath);

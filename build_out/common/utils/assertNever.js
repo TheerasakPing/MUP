@@ -17,6 +17,6 @@ exports.assertNever = assertNever;
  * }
  */
 function assertNever(value, message) {
-  throw new Error(message ?? `Unexpected value: ${String(value)}`);
+    throw new Error(message ?? `Unexpected value: ${String(value)}`);
 }
 //# sourceMappingURL=assertNever.js.map

@@ -10,8 +10,10 @@ exports.isWorkspaceArchived = isWorkspaceArchived;
  * @returns true if workspace is currently archived
  */
 function isWorkspaceArchived(archivedAt, unarchivedAt) {
-  if (!archivedAt) return false;
-  if (!unarchivedAt) return true;
-  return new Date(archivedAt).getTime() > new Date(unarchivedAt).getTime();
+    if (!archivedAt)
+        return false;
+    if (!unarchivedAt)
+        return true;
+    return new Date(archivedAt).getTime() > new Date(unarchivedAt).getTime();
 }
 //# sourceMappingURL=archive.js.map

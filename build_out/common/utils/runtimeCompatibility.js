@@ -23,10 +23,10 @@ const schemas_1 = require("../../common/orpc/schemas");
  * - "docker": Docker container runtime
  */
 function isIncompatibleRuntimeConfig(config) {
-  if (!config) {
-    return false;
-  }
-  // Unknown type from a future version
-  return !schemas_1.RuntimeModeSchema.safeParse(config.type).success;
+    if (!config) {
+        return false;
+    }
+    // Unknown type from a future version
+    return !schemas_1.RuntimeModeSchema.safeParse(config.type).success;
 }
 //# sourceMappingURL=runtimeCompatibility.js.map

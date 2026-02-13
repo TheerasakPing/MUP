@@ -26,7 +26,7 @@ const DEFAULT_MUX_HOME = "~/.mux";
  * @param muxHome - Mux home directory (default: ~/.mux, Docker uses /var/mux)
  */
 function getPlanFilePath(workspaceName, projectName, muxHome = DEFAULT_MUX_HOME) {
-  return `${muxHome}/plans/${projectName}/${workspaceName}.md`;
+    return `${muxHome}/plans/${projectName}/${workspaceName}.md`;
 }
 /**
  * Get the legacy plan file path (stored by workspace ID).
@@ -36,6 +36,6 @@ function getPlanFilePath(workspaceName, projectName, muxHome = DEFAULT_MUX_HOME)
  * @param workspaceId - Stable workspace identifier (e.g., "a1b2c3d4e5")
  */
 function getLegacyPlanFilePath(workspaceId) {
-  return `${DEFAULT_MUX_HOME}/plans/${workspaceId}.md`;
+    return `${DEFAULT_MUX_HOME}/plans/${workspaceId}.md`;
 }
 //# sourceMappingURL=planStorage.js.map

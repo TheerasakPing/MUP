@@ -6,6 +6,6 @@ exports.getErrorMessage = getErrorMessage;
  * Handles Error objects and other thrown values consistently
  */
 function getErrorMessage(error) {
-  return error instanceof Error ? error.message : String(error);
+    return error instanceof Error ? error.message : String(error);
 }
 //# sourceMappingURL=errors.js.map

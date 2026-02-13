@@ -1,139 +1,116 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coder =
-  exports.CoderListPresetsResultSchema =
-  exports.CoderListTemplatesResultSchema =
-  exports.CoderListWorkspacesResultSchema =
-  exports.CoderWorkspaceSchema =
-  exports.CoderWorkspaceStatusSchema =
-  exports.CoderPresetSchema =
-  exports.CoderTemplateSchema =
-  exports.CoderInfoSchema =
-  exports.CoderUnavailableReasonSchema =
-  exports.CoderWorkspaceConfigSchema =
-    void 0;
+exports.coder = exports.CoderListPresetsResultSchema = exports.CoderListTemplatesResultSchema = exports.CoderListWorkspacesResultSchema = exports.CoderWorkspaceSchema = exports.CoderWorkspaceStatusSchema = exports.CoderPresetSchema = exports.CoderTemplateSchema = exports.CoderInfoSchema = exports.CoderUnavailableReasonSchema = exports.CoderWorkspaceConfigSchema = void 0;
 const zod_1 = require("zod");
 // Coder workspace config - attached to SSH runtime when using Coder
 exports.CoderWorkspaceConfigSchema = zod_1.z.object({
-  /**
-   * Coder workspace name.
-   * - For new workspaces: omit or undefined (backend derives from mux branch name)
-   * - For existing workspaces: required (the selected Coder workspace name)
-   * - After creation: populated with the actual Coder workspace name for reference
-   */
-  workspaceName: zod_1.z.string().optional().meta({ description: "Coder workspace name" }),
-  template: zod_1.z.string().optional().meta({ description: "Template used to create workspace" }),
-  templateOrg: zod_1.z.string().optional().meta({
-    description: "Template organization (for disambiguation when templates have same name)",
-  }),
-  preset: zod_1.z.string().optional().meta({ description: "Preset used during creation" }),
-  /** True if connected to pre-existing Coder workspace (vs mux creating one). */
-  existingWorkspace: zod_1.z.boolean().optional().meta({
-    description: "True if connected to pre-existing Coder workspace",
-  }),
+    /**
+     * Coder workspace name.
+     * - For new workspaces: omit or undefined (backend derives from mux branch name)
+     * - For existing workspaces: required (the selected Coder workspace name)
+     * - After creation: populated with the actual Coder workspace name for reference
+     */
+    workspaceName: zod_1.z.string().optional().meta({ description: "Coder workspace name" }),
+    template: zod_1.z.string().optional().meta({ description: "Template used to create workspace" }),
+    templateOrg: zod_1.z.string().optional().meta({
+        description: "Template organization (for disambiguation when templates have same name)",
+    }),
+    preset: zod_1.z.string().optional().meta({ description: "Preset used during creation" }),
+    /** True if connected to pre-existing Coder workspace (vs mux creating one). */
+    existingWorkspace: zod_1.z.boolean().optional().meta({
+        description: "True if connected to pre-existing Coder workspace",
+    }),
 });
 // Coder CLI unavailable reason - missing, not logged in, or error with message
 exports.CoderUnavailableReasonSchema = zod_1.z.union([
-  zod_1.z.literal("missing"),
-  zod_1.z.object({ kind: zod_1.z.literal("not-logged-in"), message: zod_1.z.string() }),
-  zod_1.z.object({ kind: zod_1.z.literal("error"), message: zod_1.z.string() }),
+    zod_1.z.literal("missing"),
+    zod_1.z.object({ kind: zod_1.z.literal("not-logged-in"), message: zod_1.z.string() }),
+    zod_1.z.object({ kind: zod_1.z.literal("error"), message: zod_1.z.string() }),
 ]);
 // Coder CLI availability info - discriminated union by state
 exports.CoderInfoSchema = zod_1.z.discriminatedUnion("state", [
-  zod_1.z.object({
-    state: zod_1.z.literal("available"),
-    version: zod_1.z.string(),
-    username: zod_1.z.string().optional(),
-    url: zod_1.z.string().optional(),
-  }),
-  zod_1.z.object({
-    state: zod_1.z.literal("outdated"),
-    version: zod_1.z.string(),
-    minVersion: zod_1.z.string(),
-    binaryPath: zod_1.z.string().optional(),
-  }),
-  zod_1.z.object({
-    state: zod_1.z.literal("unavailable"),
-    reason: exports.CoderUnavailableReasonSchema,
-  }),
+    zod_1.z.object({
+        state: zod_1.z.literal("available"),
+        version: zod_1.z.string(),
+        username: zod_1.z.string().optional(),
+        url: zod_1.z.string().optional(),
+    }),
+    zod_1.z.object({
+        state: zod_1.z.literal("outdated"),
+        version: zod_1.z.string(),
+        minVersion: zod_1.z.string(),
+        binaryPath: zod_1.z.string().optional(),
+    }),
+    zod_1.z.object({ state: zod_1.z.literal("unavailable"), reason: exports.CoderUnavailableReasonSchema }),
 ]);
 // Coder template
 exports.CoderTemplateSchema = zod_1.z.object({
-  name: zod_1.z.string(),
-  displayName: zod_1.z.string(),
-  organizationName: zod_1.z.string(),
+    name: zod_1.z.string(),
+    displayName: zod_1.z.string(),
+    organizationName: zod_1.z.string(),
 });
 // Coder preset for a template
 exports.CoderPresetSchema = zod_1.z.object({
-  id: zod_1.z.string(),
-  name: zod_1.z.string(),
-  description: zod_1.z.string().optional(),
-  isDefault: zod_1.z.boolean(),
+    id: zod_1.z.string(),
+    name: zod_1.z.string(),
+    description: zod_1.z.string().optional(),
+    isDefault: zod_1.z.boolean(),
 });
 // Coder workspace status
 exports.CoderWorkspaceStatusSchema = zod_1.z.enum([
-  "running",
-  "stopped",
-  "starting",
-  "stopping",
-  "failed",
-  "pending",
-  "canceling",
-  "canceled",
-  "deleting",
-  "deleted",
+    "running",
+    "stopped",
+    "starting",
+    "stopping",
+    "failed",
+    "pending",
+    "canceling",
+    "canceled",
+    "deleting",
+    "deleted",
 ]);
 // Coder workspace
 exports.CoderWorkspaceSchema = zod_1.z.object({
-  name: zod_1.z.string(),
-  templateName: zod_1.z.string(),
-  templateDisplayName: zod_1.z.string(),
-  status: exports.CoderWorkspaceStatusSchema,
+    name: zod_1.z.string(),
+    templateName: zod_1.z.string(),
+    templateDisplayName: zod_1.z.string(),
+    status: exports.CoderWorkspaceStatusSchema,
 });
 // Coder workspace list result (lets UI distinguish errors from empty list)
 exports.CoderListWorkspacesResultSchema = zod_1.z.discriminatedUnion("ok", [
-  zod_1.z.object({
-    ok: zod_1.z.literal(true),
-    workspaces: zod_1.z.array(exports.CoderWorkspaceSchema),
-  }),
-  zod_1.z.object({ ok: zod_1.z.literal(false), error: zod_1.z.string() }),
+    zod_1.z.object({ ok: zod_1.z.literal(true), workspaces: zod_1.z.array(exports.CoderWorkspaceSchema) }),
+    zod_1.z.object({ ok: zod_1.z.literal(false), error: zod_1.z.string() }),
 ]);
 // Coder template list result (lets UI distinguish errors from empty list)
 exports.CoderListTemplatesResultSchema = zod_1.z.discriminatedUnion("ok", [
-  zod_1.z.object({
-    ok: zod_1.z.literal(true),
-    templates: zod_1.z.array(exports.CoderTemplateSchema),
-  }),
-  zod_1.z.object({ ok: zod_1.z.literal(false), error: zod_1.z.string() }),
+    zod_1.z.object({ ok: zod_1.z.literal(true), templates: zod_1.z.array(exports.CoderTemplateSchema) }),
+    zod_1.z.object({ ok: zod_1.z.literal(false), error: zod_1.z.string() }),
 ]);
 // Coder preset list result (lets UI distinguish errors from empty list)
 exports.CoderListPresetsResultSchema = zod_1.z.discriminatedUnion("ok", [
-  zod_1.z.object({ ok: zod_1.z.literal(true), presets: zod_1.z.array(exports.CoderPresetSchema) }),
-  zod_1.z.object({ ok: zod_1.z.literal(false), error: zod_1.z.string() }),
+    zod_1.z.object({ ok: zod_1.z.literal(true), presets: zod_1.z.array(exports.CoderPresetSchema) }),
+    zod_1.z.object({ ok: zod_1.z.literal(false), error: zod_1.z.string() }),
 ]);
 // API schemas for coder namespace
 exports.coder = {
-  getInfo: {
-    input: zod_1.z.void(),
-    output: exports.CoderInfoSchema,
-  },
-  listTemplates: {
-    input: zod_1.z.void(),
-    output: exports.CoderListTemplatesResultSchema,
-  },
-  listPresets: {
-    input: zod_1.z.object({
-      template: zod_1.z.string(),
-      org: zod_1.z
-        .string()
-        .optional()
-        .meta({ description: "Organization name for disambiguation" }),
-    }),
-    output: exports.CoderListPresetsResultSchema,
-  },
-  listWorkspaces: {
-    input: zod_1.z.void(),
-    output: exports.CoderListWorkspacesResultSchema,
-  },
+    getInfo: {
+        input: zod_1.z.void(),
+        output: exports.CoderInfoSchema,
+    },
+    listTemplates: {
+        input: zod_1.z.void(),
+        output: exports.CoderListTemplatesResultSchema,
+    },
+    listPresets: {
+        input: zod_1.z.object({
+            template: zod_1.z.string(),
+            org: zod_1.z.string().optional().meta({ description: "Organization name for disambiguation" }),
+        }),
+        output: exports.CoderListPresetsResultSchema,
+    },
+    listWorkspaces: {
+        input: zod_1.z.void(),
+        output: exports.CoderListWorkspacesResultSchema,
+    },
 };
 //# sourceMappingURL=coder.js.map

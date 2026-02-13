@@ -40,9 +40,9 @@ const fs = __importStar(require("fs/promises"));
 const costTrackingService_1 = require("./costTrackingService");
 const write_file_atomic_1 = __importDefault(require("write-file-atomic"));
 // Mock dependencies
-jest.mock('fs/promises');
-jest.mock('write-file-atomic');
-jest.mock('@/node/services/log', () => ({
+jest.mock("fs/promises");
+jest.mock("write-file-atomic");
+jest.mock("@/node/services/log", () => ({
     log: {
         info: jest.fn(),
         error: jest.fn(),
@@ -50,10 +50,10 @@ jest.mock('@/node/services/log', () => ({
 }));
 // Mock config
 const mockConfig = {
-    rootDir: '/test/root',
+    rootDir: "/test/root",
     loadConfigOrDefault: jest.fn().mockReturnValue({ customModelPrices: [] }),
 };
-describe('CostTrackingService', () => {
+describe("CostTrackingService", () => {
     let service;
     const mockFileContent = JSON.stringify({
         version: 1,
@@ -67,15 +67,15 @@ describe('CostTrackingService', () => {
         fs.mkdir.mockResolvedValue(undefined);
         service = new costTrackingService_1.CostTrackingService(mockConfig);
     });
-    it('should initialize correctly', () => {
+    it("should initialize correctly", () => {
         expect(service).toBeDefined();
     });
-    describe('recordCost', () => {
-        it('should read existing file, append entry, and write back', async () => {
+    describe("recordCost", () => {
+        it("should read existing file, append entry, and write back", async () => {
             const entry = {
                 timestamp: Date.now(),
-                workspaceId: 'ws-1',
-                model: 'claude-3-opus',
+                workspaceId: "ws-1",
+                model: "claude-3-opus",
                 inputTokens: 100,
                 outputTokens: 50,
                 cachedTokens: 0,
@@ -95,12 +95,12 @@ describe('CostTrackingService', () => {
             expect(writtenData.dailySummaries[today]).toBeDefined();
             expect(writtenData.dailySummaries[today].totalCost).toBe(0.05);
         });
-        it('should handle read errors by initializing empty state', async () => {
-            fs.readFile.mockRejectedValue(new Error('File not found'));
+        it("should handle read errors by initializing empty state", async () => {
+            fs.readFile.mockRejectedValue(new Error("File not found"));
             const entry = {
                 timestamp: 1234567890,
-                workspaceId: 'ws-1',
-                model: 'test-model',
+                workspaceId: "ws-1",
+                model: "test-model",
                 inputTokens: 10,
                 outputTokens: 10,
                 cachedTokens: 0,
@@ -113,37 +113,37 @@ describe('CostTrackingService', () => {
             expect(write_file_atomic_1.default).toHaveBeenCalled();
         });
     });
-    describe('trackCost', () => {
-        it('should calculate cost for known model and record it', async () => {
-            const spyRecord = jest.spyOn(service, 'recordCost');
+    describe("trackCost", () => {
+        it("should calculate cost for known model and record it", async () => {
+            const spyRecord = jest.spyOn(service, "recordCost");
             // We are using a mock model 'gpt-4o' which should be resolved by createDisplayUsage
             // utilizing the real or default model stats if not mocked.
             // Since we can't easily mock createDisplayUsage without dependency injection or module mocking
             // and jest.mock works on module level, we'll assume standard behavior.
-            await service.trackCost('ws-1', 'gpt-4o', {
+            await service.trackCost("ws-1", "gpt-4o", {
                 inputTokens: 100,
                 outputTokens: 100,
             });
             expect(spyRecord).toHaveBeenCalled();
             const args = spyRecord.mock.calls[0][0];
-            expect(args.model).toBe('gpt-4o');
+            expect(args.model).toBe("gpt-4o");
         });
     });
-    describe('pruneOldEntries', () => {
-        it('should remove entries older than retention period', async () => {
+    describe("pruneOldEntries", () => {
+        it("should remove entries older than retention period", async () => {
             const now = Date.now();
-            const oldTime = now - (91 * 24 * 60 * 60 * 1000); // 91 days ago
-            const newTime = now - (1 * 24 * 60 * 60 * 1000); // 1 day ago
+            const oldTime = now - 91 * 24 * 60 * 60 * 1000; // 91 days ago
+            const newTime = now - 1 * 24 * 60 * 60 * 1000; // 1 day ago
             const mockData = {
                 version: 1,
                 entries: [
-                    { timestamp: oldTime, cost: 1, model: 'old' },
-                    { timestamp: newTime, cost: 2, model: 'new' },
+                    { timestamp: oldTime, cost: 1, model: "old" },
+                    { timestamp: newTime, cost: 2, model: "new" },
                 ],
                 dailySummaries: {
                     [new Date(oldTime).toISOString().slice(0, 10)]: { totalCost: 1 },
                     [new Date(newTime).toISOString().slice(0, 10)]: { totalCost: 2 },
-                }
+                },
             };
             fs.readFile.mockResolvedValue(JSON.stringify(mockData));
             const removedCount = await service.pruneOldEntries(90);
@@ -152,7 +152,7 @@ describe('CostTrackingService', () => {
             const callArgs = write_file_atomic_1.default.mock.calls[0];
             const writtenData = JSON.parse(callArgs[1]);
             expect(writtenData.entries).toHaveLength(1);
-            expect(writtenData.entries[0].model).toBe('new');
+            expect(writtenData.entries[0].model).toBe("new");
         });
     });
 });

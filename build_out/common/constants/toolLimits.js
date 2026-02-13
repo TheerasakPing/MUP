@@ -1,20 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WEB_FETCH_MAX_HTML_BYTES =
-  exports.WEB_FETCH_MAX_OUTPUT_BYTES =
-  exports.WEB_FETCH_TIMEOUT_SECS =
-  exports.STATUS_MESSAGE_MAX_LENGTH =
-  exports.INIT_HOOK_MAX_LINES =
-  exports.MAX_TODOS =
-  exports.BASH_MAX_LINE_BYTES =
-  exports.BASH_TRUNCATE_MAX_FILE_BYTES =
-  exports.BASH_TRUNCATE_MAX_TOTAL_BYTES =
-  exports.BASH_MAX_FILE_BYTES =
-  exports.BASH_MAX_TOTAL_BYTES =
-  exports.BASH_HARD_MAX_LINES =
-  exports.BASH_DEFAULT_MAX_LINES =
-  exports.BASH_DEFAULT_TIMEOUT_SECS =
-    void 0;
+exports.WEB_FETCH_MAX_HTML_BYTES = exports.WEB_FETCH_MAX_OUTPUT_BYTES = exports.WEB_FETCH_TIMEOUT_SECS = exports.STATUS_MESSAGE_MAX_LENGTH = exports.INIT_HOOK_MAX_LINES = exports.MAX_TODOS = exports.BASH_MAX_LINE_BYTES = exports.BASH_TRUNCATE_MAX_FILE_BYTES = exports.BASH_TRUNCATE_MAX_TOTAL_BYTES = exports.BASH_MAX_FILE_BYTES = exports.BASH_MAX_TOTAL_BYTES = exports.BASH_HARD_MAX_LINES = exports.BASH_DEFAULT_MAX_LINES = exports.BASH_DEFAULT_TIMEOUT_SECS = void 0;
 exports.BASH_DEFAULT_TIMEOUT_SECS = 3;
 // tmpfile policy limits (AI agent - conservative for LLM context)
 exports.BASH_DEFAULT_MAX_LINES = 300;

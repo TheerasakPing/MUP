@@ -3,12 +3,7 @@
  * Constants for the post-compaction attachment system.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MAX_POST_COMPACTION_PLAN_CHARS =
-  exports.MAX_POST_COMPACTION_INJECTION_CHARS =
-  exports.MAX_EDITED_FILES =
-  exports.MAX_FILE_CONTENT_SIZE =
-  exports.TURNS_BETWEEN_ATTACHMENTS =
-    void 0;
+exports.MAX_POST_COMPACTION_PLAN_CHARS = exports.MAX_POST_COMPACTION_INJECTION_CHARS = exports.MAX_EDITED_FILES = exports.MAX_FILE_CONTENT_SIZE = exports.TURNS_BETWEEN_ATTACHMENTS = void 0;
 /** Number of turns between post-compaction attachment injections after the first immediate injection */
 exports.TURNS_BETWEEN_ATTACHMENTS = 5;
 /** Maximum size of file content before truncation (50KB) */

@@ -6,9 +6,9 @@
   <img src="docs/img/black-mux.svg" alt="mux logo" width="18%" />
 </picture>
 
-# Mux - Coding Agent Multiplexer
+# MUP - Agentic Coding Assistant
 
-[![Download](https://img.shields.io/badge/Download-Releases-purple)](https://github.com/coder/mux/releases)
+[![Download](https://img.shields.io/badge/Download-Releases-purple)](https://github.com/TheerasakPing/MUP/releases)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)](LICENSE)
 [![Discord](https://img.shields.io/discord/1446553342699507907?logo=discord&label=Discord)](https://discord.gg/thkEdtwm8c)
 
@@ -29,17 +29,18 @@ Mux is a desktop & browser application for parallel agentic development. It enab
   - OpenRouter supported for long-tail of LLMs ([docs](https://mux.coder.com/config/models#openrouter-cloud))
 - **VS Code Extension**: Jump into Mux workspaces directly from VS Code ([docs](https://mux.coder.com/integrations/vscode-extension))
 - Supporting UI and keybinds for efficiently managing a suite of agents
-- Rich markdown outputs (mermaid diagrams, LaTeX, etc.)
+- **Icon Theme System**: Support for custom file/folder icons and `.vsix` theme import
+- **Rich markdown outputs** (mermaid diagrams, LaTeX, etc.)
 
-Mux has a custom agent loop but much of the core UX is inspired by Claude Code. You'll find familiar features like Plan/Exec mode, vim inputs, `/compact` and new ones
+MUP has a custom agent loop but much of the core UX is inspired by Claude Code. You'll find familiar features like Plan/Exec mode, vim inputs, `/compact` and new ones
 like [opportunistic compaction](https://mux.coder.com/workspaces/compaction) and [mode prompts](https://mux.coder.com/agents/instruction-files#mode-prompts).
 
 **[Read the full documentation →](https://mux.coder.com)**
 
 ## Install
 
-Download pre-built binaries from [the releases page](https://github.com/coder/mux/releases) for
-macOS and Linux.
+Download pre-built binaries from [the releases page](https://github.com/TheerasakPing/MUP/releases) for
+macOS, Linux and Windows.
 
 [More on installation →](https://mux.coder.com/install)
 
