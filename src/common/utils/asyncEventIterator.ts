@@ -43,9 +43,8 @@ export async function* asyncEventIterator<T>(
     }
   };
 
-  subscribe(handler);
-
   try {
+    subscribe(handler);
     // Yield initial value if provided
     if (options?.initialValue !== undefined) {
       yield options.initialValue;
