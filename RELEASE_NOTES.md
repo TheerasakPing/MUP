@@ -1,29 +1,61 @@
 # Mux Release Notes
 
+## [0.17.7] - 2026-02-13
+
+### ✨ New Features
+
+#### 1. Enhanced Icon Theme Serving & Proxy
+
+- Added `jszip` dependency for efficient processing of icon theme extensions.
+- Exposed API server URL to the renderer process to support icon theme asset serving.
+- Configured Vite proxy to handle path resolution for icon assets dynamically.
+
+#### 2. Active Icons Support
+
+- Implemented logic to support "active" icon states in themes, ensuring visual feedback for open folders and active files.
+
+### 🔧 Improvements
+
+- Refactored icon theme type definitions for better maintainability.
+- Standardized indentation to 2 spaces across icon service and type files.
+
+### 📝 Technical Details
+
+- Added `jszip` to `package.json`.
+- Updated Vite and API server configurations for asset routing.
+
+---
+
 ## [0.17.5] - 2026-02-12
 
 ### ✨ New Features
 
 #### 1. VS Code-Compatible Icon Theme System
+
 - Integrated a full-blown icon theme engine that supports standard VS Code `.vsix` extensions.
 - Users can now import custom icon themes (like Material Icon Theme, Catppuccin, etc.) directly.
-- Implemented a unified resolution algorithm that handles file names, extensions, language IDs, and folder states with VS Code parity.
+- Implemented a unified resolution algorithm that handles file "name": "mup",
+  "version": "0.17.7", language IDs, and folder states with VS Code parity.
 
 #### 2. Enhanced Appearance Settings
+
 - Added a dedicated "Appearance" section in the Settings UI.
 - Direct management of installed themes: activate, delete, or import new ones.
 - Interactive feedback for extension imports and theme switching.
 
 #### 3. Optimized Default Icon Set
+
 - Migrated all previous hardcoded icons into a structured, theme-compliant format.
 - Significant reduction in `FileIcon` component complexity and bundle overhead.
 
 ### 🔧 Improvements
+
 - Unified icon resolution logic across the entire application.
 - Added Express-based serving for custom icon assets to ensure security and performance.
 - Improved fallback mechanisms for missing icons in custom themes.
 
 ### 🐛 Bug Fixes
+
 - Fixed port conflicts in development mode scripts.
 - Resolved various TypeScript inconsistencies between frontend and backend icon services.
 
@@ -34,21 +66,25 @@
 ### ✨ New Features
 
 #### 1. Custom Model Presets
+
 - Full-stack system to save and load model configurations.
 - Import/Export presets as JSON for easy sharing.
 - Persistent storage for cost tracking.
 
 #### 2. Model Health & Validation
+
 - Automated health check service to ping and validate model endpoints.
 - Visual health indicators in the model settings UI.
 - Detailed health reports with error diagnostics.
 
 #### 3. Realtime Agent Status Monitor
+
 - Live dashboard in the sidebar showing agent activity.
 - Visual streaming metrics (TPS, token counts, elapsed time).
 - Session cost tracking and per-model performance breakdown.
 
 ### 🐛 Bug Fixes
+
 - Fixed build system stability across Linux, macOS, and Windows.
 - Resolved styling glitches in settings modal.
 - Fixed TypeScript build errors in cost tracking service and release workflow.
@@ -127,4 +163,3 @@
 ## [0.16.9] - 2026-02-10
 
 Previous release
-
