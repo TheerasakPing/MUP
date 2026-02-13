@@ -151,12 +151,12 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
 
               const contextUsageData = contextUsage
                 ? calculateTokenMeterData(
-                  contextUsage,
-                  contextDisplayModel,
-                  has1MContext(contextDisplayModel),
-                  false,
-                  customMetadata
-                )
+                    contextUsage,
+                    contextDisplayModel,
+                    has1MContext(contextDisplayModel),
+                    false,
+                    customMetadata
+                  )
                 : { segments: [], totalTokens: 0, totalPercentage: 0 };
 
               // Warn when the compaction model can't fit the auto-compact threshold to avoid failures.
@@ -172,7 +172,7 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
                 );
                 const compactionMaxTokens =
                   has1MContext(effectiveCompactionModel) &&
-                    supports1MContext(effectiveCompactionModel)
+                  supports1MContext(effectiveCompactionModel)
                     ? 1_000_000
                     : compactionStats?.max_input_tokens;
 
@@ -256,10 +256,10 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
                   adjustedOutputCost !== undefined &&
                   adjustedReasoningCost !== undefined
                   ? adjustedInputCost +
-                  displayUsage.cached.cost_usd +
-                  displayUsage.cacheCreate.cost_usd +
-                  adjustedOutputCost +
-                  adjustedReasoningCost
+                    displayUsage.cached.cost_usd +
+                    displayUsage.cacheCreate.cost_usd +
+                    adjustedOutputCost +
+                    adjustedReasoningCost
                   : undefined
                 : undefined;
 
@@ -279,42 +279,42 @@ const CostsTabComponent: React.FC<CostsTabProps> = ({ workspaceId }) => {
               // Build component data for table (using adjusted costs for 1M context)
               const components = displayUsage
                 ? [
-                  {
-                    name: "Cache Read",
-                    tokens: displayUsage.cached.tokens,
-                    cost: displayUsage.cached.cost_usd,
-                    color: TOKEN_COMPONENT_COLORS.cached,
-                    show: displayUsage.cached.tokens > 0,
-                  },
-                  {
-                    name: "Cache Create",
-                    tokens: displayUsage.cacheCreate.tokens,
-                    cost: displayUsage.cacheCreate.cost_usd,
-                    color: TOKEN_COMPONENT_COLORS.cacheCreate,
-                    show: displayUsage.cacheCreate.tokens > 0,
-                  },
-                  {
-                    name: "Input",
-                    tokens: displayUsage.input.tokens,
-                    cost: adjustedInputCost,
-                    color: TOKEN_COMPONENT_COLORS.input,
-                    show: true,
-                  },
-                  {
-                    name: "Output",
-                    tokens: displayUsage.output.tokens,
-                    cost: adjustedOutputCost,
-                    color: TOKEN_COMPONENT_COLORS.output,
-                    show: true,
-                  },
-                  {
-                    name: "Thinking",
-                    tokens: displayUsage.reasoning.tokens,
-                    cost: adjustedReasoningCost,
-                    color: TOKEN_COMPONENT_COLORS.thinking,
-                    show: displayUsage.reasoning.tokens > 0,
-                  },
-                ].filter((c) => c.show)
+                    {
+                      name: "Cache Read",
+                      tokens: displayUsage.cached.tokens,
+                      cost: displayUsage.cached.cost_usd,
+                      color: TOKEN_COMPONENT_COLORS.cached,
+                      show: displayUsage.cached.tokens > 0,
+                    },
+                    {
+                      name: "Cache Create",
+                      tokens: displayUsage.cacheCreate.tokens,
+                      cost: displayUsage.cacheCreate.cost_usd,
+                      color: TOKEN_COMPONENT_COLORS.cacheCreate,
+                      show: displayUsage.cacheCreate.tokens > 0,
+                    },
+                    {
+                      name: "Input",
+                      tokens: displayUsage.input.tokens,
+                      cost: adjustedInputCost,
+                      color: TOKEN_COMPONENT_COLORS.input,
+                      show: true,
+                    },
+                    {
+                      name: "Output",
+                      tokens: displayUsage.output.tokens,
+                      cost: adjustedOutputCost,
+                      color: TOKEN_COMPONENT_COLORS.output,
+                      show: true,
+                    },
+                    {
+                      name: "Thinking",
+                      tokens: displayUsage.reasoning.tokens,
+                      cost: adjustedReasoningCost,
+                      color: TOKEN_COMPONENT_COLORS.thinking,
+                      show: displayUsage.reasoning.tokens > 0,
+                    },
+                  ].filter((c) => c.show)
                 : [];
 
               return (

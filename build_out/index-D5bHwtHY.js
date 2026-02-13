@@ -1,0 +1,580 @@
+import {
+  w as X,
+  N as $,
+  k as Z,
+  o as ee,
+  p as ne,
+  f as U,
+  e as K,
+  h as te,
+  g as M,
+  i as se,
+  q as P,
+  s as W,
+  j as oe,
+  b as ie,
+  z as ae,
+} from "./index-CmuXKG3k.js";
+import {
+  o as g,
+  u as B,
+  f as le,
+  s as f,
+  n as b,
+  _ as G,
+  a as H,
+  l as re,
+} from "./main-CrYcxu2d.js";
+import "./types-BUZRD7XI.js";
+import "./TerminalRouterContext-CeKE7fio.js";
+function ue({ prompt: e, responseFormat: t }) {
+  var o;
+  const i = [],
+    u = [];
+  t?.type === "json" &&
+    (t.schema == null
+      ? i.push({ role: "system", content: "Return JSON." })
+      : (i.push({
+          role: "system",
+          content: "Return JSON that conforms to the following schema: " + JSON.stringify(t.schema),
+        }),
+        u.push({
+          type: "compatibility",
+          feature: "responseFormat JSON schema",
+          details: "JSON response schema is injected into the system message.",
+        })));
+  let n = -1;
+  for (let d = e.length - 1; d >= 0; d--)
+    if (e[d].role === "user") {
+      n = d;
+      break;
+    }
+  let l = -1;
+  for (const { role: d, content: c } of e)
+    switch ((l++, d)) {
+      case "system": {
+        i.push({ role: "system", content: c });
+        break;
+      }
+      case "user": {
+        let p = "";
+        for (const a of c)
+          a.type === "text"
+            ? (p += a.text)
+            : u.push({ type: "unsupported", feature: `user message part type: ${a.type}` });
+        i.push({ role: "user", content: p });
+        break;
+      }
+      case "assistant": {
+        let p = "",
+          a;
+        const r = [];
+        for (const m of c)
+          switch (m.type) {
+            case "text": {
+              p += m.text;
+              break;
+            }
+            case "reasoning": {
+              if (l <= n) break;
+              a == null ? (a = m.text) : (a += m.text);
+              break;
+            }
+            case "tool-call": {
+              r.push({
+                id: m.toolCallId,
+                type: "function",
+                function: { name: m.toolName, arguments: JSON.stringify(m.input) },
+              });
+              break;
+            }
+          }
+        i.push({
+          role: "assistant",
+          content: p,
+          reasoning_content: a,
+          tool_calls: r.length > 0 ? r : void 0,
+        });
+        break;
+      }
+      case "tool": {
+        for (const p of c) {
+          if (p.type === "tool-approval-response") continue;
+          const a = p.output;
+          let r;
+          switch (a.type) {
+            case "text":
+            case "error-text":
+              r = a.value;
+              break;
+            case "execution-denied":
+              r = (o = a.reason) != null ? o : "Tool execution denied.";
+              break;
+            case "content":
+            case "json":
+            case "error-json":
+              r = JSON.stringify(a.value);
+              break;
+          }
+          i.push({ role: "tool", tool_call_id: p.toolCallId, content: r });
+        }
+        break;
+      }
+      default: {
+        u.push({ type: "unsupported", feature: `message role: ${d}` });
+        break;
+      }
+    }
+  return { messages: i, warnings: u };
+}
+function z(e) {
+  var t, o, i, u, n;
+  if (e == null)
+    return {
+      inputTokens: { total: void 0, noCache: void 0, cacheRead: void 0, cacheWrite: void 0 },
+      outputTokens: { total: void 0, text: void 0, reasoning: void 0 },
+      raw: void 0,
+    };
+  const l = (t = e.prompt_tokens) != null ? t : 0,
+    d = (o = e.completion_tokens) != null ? o : 0,
+    c = (i = e.prompt_cache_hit_tokens) != null ? i : 0,
+    p =
+      (n = (u = e.completion_tokens_details) == null ? void 0 : u.reasoning_tokens) != null ? n : 0;
+  return {
+    inputTokens: { total: l, noCache: l - c, cacheRead: c, cacheWrite: void 0 },
+    outputTokens: { total: d, text: d - p, reasoning: p },
+    raw: e,
+  };
+}
+var Y = g({
+    prompt_tokens: b().nullish(),
+    completion_tokens: b().nullish(),
+    prompt_cache_hit_tokens: b().nullish(),
+    prompt_cache_miss_tokens: b().nullish(),
+    total_tokens: b().nullish(),
+    completion_tokens_details: g({ reasoning_tokens: b().nullish() }).nullish(),
+  }).nullish(),
+  Q = g({
+    error: g({
+      message: f(),
+      type: f().nullish(),
+      param: le().nullish(),
+      code: B([f(), b()]).nullish(),
+    }),
+  }),
+  ce = g({
+    id: f().nullish(),
+    created: b().nullish(),
+    model: f().nullish(),
+    choices: H(
+      g({
+        message: g({
+          role: re("assistant").nullish(),
+          content: f().nullish(),
+          reasoning_content: f().nullish(),
+          tool_calls: H(
+            g({ id: f().nullish(), function: g({ name: f(), arguments: f() }) })
+          ).nullish(),
+        }),
+        finish_reason: f().nullish(),
+      })
+    ),
+    usage: Y,
+  }),
+  de = ie(() =>
+    ae(
+      B([
+        g({
+          id: f().nullish(),
+          created: b().nullish(),
+          model: f().nullish(),
+          choices: H(
+            g({
+              delta: g({
+                role: G(["assistant"]).nullish(),
+                content: f().nullish(),
+                reasoning_content: f().nullish(),
+                tool_calls: H(
+                  g({
+                    index: b(),
+                    id: f().nullish(),
+                    function: g({ name: f().nullish(), arguments: f().nullish() }),
+                  })
+                ).nullish(),
+              }).nullish(),
+              finish_reason: f().nullish(),
+            })
+          ),
+          usage: Y,
+        }),
+        Q,
+      ])
+    )
+  ),
+  pe = g({ thinking: g({ type: G(["enabled", "disabled"]).optional() }).optional() });
+function he({ tools: e, toolChoice: t }) {
+  e = e?.length ? e : void 0;
+  const o = [];
+  if (e == null) return { tools: void 0, toolChoice: void 0, toolWarnings: o };
+  const i = [];
+  for (const n of e)
+    n.type === "provider"
+      ? o.push({ type: "unsupported", feature: `provider-defined tool ${n.id}` })
+      : i.push({
+          type: "function",
+          function: {
+            name: n.name,
+            description: n.description,
+            parameters: n.inputSchema,
+            ...(n.strict != null ? { strict: n.strict } : {}),
+          },
+        });
+  if (t == null) return { tools: i, toolChoice: void 0, toolWarnings: o };
+  const u = t?.type;
+  switch (u) {
+    case "auto":
+    case "none":
+    case "required":
+      return { tools: i, toolChoice: u, toolWarnings: o };
+    case "tool":
+      return {
+        tools: i,
+        toolChoice: { type: "function", function: { name: t.toolName } },
+        toolWarnings: o,
+      };
+    default:
+      return {
+        tools: i,
+        toolChoice: void 0,
+        toolWarnings: [...o, { type: "unsupported", feature: `tool choice type: ${u}` }],
+      };
+  }
+}
+function L({ id: e, model: t, created: o }) {
+  return {
+    id: e ?? void 0,
+    modelId: t ?? void 0,
+    timestamp: o != null ? new Date(o * 1e3) : void 0,
+  };
+}
+function F(e) {
+  switch (e) {
+    case "stop":
+      return "stop";
+    case "length":
+      return "length";
+    case "content_filter":
+      return "content-filter";
+    case "tool_calls":
+      return "tool-calls";
+    case "insufficient_system_resource":
+      return "error";
+    default:
+      return "other";
+  }
+}
+var fe = class {
+    constructor(e, t) {
+      ((this.specificationVersion = "v3"),
+        (this.supportedUrls = {}),
+        (this.modelId = e),
+        (this.config = t),
+        (this.failedResponseHandler = ee({
+          errorSchema: Q,
+          errorToMessage: (o) => o.error.message,
+        })));
+    }
+    get provider() {
+      return this.config.provider;
+    }
+    get providerOptionsName() {
+      return this.config.provider.split(".")[0].trim();
+    }
+    async getArgs({
+      prompt: e,
+      maxOutputTokens: t,
+      temperature: o,
+      topP: i,
+      topK: u,
+      frequencyPenalty: n,
+      presencePenalty: l,
+      providerOptions: d,
+      stopSequences: c,
+      responseFormat: p,
+      seed: a,
+      toolChoice: r,
+      tools: m,
+    }) {
+      var h, s;
+      const w =
+          (h = await ne({ provider: this.providerOptionsName, providerOptions: d, schema: pe })) !=
+          null
+            ? h
+            : {},
+        { messages: x, warnings: v } = ue({ prompt: e, responseFormat: p });
+      (u != null && v.push({ type: "unsupported", feature: "topK" }),
+        a != null && v.push({ type: "unsupported", feature: "seed" }));
+      const { tools: C, toolChoice: T, toolWarnings: N } = he({ tools: m, toolChoice: r });
+      return {
+        args: {
+          model: this.modelId,
+          max_tokens: t,
+          temperature: o,
+          top_p: i,
+          frequency_penalty: n,
+          presence_penalty: l,
+          response_format: p?.type === "json" ? { type: "json_object" } : void 0,
+          stop: c,
+          messages: x,
+          tools: C,
+          tool_choice: T,
+          thinking:
+            ((s = w.thinking) == null ? void 0 : s.type) != null
+              ? { type: w.thinking.type }
+              : void 0,
+        },
+        warnings: [...v, ...N],
+      };
+    }
+    async doGenerate(e) {
+      var t, o, i, u;
+      const { args: n, warnings: l } = await this.getArgs({ ...e }),
+        {
+          responseHeaders: d,
+          value: c,
+          rawValue: p,
+        } = await U({
+          url: this.config.url({ path: "/chat/completions", modelId: this.modelId }),
+          headers: K(this.config.headers(), e.headers),
+          body: n,
+          failedResponseHandler: this.failedResponseHandler,
+          successfulResponseHandler: te(ce),
+          abortSignal: e.abortSignal,
+          fetch: this.config.fetch,
+        }),
+        a = c.choices[0],
+        r = [],
+        m = a.message.reasoning_content;
+      if (
+        (m != null && m.length > 0 && r.push({ type: "reasoning", text: m }),
+        a.message.tool_calls != null)
+      )
+        for (const s of a.message.tool_calls)
+          r.push({
+            type: "tool-call",
+            toolCallId: (t = s.id) != null ? t : M(),
+            toolName: s.function.name,
+            input: s.function.arguments,
+          });
+      const h = a.message.content;
+      return (
+        h != null && h.length > 0 && r.push({ type: "text", text: h }),
+        {
+          content: r,
+          finishReason: {
+            unified: F(a.finish_reason),
+            raw: (o = a.finish_reason) != null ? o : void 0,
+          },
+          usage: z(c.usage),
+          providerMetadata: {
+            [this.providerOptionsName]: {
+              promptCacheHitTokens: (i = c.usage) == null ? void 0 : i.prompt_cache_hit_tokens,
+              promptCacheMissTokens: (u = c.usage) == null ? void 0 : u.prompt_cache_miss_tokens,
+            },
+          },
+          request: { body: n },
+          response: { ...L(c), headers: d, body: p },
+          warnings: l,
+        }
+      );
+    }
+    async doStream(e) {
+      const { args: t, warnings: o } = await this.getArgs({ ...e }),
+        i = { ...t, stream: !0, stream_options: { include_usage: !0 } },
+        { responseHeaders: u, value: n } = await U({
+          url: this.config.url({ path: "/chat/completions", modelId: this.modelId }),
+          headers: K(this.config.headers(), e.headers),
+          body: i,
+          failedResponseHandler: this.failedResponseHandler,
+          successfulResponseHandler: se(de),
+          abortSignal: e.abortSignal,
+          fetch: this.config.fetch,
+        }),
+        l = [];
+      let d = { unified: "other", raw: void 0 },
+        c,
+        p = !0;
+      const a = this.providerOptionsName;
+      let r = !1,
+        m = !1;
+      return {
+        stream: n.pipeThrough(
+          new TransformStream({
+            start(h) {
+              h.enqueue({ type: "stream-start", warnings: o });
+            },
+            transform(h, s) {
+              var w, x, v, C, T, N, O, E, A, J, j, D;
+              if (
+                (e.includeRawChunks && s.enqueue({ type: "raw", rawValue: h.rawValue }), !h.success)
+              ) {
+                ((d = { unified: "error", raw: void 0 }),
+                  s.enqueue({ type: "error", error: h.error }));
+                return;
+              }
+              const q = h.value;
+              if ("error" in q) {
+                ((d = { unified: "error", raw: void 0 }),
+                  s.enqueue({ type: "error", error: q.error.message }));
+                return;
+              }
+              (p && ((p = !1), s.enqueue({ type: "response-metadata", ...L(q) })),
+                q.usage != null && (c = q.usage));
+              const S = q.choices[0];
+              if (
+                (S?.finish_reason != null &&
+                  (d = { unified: F(S.finish_reason), raw: S.finish_reason }),
+                S?.delta == null)
+              )
+                return;
+              const R = S.delta,
+                V = R.reasoning_content;
+              if (
+                (V &&
+                  (r || (s.enqueue({ type: "reasoning-start", id: "reasoning-0" }), (r = !0)),
+                  s.enqueue({ type: "reasoning-delta", id: "reasoning-0", delta: V })),
+                R.content &&
+                  (m || (s.enqueue({ type: "text-start", id: "txt-0" }), (m = !0)),
+                  r && (s.enqueue({ type: "reasoning-end", id: "reasoning-0" }), (r = !1)),
+                  s.enqueue({ type: "text-delta", id: "txt-0", delta: R.content })),
+                R.tool_calls != null)
+              ) {
+                r && (s.enqueue({ type: "reasoning-end", id: "reasoning-0" }), (r = !1));
+                for (const _ of R.tool_calls) {
+                  const I = _.index;
+                  if (l[I] == null) {
+                    if (_.id == null)
+                      throw new P({ data: _, message: "Expected 'id' to be a string." });
+                    if (((w = _.function) == null ? void 0 : w.name) == null)
+                      throw new P({ data: _, message: "Expected 'function.name' to be a string." });
+                    (s.enqueue({ type: "tool-input-start", id: _.id, toolName: _.function.name }),
+                      (l[I] = {
+                        id: _.id,
+                        type: "function",
+                        function: {
+                          name: _.function.name,
+                          arguments: (x = _.function.arguments) != null ? x : "",
+                        },
+                        hasFinished: !1,
+                      }));
+                    const k = l[I];
+                    ((v = k.function) == null ? void 0 : v.name) != null &&
+                      ((C = k.function) == null ? void 0 : C.arguments) != null &&
+                      (k.function.arguments.length > 0 &&
+                        s.enqueue({
+                          type: "tool-input-delta",
+                          id: k.id,
+                          delta: k.function.arguments,
+                        }),
+                      W(k.function.arguments) &&
+                        (s.enqueue({ type: "tool-input-end", id: k.id }),
+                        s.enqueue({
+                          type: "tool-call",
+                          toolCallId: (T = k.id) != null ? T : M(),
+                          toolName: k.function.name,
+                          input: k.function.arguments,
+                        }),
+                        (k.hasFinished = !0)));
+                    continue;
+                  }
+                  const y = l[I];
+                  y.hasFinished ||
+                    (((N = _.function) == null ? void 0 : N.arguments) != null &&
+                      (y.function.arguments +=
+                        (E = (O = _.function) == null ? void 0 : O.arguments) != null ? E : ""),
+                    s.enqueue({
+                      type: "tool-input-delta",
+                      id: y.id,
+                      delta: (A = _.function.arguments) != null ? A : "",
+                    }),
+                    ((J = y.function) == null ? void 0 : J.name) != null &&
+                      ((j = y.function) == null ? void 0 : j.arguments) != null &&
+                      W(y.function.arguments) &&
+                      (s.enqueue({ type: "tool-input-end", id: y.id }),
+                      s.enqueue({
+                        type: "tool-call",
+                        toolCallId: (D = y.id) != null ? D : M(),
+                        toolName: y.function.name,
+                        input: y.function.arguments,
+                      }),
+                      (y.hasFinished = !0)));
+                }
+              }
+            },
+            flush(h) {
+              var s, w, x;
+              (r && h.enqueue({ type: "reasoning-end", id: "reasoning-0" }),
+                m && h.enqueue({ type: "text-end", id: "txt-0" }));
+              for (const v of l.filter((C) => !C.hasFinished))
+                (h.enqueue({ type: "tool-input-end", id: v.id }),
+                  h.enqueue({
+                    type: "tool-call",
+                    toolCallId: (s = v.id) != null ? s : M(),
+                    toolName: v.function.name,
+                    input: v.function.arguments,
+                  }));
+              h.enqueue({
+                type: "finish",
+                finishReason: d,
+                usage: z(c),
+                providerMetadata: {
+                  [a]: {
+                    promptCacheHitTokens: (w = c?.prompt_cache_hit_tokens) != null ? w : void 0,
+                    promptCacheMissTokens: (x = c?.prompt_cache_miss_tokens) != null ? x : void 0,
+                  },
+                },
+              });
+            },
+          })
+        ),
+        request: { body: i },
+        response: { headers: u },
+      };
+    }
+  },
+  me = "2.0.17";
+function ge(e = {}) {
+  var t;
+  const o = X((t = e.baseURL) != null ? t : "https://api.deepseek.com"),
+    i = () =>
+      Z(
+        {
+          Authorization: `Bearer ${oe({ apiKey: e.apiKey, environmentVariableName: "DEEPSEEK_API_KEY", description: "DeepSeek API key" })}`,
+          ...e.headers,
+        },
+        `ai-sdk/deepseek/${me}`
+      ),
+    u = (l) =>
+      new fe(l, {
+        provider: "deepseek.chat",
+        url: ({ path: d }) => `${o}${d}`,
+        headers: i,
+        fetch: e.fetch,
+      }),
+    n = (l) => u(l);
+  return (
+    (n.specificationVersion = "v3"),
+    (n.languageModel = u),
+    (n.chat = u),
+    (n.embeddingModel = (l) => {
+      throw new $({ modelId: l, modelType: "embeddingModel" });
+    }),
+    (n.textEmbeddingModel = n.embeddingModel),
+    (n.imageModel = (l) => {
+      throw new $({ modelId: l, modelType: "imageModel" });
+    }),
+    n
+  );
+}
+var be = ge();
+export { me as VERSION, ge as createDeepSeek, be as deepseek };

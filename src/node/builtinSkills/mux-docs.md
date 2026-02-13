@@ -16,7 +16,7 @@ This skill bundles an **offline snapshot of the mux docs** under `references/doc
 Why prefer the bundled snapshot?
 
 1. The docs tree below is guaranteed to match what’s embedded.
-2. It’s more likely to match *your installed mux version* (the live site may be ahead).
+2. It’s more likely to match _your installed mux version_ (the live site may be ahead).
 
 To read a specific page:
 
@@ -44,6 +44,7 @@ Use this index to find a page's:
 - **Embedded file path** (for `agent_skill_read_file`)
 
 <!-- BEGIN DOCS_TREE -->
+
 - **Documentation**
   - **Getting Started**
     - Introduction (`/`) → `references/docs/index.mdx`
@@ -96,12 +97,8 @@ Use this index to find a page's:
     - Prompting Tips (`/agents/prompting-tips`) → `references/docs/agents/prompting-tips.mdx` — Tips and tricks for getting the most out of your AI agents
   - **Integrations**
     - VS Code Extension (`/integrations/vscode-extension`) → `references/docs/integrations/vscode-extension.mdx` — Pair Mux workspaces with VS Code and Cursor editors
-  - **Reference**
-    - Telemetry (`/reference/telemetry`) → `references/docs/reference/telemetry.mdx` — What Mux collects, what it doesn’t, and how to disable it
-    - Storybook (`/reference/storybook`) → `references/docs/reference/storybook.mdx` — Develop and test Mux UI states in isolation
-    - Terminal Benchmarking (`/reference/benchmarking`) → `references/docs/reference/benchmarking.mdx` — Run Terminal-Bench benchmarks with the Mux adapter
-    - AGENTS.md (`/AGENTS`) → `references/docs/AGENTS.md` — Agent instructions for AI assistants working on the Mux codebase
-<!-- END DOCS_TREE -->
+  - **Reference** - Telemetry (`/reference/telemetry`) → `references/docs/reference/telemetry.mdx` — What Mux collects, what it doesn’t, and how to disable it - Storybook (`/reference/storybook`) → `references/docs/reference/storybook.mdx` — Develop and test Mux UI states in isolation - Terminal Benchmarking (`/reference/benchmarking`) → `references/docs/reference/benchmarking.mdx` — Run Terminal-Bench benchmarks with the Mux adapter - AGENTS.md (`/AGENTS`) → `references/docs/AGENTS.md` — Agent instructions for AI assistants working on the Mux codebase
+  <!-- END DOCS_TREE -->
 
 1. Read the docs navigation (source of truth for which pages exist):
 

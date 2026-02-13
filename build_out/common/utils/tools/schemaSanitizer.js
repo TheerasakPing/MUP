@@ -13,83 +13,82 @@ exports.sanitizeMCPToolsForOpenAI = sanitizeMCPToolsForOpenAI;
  * @see https://github.com/vercel/ai/discussions/5164
  */
 const OPENAI_UNSUPPORTED_SCHEMA_PROPERTIES = new Set([
-    // String validation
-    "minLength",
-    "maxLength",
-    "pattern",
-    "format",
-    // Number validation
-    "minimum",
-    "maximum",
-    "exclusiveMinimum",
-    "exclusiveMaximum",
-    "multipleOf",
-    // Array validation
-    "minItems",
-    "maxItems",
-    "uniqueItems",
-    // Object validation
-    "minProperties",
-    "maxProperties",
-    // General
-    "default",
-    "examples",
-    "deprecated",
-    "readOnly",
-    "writeOnly",
-    // Composition (partially supported - strip from items/properties)
-    // Note: oneOf/anyOf at root level may work, but not in nested contexts
+  // String validation
+  "minLength",
+  "maxLength",
+  "pattern",
+  "format",
+  // Number validation
+  "minimum",
+  "maximum",
+  "exclusiveMinimum",
+  "exclusiveMaximum",
+  "multipleOf",
+  // Array validation
+  "minItems",
+  "maxItems",
+  "uniqueItems",
+  // Object validation
+  "minProperties",
+  "maxProperties",
+  // General
+  "default",
+  "examples",
+  "deprecated",
+  "readOnly",
+  "writeOnly",
+  // Composition (partially supported - strip from items/properties)
+  // Note: oneOf/anyOf at root level may work, but not in nested contexts
 ]);
 /**
  * Recursively strip unsupported schema properties for OpenAI compatibility.
  * This mutates the schema in place for efficiency.
  */
 function stripUnsupportedProperties(schema) {
-    if (typeof schema !== "object" || schema === null) {
-        return;
+  if (typeof schema !== "object" || schema === null) {
+    return;
+  }
+  const obj = schema;
+  // Remove unsupported properties at this level
+  for (const prop of OPENAI_UNSUPPORTED_SCHEMA_PROPERTIES) {
+    if (prop in obj) {
+      delete obj[prop];
     }
-    const obj = schema;
-    // Remove unsupported properties at this level
-    for (const prop of OPENAI_UNSUPPORTED_SCHEMA_PROPERTIES) {
-        if (prop in obj) {
-            delete obj[prop];
-        }
+  }
+  // Recursively process nested schemas
+  if (obj.properties && typeof obj.properties === "object") {
+    for (const propSchema of Object.values(obj.properties)) {
+      stripUnsupportedProperties(propSchema);
     }
-    // Recursively process nested schemas
-    if (obj.properties && typeof obj.properties === "object") {
-        for (const propSchema of Object.values(obj.properties)) {
-            stripUnsupportedProperties(propSchema);
-        }
+  }
+  if (obj.items) {
+    if (Array.isArray(obj.items)) {
+      for (const itemSchema of obj.items) {
+        stripUnsupportedProperties(itemSchema);
+      }
+    } else {
+      stripUnsupportedProperties(obj.items);
     }
-    if (obj.items) {
-        if (Array.isArray(obj.items)) {
-            for (const itemSchema of obj.items) {
-                stripUnsupportedProperties(itemSchema);
-            }
-        }
-        else {
-            stripUnsupportedProperties(obj.items);
-        }
+  }
+  if (obj.additionalProperties && typeof obj.additionalProperties === "object") {
+    stripUnsupportedProperties(obj.additionalProperties);
+  }
+  // Handle anyOf/oneOf/allOf
+  for (const keyword of ["anyOf", "oneOf", "allOf"]) {
+    if (Array.isArray(obj[keyword])) {
+      for (const subSchema of obj[keyword]) {
+        stripUnsupportedProperties(subSchema);
+      }
     }
-    if (obj.additionalProperties && typeof obj.additionalProperties === "object") {
-        stripUnsupportedProperties(obj.additionalProperties);
+  }
+  // Handle definitions/defs (JSON Schema draft-07 and later)
+  for (const defsKey of ["definitions", "$defs"]) {
+    if (obj[defsKey] && typeof obj[defsKey] === "object") {
+      for (const defSchema of Object.values(obj[defsKey])) {
+        stripUnsupportedProperties(defSchema);
+      }
     }
-    // Handle anyOf/oneOf/allOf
-    for (const keyword of ["anyOf", "oneOf", "allOf"]) {
-        if (Array.isArray(obj[keyword])) {
-            for (const subSchema of obj[keyword]) {
-                stripUnsupportedProperties(subSchema);
-            }
-        }
-    }
-    // Handle definitions/defs (JSON Schema draft-07 and later)
-    for (const defsKey of ["definitions", "$defs"]) {
-        if (obj[defsKey] && typeof obj[defsKey] === "object") {
-            for (const defSchema of Object.values(obj[defsKey])) {
-                stripUnsupportedProperties(defSchema);
-            }
-        }
-    }
+  }
 }
 /**
  * Sanitize a tool's parameter schema for OpenAI Responses API compatibility.
@@ -106,50 +105,50 @@ function stripUnsupportedProperties(schema) {
  * @returns A new tool with sanitized parameter schema
  */
 function sanitizeToolSchemaForOpenAI(tool) {
-    // Access tool internals - the AI SDK tool structure varies:
-    // - Regular tools have `parameters` (Zod schema)
-    // - MCP/dynamic tools have `inputSchema` (JSON Schema wrapper with getter)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const toolRecord = tool;
-    // Check for inputSchema first (MCP tools use this)
-    // The inputSchema is a wrapper object with a jsonSchema getter
-    if (toolRecord.inputSchema && typeof toolRecord.inputSchema === "object") {
-        const inputSchemaWrapper = toolRecord.inputSchema;
-        // Get the actual JSON Schema - it's exposed via a getter
-        const rawJsonSchema = inputSchemaWrapper.jsonSchema;
-        if (rawJsonSchema && typeof rawJsonSchema === "object") {
-            // Deep clone and sanitize
-            const clonedSchema = JSON.parse(JSON.stringify(rawJsonSchema));
-            stripUnsupportedProperties(clonedSchema);
-            // Create a new inputSchema wrapper that returns our sanitized schema
-            const sanitizedInputSchema = {
-                ...inputSchemaWrapper,
-                // Override the jsonSchema getter with our sanitized version
-                get jsonSchema() {
-                    return clonedSchema;
-                },
-            };
-            return {
-                ...tool,
-                inputSchema: sanitizedInputSchema,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            };
-        }
-    }
-    // Fall back to parameters (regular AI SDK tools)
-    if (!toolRecord.parameters) {
-        return tool;
-    }
-    // Deep clone the parameters to avoid mutating the original
-    const clonedParams = JSON.parse(JSON.stringify(toolRecord.parameters));
-    // Strip unsupported properties
-    stripUnsupportedProperties(clonedParams);
-    // Create a new tool with sanitized parameters
-    return {
+  // Access tool internals - the AI SDK tool structure varies:
+  // - Regular tools have `parameters` (Zod schema)
+  // - MCP/dynamic tools have `inputSchema` (JSON Schema wrapper with getter)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const toolRecord = tool;
+  // Check for inputSchema first (MCP tools use this)
+  // The inputSchema is a wrapper object with a jsonSchema getter
+  if (toolRecord.inputSchema && typeof toolRecord.inputSchema === "object") {
+    const inputSchemaWrapper = toolRecord.inputSchema;
+    // Get the actual JSON Schema - it's exposed via a getter
+    const rawJsonSchema = inputSchemaWrapper.jsonSchema;
+    if (rawJsonSchema && typeof rawJsonSchema === "object") {
+      // Deep clone and sanitize
+      const clonedSchema = JSON.parse(JSON.stringify(rawJsonSchema));
+      stripUnsupportedProperties(clonedSchema);
+      // Create a new inputSchema wrapper that returns our sanitized schema
+      const sanitizedInputSchema = {
+        ...inputSchemaWrapper,
+        // Override the jsonSchema getter with our sanitized version
+        get jsonSchema() {
+          return clonedSchema;
+        },
+      };
+      return {
         ...tool,
-        parameters: clonedParams,
+        inputSchema: sanitizedInputSchema,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    };
+      };
+    }
+  }
+  // Fall back to parameters (regular AI SDK tools)
+  if (!toolRecord.parameters) {
+    return tool;
+  }
+  // Deep clone the parameters to avoid mutating the original
+  const clonedParams = JSON.parse(JSON.stringify(toolRecord.parameters));
+  // Strip unsupported properties
+  stripUnsupportedProperties(clonedParams);
+  // Create a new tool with sanitized parameters
+  return {
+    ...tool,
+    parameters: clonedParams,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  };
 }
 /**
  * Sanitize all MCP tools for OpenAI compatibility.
@@ -158,10 +157,10 @@ function sanitizeToolSchemaForOpenAI(tool) {
  * @returns Record of sanitized tools
  */
 function sanitizeMCPToolsForOpenAI(mcpTools) {
-    const sanitized = {};
-    for (const [name, tool] of Object.entries(mcpTools)) {
-        sanitized[name] = sanitizeToolSchemaForOpenAI(tool);
-    }
-    return sanitized;
+  const sanitized = {};
+  for (const [name, tool] of Object.entries(mcpTools)) {
+    sanitized[name] = sanitizeToolSchemaForOpenAI(tool);
+  }
+  return sanitized;
 }
 //# sourceMappingURL=schemaSanitizer.js.map

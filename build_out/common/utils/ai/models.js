@@ -18,18 +18,18 @@ exports.defaultModel = knownModels_1.DEFAULT_MODEL;
  * Otherwise returns the input unchanged.
  */
 function resolveModelAlias(modelInput) {
-    if (Object.hasOwn(knownModels_1.MODEL_ABBREVIATIONS, modelInput)) {
-        return knownModels_1.MODEL_ABBREVIATIONS[modelInput];
-    }
-    return modelInput;
+  if (Object.hasOwn(knownModels_1.MODEL_ABBREVIATIONS, modelInput)) {
+    return knownModels_1.MODEL_ABBREVIATIONS[modelInput];
+  }
+  return modelInput;
 }
 /**
  * Validate model string format (must be "provider:model-id").
  * Supports colons in the model ID (e.g., "ollama:gpt-oss:20b").
  */
 function isValidModelFormat(model) {
-    const colonIndex = model.indexOf(":");
-    return colonIndex > 0 && colonIndex < model.length - 1;
+  const colonIndex = model.indexOf(":");
+  return colonIndex > 0 && colonIndex < model.length - 1;
 }
 const MUX_GATEWAY_PREFIX = "mux-gateway:";
 /**
@@ -38,16 +38,16 @@ const MUX_GATEWAY_PREFIX = "mux-gateway:";
  * Returns non-gateway strings unchanged.
  */
 function normalizeGatewayModel(modelString) {
-    if (!modelString.startsWith(MUX_GATEWAY_PREFIX)) {
-        return modelString;
-    }
-    // mux-gateway:anthropic/claude-opus-4-5 → anthropic:claude-opus-4-5
-    const inner = modelString.slice(MUX_GATEWAY_PREFIX.length);
-    const slashIndex = inner.indexOf("/");
-    if (slashIndex === -1) {
-        return modelString; // Malformed, return as-is
-    }
-    return `${inner.slice(0, slashIndex)}:${inner.slice(slashIndex + 1)}`;
+  if (!modelString.startsWith(MUX_GATEWAY_PREFIX)) {
+    return modelString;
+  }
+  // mux-gateway:anthropic/claude-opus-4-5 → anthropic:claude-opus-4-5
+  const inner = modelString.slice(MUX_GATEWAY_PREFIX.length);
+  const slashIndex = inner.indexOf("/");
+  if (slashIndex === -1) {
+    return modelString; // Malformed, return as-is
+  }
+  return `${inner.slice(0, slashIndex)}:${inner.slice(slashIndex + 1)}`;
 }
 /**
  * Extract the model name from a model string (e.g., "anthropic:claude-sonnet-4-5" -> "claude-sonnet-4-5")
@@ -55,12 +55,12 @@ function normalizeGatewayModel(modelString) {
  * @returns The model name part (after the colon), or the full string if no colon is found
  */
 function getModelName(modelString) {
-    const normalized = normalizeGatewayModel(modelString);
-    const colonIndex = normalized.indexOf(":");
-    if (colonIndex === -1) {
-        return normalized;
-    }
-    return normalized.substring(colonIndex + 1);
+  const normalized = normalizeGatewayModel(modelString);
+  const colonIndex = normalized.indexOf(":");
+  if (colonIndex === -1) {
+    return normalized;
+  }
+  return normalized.substring(colonIndex + 1);
 }
 /**
  * Extract the provider from a model string (e.g., "anthropic:claude-sonnet-4-5" -> "anthropic")
@@ -68,12 +68,12 @@ function getModelName(modelString) {
  * @returns The provider part (before the colon), or empty string if no colon is found
  */
 function getModelProvider(modelString) {
-    const normalized = normalizeGatewayModel(modelString);
-    const colonIndex = normalized.indexOf(":");
-    if (colonIndex === -1) {
-        return "";
-    }
-    return normalized.substring(0, colonIndex);
+  const normalized = normalizeGatewayModel(modelString);
+  const colonIndex = normalized.indexOf(":");
+  if (colonIndex === -1) {
+    return "";
+  }
+  return normalized.substring(0, colonIndex);
 }
 /**
  * Check if a model supports the 1M context window.
@@ -82,13 +82,15 @@ function getModelProvider(modelString) {
  * @returns True if the model supports 1M context window
  */
 function supports1MContext(modelString) {
-    const normalized = normalizeGatewayModel(modelString);
-    const [provider, modelName] = normalized.split(":");
-    if (provider !== "anthropic") {
-        return false;
-    }
-    // Sonnet 4, Sonnet 4.5, and Opus 4.6 support 1M context (beta)
-    return ((modelName?.includes("claude-sonnet-4") && !modelName.includes("claude-sonnet-3")) ||
-        modelName?.includes("claude-opus-4-6") === true);
+  const normalized = normalizeGatewayModel(modelString);
+  const [provider, modelName] = normalized.split(":");
+  if (provider !== "anthropic") {
+    return false;
+  }
+  // Sonnet 4, Sonnet 4.5, and Opus 4.6 support 1M context (beta)
+  return (
+    (modelName?.includes("claude-sonnet-4") && !modelName.includes("claude-sonnet-3")) ||
+    modelName?.includes("claude-opus-4-6") === true
+  );
 }
 //# sourceMappingURL=models.js.map

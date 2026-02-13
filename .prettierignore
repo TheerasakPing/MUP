@@ -6,3 +6,10 @@ mobile/.expo/
 mobile/ios/
 mobile/android/
 mobile/expo-env.d.ts
+
+# Build artifacts
+build_out/
+release/
+build/
+dist/
+node_modules/

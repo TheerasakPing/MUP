@@ -516,10 +516,7 @@ const RightSidebarTabsetNode: React.FC<RightSidebarTabsetNodeProps> = (props) =>
         )}
 
         {props.node.tabs.includes("monitor") && (
-          <div
-            role="tabpanel"
-            hidden={props.node.activeTab !== "monitor"}
-          >
+          <div role="tabpanel" hidden={props.node.activeTab !== "monitor"}>
             <ErrorBoundary workspaceInfo="Monitor tab">
               <AgentMonitor workspaceId={props.workspaceId} />
             </ErrorBoundary>

@@ -337,7 +337,9 @@ export function ModelsSection() {
       {/* Custom Models */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <div className="text-muted text-xs font-medium tracking-wide uppercase">Custom Models</div>
+          <div className="text-muted text-xs font-medium tracking-wide uppercase">
+            Custom Models
+          </div>
           <Button
             variant="outline"
             size="sm"
@@ -461,7 +463,10 @@ export function ModelsSection() {
         onApplyPreset={(presetModels) => {
           if (!api) return;
           // Apply preset — set models for each provider
-          const byProvider = new Map<string, { modelId: string; metadata?: CustomModelMetadata }[]>();
+          const byProvider = new Map<
+            string,
+            { modelId: string; metadata?: CustomModelMetadata }[]
+          >();
           for (const m of presetModels) {
             const list = byProvider.get(m.provider) ?? [];
             list.push({ modelId: m.modelId, metadata: m.metadata });

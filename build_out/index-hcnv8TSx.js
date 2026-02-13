@@ -1,11 +1,2852 @@
-import{c as X,a as le,b as R,z as F,v as ke,U as J,o as re,l as Fe,L as ae,M as ye,k as Ee,O as Je,e as ne,g as st,p as fe,r as oe,f as me,h as be,T as it,w as Ue,P as rt,n as Me,J as lt,Q as ct,E as dt,K as ut,R as pt}from"./index-CGwOAdyT.js";import{o as i,a as T,s,n as h,_ as O,d as te,t as ie,l as x,b as W,u as K,r as ee,f as Xe,e as z}from"./main-B2XpWmPF.js";import{a as ht}from"./TerminalRouterContext-CeKE7fio.js";import"./types-CUi3gq4E.js";var mt=R(()=>F(i({type:x("error"),error:i({type:s(),message:s()})})));re({errorSchema:mt,errorToMessage:e=>e.error.message});i({citations:i({enabled:W()}).optional(),title:s().optional(),context:s().optional()});i({sendReasoning:W().optional(),structuredOutputMode:O(["outputFormat","jsonTool","auto"]).optional(),thinking:te("type",[i({type:x("adaptive")}),i({type:x("enabled"),budgetTokens:h().optional()}),i({type:x("disabled")})]).optional(),disableParallelToolUse:W().optional(),cacheControl:i({type:x("ephemeral"),ttl:K([x("5m"),x("1h")]).optional()}).optional(),mcpServers:T(i({type:x("url"),name:s(),url:s(),authorizationToken:s().nullish(),toolConfiguration:i({enabled:W().nullish(),allowedTools:T(s()).nullish()}).nullish()})).optional(),container:i({id:s().optional(),skills:T(i({type:K([x("anthropic"),x("custom")]),skillId:s(),version:s().optional()})).optional()}).optional(),toolStreaming:W().optional(),effort:O(["low","medium","high","max"]).optional(),contextManagement:i({edits:T(te("type",[i({type:x("clear_tool_uses_20250919"),trigger:te("type",[i({type:x("input_tokens"),value:h()}),i({type:x("tool_uses"),value:h()})]).optional(),keep:i({type:x("tool_uses"),value:h()}).optional(),clearAtLeast:i({type:x("input_tokens"),value:h()}).optional(),clearToolInputs:W().optional(),excludeTools:T(s()).optional()}),i({type:x("clear_thinking_20251015"),keep:K([x("all"),i({type:x("thinking_turns"),value:h()})]).optional()})]))}).optional()});var Ne=4;function gt(e){var t;const n=e?.anthropic;return(t=n?.cacheControl)!=null?t:n?.cache_control}var ft=class{constructor(){this.breakpointCount=0,this.warnings=[]}getCacheControl(e,t){const n=gt(e);if(n){if(!t.canCache){this.warnings.push({type:"unsupported",feature:"cache_control on non-cacheable context",details:`cache_control cannot be set on ${t.type}. It will be ignored.`});return}if(this.breakpointCount++,this.breakpointCount>Ne){this.warnings.push({type:"unsupported",feature:"cacheControl breakpoint limit",details:`Maximum ${Ne} cache breakpoints exceeded (found ${this.breakpointCount}). This breakpoint will be ignored.`});return}return n}}getWarnings(){return this.warnings}},xt=R(()=>F(i({maxCharacters:h().optional()}))),yt=R(()=>F(i({command:O(["view","create","str_replace","insert"]),path:s(),file_text:s().optional(),insert_line:h().int().optional(),new_str:s().optional(),insert_text:s().optional(),old_str:s().optional(),view_range:T(h().int()).optional()}))),_t=X({id:"anthropic.text_editor_20250728",inputSchema:yt}),bt=(e={})=>_t(e),vt=R(()=>F(i({maxUses:h().optional(),allowedDomains:T(s()).optional(),blockedDomains:T(s()).optional(),userLocation:i({type:x("approximate"),city:s().optional(),region:s().optional(),country:s().optional(),timezone:s().optional()}).optional()}))),kt=R(()=>F(T(i({url:s(),title:s().nullable(),pageAge:s().nullable(),encryptedContent:s(),type:x("web_search_result")})))),wt=R(()=>F(i({query:s()}))),Bt=le({id:"anthropic.web_search_20250305",inputSchema:wt,outputSchema:kt,supportsDeferredResults:!0}),St=(e={})=>Bt(e),At=R(()=>F(i({maxUses:h().optional(),allowedDomains:T(s()).optional(),blockedDomains:T(s()).optional(),citations:i({enabled:W()}).optional(),maxContentTokens:h().optional()}))),Ct=R(()=>F(i({type:x("web_fetch_result"),url:s(),content:i({type:x("document"),title:s().nullable(),citations:i({enabled:W()}).optional(),source:K([i({type:x("base64"),mediaType:x("application/pdf"),data:s()}),i({type:x("text"),mediaType:x("text/plain"),data:s()})])}),retrievedAt:s().nullable()}))),Et=R(()=>F(i({url:s()}))),Dt=le({id:"anthropic.web_fetch_20250910",inputSchema:Et,outputSchema:Ct,supportsDeferredResults:!0}),Tt=(e={})=>Dt(e);async function It({tools:e,toolChoice:t,disableParallelToolUse:n,cacheControlValidator:a,supportsStructuredOutput:l}){var o;e=e?.length?e:void 0;const r=[],c=new Set,u=a||new ft;if(e==null)return{tools:void 0,toolChoice:void 0,toolWarnings:r,betas:c};const g=[];for(const f of e)switch(f.type){case"function":{const m=u.getCacheControl(f.providerOptions,{type:"tool definition",canCache:!0}),d=(o=f.providerOptions)==null?void 0:o.anthropic,v=d?.deferLoading,p=d?.allowedCallers;g.push({name:f.name,description:f.description,input_schema:f.inputSchema,cache_control:m,...v!=null?{defer_loading:v}:{},...p!=null?{allowed_callers:p}:{},...f.inputExamples!=null?{input_examples:f.inputExamples.map(D=>D.input)}:{}}),(f.inputExamples!=null||p!=null)&&c.add("advanced-tool-use-2025-11-20");break}case"provider":{switch(f.id){case"anthropic.code_execution_20250522":{c.add("code-execution-2025-05-22"),g.push({type:"code_execution_20250522",name:"code_execution",cache_control:void 0});break}case"anthropic.code_execution_20250825":{c.add("code-execution-2025-08-25"),g.push({type:"code_execution_20250825",name:"code_execution"});break}case"anthropic.computer_20250124":{c.add("computer-use-2025-01-24"),g.push({name:"computer",type:"computer_20250124",display_width_px:f.args.displayWidthPx,display_height_px:f.args.displayHeightPx,display_number:f.args.displayNumber,cache_control:void 0});break}case"anthropic.computer_20251124":{c.add("computer-use-2025-11-24"),g.push({name:"computer",type:"computer_20251124",display_width_px:f.args.displayWidthPx,display_height_px:f.args.displayHeightPx,display_number:f.args.displayNumber,enable_zoom:f.args.enableZoom,cache_control:void 0});break}case"anthropic.computer_20241022":{c.add("computer-use-2024-10-22"),g.push({name:"computer",type:"computer_20241022",display_width_px:f.args.displayWidthPx,display_height_px:f.args.displayHeightPx,display_number:f.args.displayNumber,cache_control:void 0});break}case"anthropic.text_editor_20250124":{c.add("computer-use-2025-01-24"),g.push({name:"str_replace_editor",type:"text_editor_20250124",cache_control:void 0});break}case"anthropic.text_editor_20241022":{c.add("computer-use-2024-10-22"),g.push({name:"str_replace_editor",type:"text_editor_20241022",cache_control:void 0});break}case"anthropic.text_editor_20250429":{c.add("computer-use-2025-01-24"),g.push({name:"str_replace_based_edit_tool",type:"text_editor_20250429",cache_control:void 0});break}case"anthropic.text_editor_20250728":{const m=await ke({value:f.args,schema:xt});g.push({name:"str_replace_based_edit_tool",type:"text_editor_20250728",max_characters:m.maxCharacters,cache_control:void 0});break}case"anthropic.bash_20250124":{c.add("computer-use-2025-01-24"),g.push({name:"bash",type:"bash_20250124",cache_control:void 0});break}case"anthropic.bash_20241022":{c.add("computer-use-2024-10-22"),g.push({name:"bash",type:"bash_20241022",cache_control:void 0});break}case"anthropic.memory_20250818":{c.add("context-management-2025-06-27"),g.push({name:"memory",type:"memory_20250818"});break}case"anthropic.web_fetch_20250910":{c.add("web-fetch-2025-09-10");const m=await ke({value:f.args,schema:At});g.push({type:"web_fetch_20250910",name:"web_fetch",max_uses:m.maxUses,allowed_domains:m.allowedDomains,blocked_domains:m.blockedDomains,citations:m.citations,max_content_tokens:m.maxContentTokens,cache_control:void 0});break}case"anthropic.web_search_20250305":{const m=await ke({value:f.args,schema:vt});g.push({type:"web_search_20250305",name:"web_search",max_uses:m.maxUses,allowed_domains:m.allowedDomains,blocked_domains:m.blockedDomains,user_location:m.userLocation,cache_control:void 0});break}case"anthropic.tool_search_regex_20251119":{c.add("advanced-tool-use-2025-11-20"),g.push({type:"tool_search_tool_regex_20251119",name:"tool_search_tool_regex"});break}case"anthropic.tool_search_bm25_20251119":{c.add("advanced-tool-use-2025-11-20"),g.push({type:"tool_search_tool_bm25_20251119",name:"tool_search_tool_bm25"});break}default:{r.push({type:"unsupported",feature:`provider-defined tool ${f.id}`});break}}break}default:{r.push({type:"unsupported",feature:`tool ${f}`});break}}if(t==null)return{tools:g,toolChoice:n?{type:"auto",disable_parallel_tool_use:n}:void 0,toolWarnings:r,betas:c};const _=t.type;switch(_){case"auto":return{tools:g,toolChoice:{type:"auto",disable_parallel_tool_use:n},toolWarnings:r,betas:c};case"required":return{tools:g,toolChoice:{type:"any",disable_parallel_tool_use:n},toolWarnings:r,betas:c};case"none":return{tools:void 0,toolChoice:void 0,toolWarnings:r,betas:c};case"tool":return{tools:g,toolChoice:{type:"tool",name:t.toolName,disable_parallel_tool_use:n},toolWarnings:r,betas:c};default:{const f=_;throw new J({functionality:`tool choice type: ${f}`})}}}var Rt=R(()=>F(i({type:x("code_execution_result"),stdout:s(),stderr:s(),return_code:h(),content:T(i({type:x("code_execution_output"),file_id:s()})).optional().default([])}))),Ft=R(()=>F(i({code:s()}))),Ut=le({id:"anthropic.code_execution_20250522",inputSchema:Ft,outputSchema:Rt}),Mt=(e={})=>Ut(e),Nt=R(()=>F(te("type",[i({type:x("code_execution_result"),stdout:s(),stderr:s(),return_code:h(),content:T(i({type:x("code_execution_output"),file_id:s()})).optional().default([])}),i({type:x("bash_code_execution_result"),content:T(i({type:x("bash_code_execution_output"),file_id:s()})),stdout:s(),stderr:s(),return_code:h()}),i({type:x("bash_code_execution_tool_result_error"),error_code:s()}),i({type:x("text_editor_code_execution_tool_result_error"),error_code:s()}),i({type:x("text_editor_code_execution_view_result"),content:s(),file_type:s(),num_lines:h().nullable(),start_line:h().nullable(),total_lines:h().nullable()}),i({type:x("text_editor_code_execution_create_result"),is_file_update:W()}),i({type:x("text_editor_code_execution_str_replace_result"),lines:T(s()).nullable(),new_lines:h().nullable(),new_start:h().nullable(),old_lines:h().nullable(),old_start:h().nullable()})]))),Ot=R(()=>F(te("type",[i({type:x("programmatic-tool-call"),code:s()}),i({type:x("bash_code_execution"),command:s()}),te("command",[i({type:x("text_editor_code_execution"),command:x("view"),path:s()}),i({type:x("text_editor_code_execution"),command:x("create"),path:s(),file_text:s().nullish()}),i({type:x("text_editor_code_execution"),command:x("str_replace"),path:s(),old_str:s(),new_str:s()})])]))),qt=le({id:"anthropic.code_execution_20250825",inputSchema:Ot,outputSchema:Nt,supportsDeferredResults:!0}),$t=(e={})=>qt(e),Pt=R(()=>F(T(i({type:x("tool_reference"),toolName:s()})))),Wt=R(()=>F(i({pattern:s(),limit:h().optional()}))),Ht=le({id:"anthropic.tool_search_regex_20251119",inputSchema:Wt,outputSchema:Pt,supportsDeferredResults:!0}),zt=(e={})=>Ht(e),Kt=R(()=>F(i({command:s(),restart:W().optional()}))),jt=X({id:"anthropic.bash_20241022",inputSchema:Kt}),Vt=R(()=>F(i({command:s(),restart:W().optional()}))),Gt=X({id:"anthropic.bash_20250124",inputSchema:Vt}),Lt=R(()=>F(i({action:O(["key","type","mouse_move","left_click","left_click_drag","right_click","middle_click","double_click","screenshot","cursor_position"]),coordinate:T(h().int()).optional(),text:s().optional()}))),Jt=X({id:"anthropic.computer_20241022",inputSchema:Lt}),Xt=R(()=>F(i({action:O(["key","hold_key","type","cursor_position","mouse_move","left_mouse_down","left_mouse_up","left_click","left_click_drag","right_click","middle_click","double_click","triple_click","scroll","wait","screenshot"]),coordinate:ie([h().int(),h().int()]).optional(),duration:h().optional(),scroll_amount:h().optional(),scroll_direction:O(["up","down","left","right"]).optional(),start_coordinate:ie([h().int(),h().int()]).optional(),text:s().optional()}))),Qt=X({id:"anthropic.computer_20250124",inputSchema:Xt}),Zt=R(()=>F(i({action:O(["key","hold_key","type","cursor_position","mouse_move","left_mouse_down","left_mouse_up","left_click","left_click_drag","right_click","middle_click","double_click","triple_click","scroll","wait","screenshot","zoom"]),coordinate:ie([h().int(),h().int()]).optional(),duration:h().optional(),region:ie([h().int(),h().int(),h().int(),h().int()]).optional(),scroll_amount:h().optional(),scroll_direction:O(["up","down","left","right"]).optional(),start_coordinate:ie([h().int(),h().int()]).optional(),text:s().optional()}))),Yt=X({id:"anthropic.computer_20251124",inputSchema:Zt}),en=R(()=>F(te("command",[i({command:x("view"),path:s(),view_range:ie([h(),h()]).optional()}),i({command:x("create"),path:s(),file_text:s()}),i({command:x("str_replace"),path:s(),old_str:s(),new_str:s()}),i({command:x("insert"),path:s(),insert_line:h(),insert_text:s()}),i({command:x("delete"),path:s()}),i({command:x("rename"),old_path:s(),new_path:s()})]))),tn=X({id:"anthropic.memory_20250818",inputSchema:en}),nn=R(()=>F(i({command:O(["view","create","str_replace","insert","undo_edit"]),path:s(),file_text:s().optional(),insert_line:h().int().optional(),new_str:s().optional(),insert_text:s().optional(),old_str:s().optional(),view_range:T(h().int()).optional()}))),on=X({id:"anthropic.text_editor_20241022",inputSchema:nn}),an=R(()=>F(i({command:O(["view","create","str_replace","insert","undo_edit"]),path:s(),file_text:s().optional(),insert_line:h().int().optional(),new_str:s().optional(),insert_text:s().optional(),old_str:s().optional(),view_range:T(h().int()).optional()}))),sn=X({id:"anthropic.text_editor_20250124",inputSchema:an}),rn=R(()=>F(i({command:O(["view","create","str_replace","insert"]),path:s(),file_text:s().optional(),insert_line:h().int().optional(),new_str:s().optional(),insert_text:s().optional(),old_str:s().optional(),view_range:T(h().int()).optional()}))),ln=X({id:"anthropic.text_editor_20250429",inputSchema:rn}),cn=R(()=>F(T(i({type:x("tool_reference"),toolName:s()})))),dn=R(()=>F(i({query:s(),limit:h().optional()}))),un=le({id:"anthropic.tool_search_bm25_20251119",inputSchema:dn,outputSchema:cn,supportsDeferredResults:!0}),pn=(e={})=>un(e),Qe={bash_20241022:jt,bash_20250124:Gt,codeExecution_20250522:Mt,codeExecution_20250825:$t,computer_20241022:Jt,computer_20250124:Qt,computer_20251124:Yt,memory_20250818:tn,textEditor_20241022:on,textEditor_20250124:sn,textEditor_20250429:ln,textEditor_20250728:bt,webFetch_20250910:Tt,webSearch_20250305:St,toolSearchRegex_20251119:zt,toolSearchBm25_20251119:pn};const hn=e=>new TextEncoder().encode(e);typeof Buffer<"u"&&Buffer.from;function mn(e){if(!Uint32Array.from){for(var t=new Uint32Array(e.length),n=0;n<e.length;)t[n]=e[n],n+=1;return t}return Uint32Array.from(e)}var Ze=(function(){function e(){this.checksum=4294967295}return e.prototype.update=function(t){var n,a;try{for(var l=ht(t),o=l.next();!o.done;o=l.next()){var r=o.value;this.checksum=this.checksum>>>8^fn[(this.checksum^r)&255]}}catch(c){n={error:c}}finally{try{o&&!o.done&&(a=l.return)&&a.call(l)}finally{if(n)throw n.error}}return this},e.prototype.digest=function(){return(this.checksum^4294967295)>>>0},e})(),gn=[0,1996959894,3993919788,2567524794,124634137,1886057615,3915621685,2657392035,249268274,2044508324,3772115230,2547177864,162941995,2125561021,3887607047,2428444049,498536548,1789927666,4089016648,2227061214,450548861,1843258603,4107580753,2211677639,325883990,1684777152,4251122042,2321926636,335633487,1661365465,4195302755,2366115317,997073096,1281953886,3579855332,2724688242,1006888145,1258607687,3524101629,2768942443,901097722,1119000684,3686517206,2898065728,853044451,1172266101,3705015759,2882616665,651767980,1373503546,3369554304,3218104598,565507253,1454621731,3485111705,3099436303,671266974,1594198024,3322730930,2970347812,795835527,1483230225,3244367275,3060149565,1994146192,31158534,2563907772,4023717930,1907459465,112637215,2680153253,3904427059,2013776290,251722036,2517215374,3775830040,2137656763,141376813,2439277719,3865271297,1802195444,476864866,2238001368,4066508878,1812370925,453092731,2181625025,4111451223,1706088902,314042704,2344532202,4240017532,1658658271,366619977,2362670323,4224994405,1303535960,984961486,2747007092,3569037538,1256170817,1037604311,2765210733,3554079995,1131014506,879679996,2909243462,3663771856,1141124467,855842277,2852801631,3708648649,1342533948,654459306,3188396048,3373015174,1466479909,544179635,3110523913,3462522015,1591671054,702138776,2966460450,3352799412,1504918807,783551873,3082640443,3233442989,3988292384,2596254646,62317068,1957810842,3939845945,2647816111,81470997,1943803523,3814918930,2489596804,225274430,2053790376,3826175755,2466906013,167816743,2097651377,4027552580,2265490386,503444072,1762050814,4150417245,2154129355,426522225,1852507879,4275313526,2312317920,282753626,1742555852,4189708143,2394877945,397917763,1622183637,3604390888,2714866558,953729732,1340076626,3518719985,2797360999,1068828381,1219638859,3624741850,2936675148,906185462,1090812512,3747672003,2825379669,829329135,1181335161,3412177804,3160834842,628085408,1382605366,3423369109,3138078467,570562233,1426400815,3317316542,2998733608,733239954,1555261956,3268935591,3050360625,752459403,1541320221,2607071920,3965973030,1969922972,40735498,2617837225,3943577151,1913087877,83908371,2512341634,3803740692,2075208622,213261112,2463272603,3855990285,2094854071,198958881,2262029012,4057260610,1759359992,534414190,2176718541,4139329115,1873836001,414664567,2282248934,4279200368,1711684554,285281116,2405801727,4167216745,1634467795,376229701,2685067896,3608007406,1308918612,956543938,2808555105,3495958263,1231636301,1047427035,2932959818,3654703836,1088359270,936918e3,2847714899,3736837829,1202900863,817233897,3183342108,3401237130,1404277552,615818150,3134207493,3453421203,1423857449,601450431,3009837614,3294710456,1567103746,711928724,3020668471,3272380065,1510334235,755167117],fn=mn(gn);const Ye={},Ae={};for(let e=0;e<256;e++){let t=e.toString(16).toLowerCase();t.length===1&&(t=`0${t}`),Ye[e]=t,Ae[t]=e}function xn(e){if(e.length%2!==0)throw new Error("Hex encoded strings must have an even number length");const t=new Uint8Array(e.length/2);for(let n=0;n<e.length;n+=2){const a=e.slice(n,n+2).toLowerCase();if(a in Ae)t[n/2]=Ae[a];else throw new Error(`Cannot decode unrecognized sequence ${a} as hexadecimal`)}return t}function se(e){let t="";for(let n=0;n<e.byteLength;n++)t+=Ye[e[n]];return t}class he{bytes;constructor(t){if(this.bytes=t,t.byteLength!==8)throw new Error("Int64 buffers must be exactly 8 bytes")}static fromNumber(t){if(t>9223372036854776e3||t<-9223372036854776e3)throw new Error(`${t} is too large (or, if negative, too small) to represent as an Int64`);const n=new Uint8Array(8);for(let a=7,l=Math.abs(Math.round(t));a>-1&&l>0;a--,l/=256)n[a]=l;return t<0&&Oe(n),new he(n)}valueOf(){const t=this.bytes.slice(0),n=t[0]&128;return n&&Oe(t),parseInt(se(t),16)*(n?-1:1)}toString(){return String(this.valueOf())}}function Oe(e){for(let t=0;t<8;t++)e[t]^=255;for(let t=7;t>-1&&(e[t]++,e[t]===0);t--);}class yn{toUtf8;fromUtf8;constructor(t,n){this.toUtf8=t,this.fromUtf8=n}format(t){const n=[];for(const o of Object.keys(t)){const r=this.fromUtf8(o);n.push(Uint8Array.from([r.byteLength]),r,this.formatHeaderValue(t[o]))}const a=new Uint8Array(n.reduce((o,r)=>o+r.byteLength,0));let l=0;for(const o of n)a.set(o,l),l+=o.byteLength;return a}formatHeaderValue(t){switch(t.type){case"boolean":return Uint8Array.from([t.value?0:1]);case"byte":return Uint8Array.from([2,t.value]);case"short":const n=new DataView(new ArrayBuffer(3));return n.setUint8(0,3),n.setInt16(1,t.value,!1),new Uint8Array(n.buffer);case"integer":const a=new DataView(new ArrayBuffer(5));return a.setUint8(0,4),a.setInt32(1,t.value,!1),new Uint8Array(a.buffer);case"long":const l=new Uint8Array(9);return l[0]=5,l.set(t.value.bytes,1),l;case"binary":const o=new DataView(new ArrayBuffer(3+t.value.byteLength));o.setUint8(0,6),o.setUint16(1,t.value.byteLength,!1);const r=new Uint8Array(o.buffer);return r.set(t.value,3),r;case"string":const c=this.fromUtf8(t.value),u=new DataView(new ArrayBuffer(3+c.byteLength));u.setUint8(0,7),u.setUint16(1,c.byteLength,!1);const g=new Uint8Array(u.buffer);return g.set(c,3),g;case"timestamp":const _=new Uint8Array(9);return _[0]=8,_.set(he.fromNumber(t.value.valueOf()).bytes,1),_;case"uuid":if(!Cn.test(t.value))throw new Error(`Invalid UUID received: ${t.value}`);const f=new Uint8Array(17);return f[0]=9,f.set(xn(t.value.replace(/\-/g,"")),1),f}}parse(t){const n={};let a=0;for(;a<t.byteLength;){const l=t.getUint8(a++),o=this.toUtf8(new Uint8Array(t.buffer,t.byteOffset+a,l));switch(a+=l,t.getUint8(a++)){case 0:n[o]={type:$e,value:!0};break;case 1:n[o]={type:$e,value:!1};break;case 2:n[o]={type:_n,value:t.getInt8(a++)};break;case 3:n[o]={type:bn,value:t.getInt16(a,!1)},a+=2;break;case 4:n[o]={type:vn,value:t.getInt32(a,!1)},a+=4;break;case 5:n[o]={type:kn,value:new he(new Uint8Array(t.buffer,t.byteOffset+a,8))},a+=8;break;case 6:const r=t.getUint16(a,!1);a+=2,n[o]={type:wn,value:new Uint8Array(t.buffer,t.byteOffset+a,r)},a+=r;break;case 7:const c=t.getUint16(a,!1);a+=2,n[o]={type:Bn,value:this.toUtf8(new Uint8Array(t.buffer,t.byteOffset+a,c))},a+=c;break;case 8:n[o]={type:Sn,value:new Date(new he(new Uint8Array(t.buffer,t.byteOffset+a,8)).valueOf())},a+=8;break;case 9:const u=new Uint8Array(t.buffer,t.byteOffset+a,16);a+=16,n[o]={type:An,value:`${se(u.subarray(0,4))}-${se(u.subarray(4,6))}-${se(u.subarray(6,8))}-${se(u.subarray(8,10))}-${se(u.subarray(10))}`};break;default:throw new Error("Unrecognized header type tag")}}return n}}var qe;(function(e){e[e.boolTrue=0]="boolTrue",e[e.boolFalse=1]="boolFalse",e[e.byte=2]="byte",e[e.short=3]="short",e[e.integer=4]="integer",e[e.long=5]="long",e[e.byteArray=6]="byteArray",e[e.string=7]="string",e[e.timestamp=8]="timestamp",e[e.uuid=9]="uuid"})(qe||(qe={}));const $e="boolean",_n="byte",bn="short",vn="integer",kn="long",wn="binary",Bn="string",Sn="timestamp",An="uuid",Cn=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/,et=4,Q=et*2,Y=4,En=Q+Y*2;function Dn({byteLength:e,byteOffset:t,buffer:n}){if(e<En)throw new Error("Provided message too short to accommodate event stream message overhead");const a=new DataView(n,t,e),l=a.getUint32(0,!1);if(e!==l)throw new Error("Reported message length does not match received message length");const o=a.getUint32(et,!1),r=a.getUint32(Q,!1),c=a.getUint32(e-Y,!1),u=new Ze().update(new Uint8Array(n,t,Q));if(r!==u.digest())throw new Error(`The prelude checksum specified in the message (${r}) does not match the calculated CRC32 checksum (${u.digest()})`);if(u.update(new Uint8Array(n,t+Q,e-(Q+Y))),c!==u.digest())throw new Error(`The message checksum (${u.digest()}) did not match the expected value of ${c}`);return{headers:new DataView(n,t+Q+Y,o),body:new Uint8Array(n,t+Q+Y+o,l-o-(Q+Y+Y))}}class Tn{headerMarshaller;messageBuffer;isEndOfStream;constructor(t,n){this.headerMarshaller=new yn(t,n),this.messageBuffer=[],this.isEndOfStream=!1}feed(t){this.messageBuffer.push(this.decode(t))}endOfStream(){this.isEndOfStream=!0}getMessage(){const t=this.messageBuffer.pop(),n=this.isEndOfStream;return{getMessage(){return t},isEndOfStream(){return n}}}getAvailableMessages(){const t=this.messageBuffer;this.messageBuffer=[];const n=this.isEndOfStream;return{getMessages(){return t},isEndOfStream(){return n}}}encode({headers:t,body:n}){const a=this.headerMarshaller.format(t),l=a.byteLength+n.byteLength+16,o=new Uint8Array(l),r=new DataView(o.buffer,o.byteOffset,o.byteLength),c=new Ze;return r.setUint32(0,l,!1),r.setUint32(4,a.byteLength,!1),r.setUint32(8,c.update(o.subarray(0,8)).digest(),!1),o.set(a,12),o.set(n,a.byteLength+12),r.setUint32(l-4,c.update(o.subarray(8,l-4)).digest(),!1),o}decode(t){const{headers:n,body:a}=Dn(t);return{headers:this.headerMarshaller.parse(n),body:a}}formatHeaders(t){return this.headerMarshaller.format(t)}}const In=e=>new TextEncoder().encode(e),Rn=e=>{if(typeof e=="string")return e;if(typeof e!="object"||typeof e.byteOffset!="number"||typeof e.byteLength!="number")throw new Error("@smithy/util-utf8: toUtf8 encoder function only accepts string | Uint8Array.");return new TextDecoder("utf-8").decode(e)};const Ce=new TextEncoder,Fn={appstream2:"appstream",cloudhsmv2:"cloudhsm",email:"ses",marketplace:"aws-marketplace",mobile:"AWSMobileHubService",pinpoint:"mobiletargeting",queue:"sqs","git-codecommit":"codecommit","mturk-requester-sandbox":"mturk-requester","personalize-runtime":"personalize"},Un=new Set(["authorization","content-type","content-length","user-agent","presigned-expires","expect","x-amzn-trace-id","range","connection"]);class Mn{constructor({method:t,url:n,headers:a,body:l,accessKeyId:o,secretAccessKey:r,sessionToken:c,service:u,region:g,cache:_,datetime:f,signQuery:m,appendSessionToken:d,allHeaders:v,singleEncode:p}){if(n==null)throw new TypeError("url is a required option");if(o==null)throw new TypeError("accessKeyId is a required option");if(r==null)throw new TypeError("secretAccessKey is a required option");this.method=t||(l?"POST":"GET"),this.url=new URL(n),this.headers=new Headers(a||{}),this.body=l,this.accessKeyId=o,this.secretAccessKey=r,this.sessionToken=c;let D,C;(!u||!g)&&([D,C]=Nn(this.url,this.headers)),this.service=u||D||"",this.region=g||C||"us-east-1",this.cache=_||new Map,this.datetime=f||new Date().toISOString().replace(/[:-]|\.\d{3}/g,""),this.signQuery=m,this.appendSessionToken=d||this.service==="iotdevicegateway",this.headers.delete("Host"),this.service==="s3"&&!this.signQuery&&!this.headers.has("X-Amz-Content-Sha256")&&this.headers.set("X-Amz-Content-Sha256","UNSIGNED-PAYLOAD");const S=this.signQuery?this.url.searchParams:this.headers;if(S.set("X-Amz-Date",this.datetime),this.sessionToken&&!this.appendSessionToken&&S.set("X-Amz-Security-Token",this.sessionToken),this.signableHeaders=["host",...this.headers.keys()].filter(y=>v||!Un.has(y)).sort(),this.signedHeaders=this.signableHeaders.join(";"),this.canonicalHeaders=this.signableHeaders.map(y=>y+":"+(y==="host"?this.url.host:(this.headers.get(y)||"").replace(/\s+/g," "))).join(`
-`),this.credentialString=[this.datetime.slice(0,8),this.region,this.service,"aws4_request"].join("/"),this.signQuery&&(this.service==="s3"&&!S.has("X-Amz-Expires")&&S.set("X-Amz-Expires","86400"),S.set("X-Amz-Algorithm","AWS4-HMAC-SHA256"),S.set("X-Amz-Credential",this.accessKeyId+"/"+this.credentialString),S.set("X-Amz-SignedHeaders",this.signedHeaders)),this.service==="s3")try{this.encodedPath=decodeURIComponent(this.url.pathname.replace(/\+/g," "))}catch{this.encodedPath=this.url.pathname}else this.encodedPath=this.url.pathname.replace(/\/+/g,"/");p||(this.encodedPath=encodeURIComponent(this.encodedPath).replace(/%2F/g,"/")),this.encodedPath=He(this.encodedPath);const E=new Set;this.encodedSearch=[...this.url.searchParams].filter(([y])=>{if(!y)return!1;if(this.service==="s3"){if(E.has(y))return!1;E.add(y)}return!0}).map(y=>y.map(I=>He(encodeURIComponent(I)))).sort(([y,I],[k,B])=>y<k?-1:y>k?1:I<B?-1:I>B?1:0).map(y=>y.join("=")).join("&")}async sign(){return this.signQuery?(this.url.searchParams.set("X-Amz-Signature",await this.signature()),this.sessionToken&&this.appendSessionToken&&this.url.searchParams.set("X-Amz-Security-Token",this.sessionToken)):this.headers.set("Authorization",await this.authHeader()),{method:this.method,url:this.url,headers:this.headers,body:this.body}}async authHeader(){return["AWS4-HMAC-SHA256 Credential="+this.accessKeyId+"/"+this.credentialString,"SignedHeaders="+this.signedHeaders,"Signature="+await this.signature()].join(", ")}async signature(){const t=this.datetime.slice(0,8),n=[this.secretAccessKey,t,this.region,this.service].join();let a=this.cache.get(n);if(!a){const l=await pe("AWS4"+this.secretAccessKey,t),o=await pe(l,this.region),r=await pe(o,this.service);a=await pe(r,"aws4_request"),this.cache.set(n,a)}return we(await pe(a,await this.stringToSign()))}async stringToSign(){return["AWS4-HMAC-SHA256",this.datetime,this.credentialString,we(await Pe(await this.canonicalString()))].join(`
-`)}async canonicalString(){return[this.method.toUpperCase(),this.encodedPath,this.encodedSearch,this.canonicalHeaders+`
-`,this.signedHeaders,await this.hexBodyHash()].join(`
-`)}async hexBodyHash(){let t=this.headers.get("X-Amz-Content-Sha256")||(this.service==="s3"&&this.signQuery?"UNSIGNED-PAYLOAD":null);if(t==null){if(this.body&&typeof this.body!="string"&&!("byteLength"in this.body))throw new Error("body must be a string, ArrayBuffer or ArrayBufferView, unless you include the X-Amz-Content-Sha256 header");t=we(await Pe(this.body||""))}return t}}async function pe(e,t){const n=await crypto.subtle.importKey("raw",typeof e=="string"?Ce.encode(e):e,{name:"HMAC",hash:{name:"SHA-256"}},!1,["sign"]);return crypto.subtle.sign("HMAC",n,Ce.encode(t))}async function Pe(e){return crypto.subtle.digest("SHA-256",typeof e=="string"?Ce.encode(e):e)}const We=["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"];function we(e){const t=new Uint8Array(e);let n="";for(let a=0;a<t.length;a++){const l=t[a];n+=We[l>>>4&15],n+=We[l&15]}return n}function He(e){return e.replace(/[!'()*]/g,t=>"%"+t.charCodeAt(0).toString(16).toUpperCase())}function Nn(e,t){const{hostname:n,pathname:a}=e;if(n.endsWith(".on.aws")){const c=n.match(/^[^.]{1,63}\.lambda-url\.([^.]{1,63})\.on\.aws$/);return c!=null?["lambda",c[1]||""]:["",""]}if(n.endsWith(".r2.cloudflarestorage.com"))return["s3","auto"];if(n.endsWith(".backblazeb2.com")){const c=n.match(/^(?:[^.]{1,63}\.)?s3\.([^.]{1,63})\.backblazeb2\.com$/);return c!=null?["s3",c[1]||""]:["",""]}const l=n.replace("dualstack.","").match(/([^.]{1,63})\.(?:([^.]{0,63})\.)?amazonaws\.com(?:\.cn)?$/);let o=l&&l[1]||"",r=l&&l[2];if(r==="us-gov")r="us-gov-west-1";else if(r==="s3"||r==="s3-accelerate")r="us-east-1",o="s3";else if(o==="iot")n.startsWith("iot.")?o="execute-api":n.startsWith("data.jobs.iot.")?o="iot-jobs-data":o=a==="/mqtt"?"iotdevicegateway":"iotdata";else if(o==="autoscaling"){const c=(t.get("X-Amz-Target")||"").split(".")[0];c==="AnyScaleFrontendService"?o="application-autoscaling":c==="AnyScaleScalingPlannerFrontendService"&&(o="autoscaling-plans")}else r==null&&o.startsWith("s3-")?(r=o.slice(3).replace(/^fips-|^external-1/,""),o="s3"):o.endsWith("-fips")?o=o.slice(0,-5):r&&/-\d$/.test(o)&&!/-\d$/.test(r)&&([o,r]=[r,o]);return[Fn[o]||o,r||""]}var On=["stop","stop_sequence","end_turn","length","max_tokens","content-filter","content_filtered","guardrail_intervened","tool-calls","tool_use"],ze={"image/jpeg":"jpeg","image/png":"png","image/gif":"gif","image/webp":"webp"},Ke={"application/pdf":"pdf","text/csv":"csv","application/msword":"doc","application/vnd.openxmlformats-officedocument.wordprocessingml.document":"docx","application/vnd.ms-excel":"xls","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":"xlsx","text/html":"html","text/plain":"txt","text/markdown":"md"},qn=i({citations:i({enabled:W()}).optional()}),$n=i({additionalModelRequestFields:ee(s(),Xe()).optional(),reasoningConfig:i({type:K([x("enabled"),x("disabled")]).optional(),budgetTokens:h().optional(),maxReasoningEffort:O(["low","medium","high"]).optional()}).optional(),anthropicBeta:T(s()).optional()}),ge=i({message:s(),type:s().nullish()});function Pn(e,t){const n=new Tn(Rn,In);let a=new Uint8Array(0);const l=new TextDecoder;return e.pipeThrough(new TransformStream({async transform(o,r){var c,u;const g=new Uint8Array(a.length+o.length);for(g.set(a),g.set(o,a.length),a=g;a.length>=4;){const _=new DataView(a.buffer,a.byteOffset,a.byteLength).getUint32(0,!1);if(a.length<_)break;try{const f=a.subarray(0,_),m=n.decode(f);a=a.slice(_);const d=(c=m.headers[":message-type"])==null?void 0:c.value,v=(u=m.headers[":event-type"])==null?void 0:u.value,p=l.decode(m.body);await t({messageType:d,eventType:v,data:p},r)}catch{break}}}}))}var Wn=e=>async({response:t})=>{const n=lt(t);if(t.body==null)throw new ct({});return{responseHeaders:n,value:Pn(t.body,async(a,l)=>{if(a.messageType==="event"){const o=await ut({text:a.data});if(!o.success){l.enqueue(o);return}delete o.value.p;const r={[a.eventType]:o.value},c=await pt({value:r,schema:e});c.success?l.enqueue({success:!0,value:c.value,rawValue:r}):l.enqueue(c)}})}};async function Hn({tools:e,toolChoice:t,modelId:n}){var a;const l=[],o=new Set;if(e==null||e.length===0)return{toolConfig:{},additionalTools:void 0,betas:o,toolWarnings:l};const r=e.filter(p=>p.type==="provider"&&p.id==="anthropic.web_search_20250305"?(l.push({type:"unsupported",feature:"web_search_20250305 tool",details:"The web_search_20250305 tool is not supported on Amazon Bedrock."}),!1):!0);if(r.length===0)return{toolConfig:{},additionalTools:void 0,betas:o,toolWarnings:l};const c=n.includes("anthropic."),u=r.filter(p=>p.type==="provider"),g=r.filter(p=>p.type==="function");let _;const f=[],m=c&&u.length>0;if(m){g.length>0&&l.push({type:"unsupported",feature:"mixing Anthropic provider-defined tools and standard function tools",details:"Mixed Anthropic provider-defined tools and standard function tools are not supported in a single call to Bedrock. Only Anthropic tools will be used."});const{toolChoice:p,toolWarnings:D,betas:C}=await It({tools:u,toolChoice:t,supportsStructuredOutput:!1});l.push(...D),C.forEach(S=>o.add(S)),p&&(_={tool_choice:p});for(const S of u){const E=Object.values(Qe).find(y=>y({}).id===S.id);if(E!=null){const y=E({});f.push({toolSpec:{name:S.name,inputSchema:{json:await rt(y.inputSchema).jsonSchema}}})}else l.push({type:"unsupported",feature:"tool ${tool.id}"})}}else for(const p of u)l.push({type:"unsupported",feature:`tool ${p.id}`});for(const p of g)f.push({toolSpec:{name:p.name,...((a=p.description)==null?void 0:a.trim())!==""?{description:p.description}:{},inputSchema:{json:p.inputSchema}}});let d;if(!m&&f.length>0&&t){const p=t.type;switch(p){case"auto":d={auto:{}};break;case"required":d={any:{}};break;case"none":f.length=0,d=void 0;break;case"tool":d={tool:{name:t.toolName}};break;default:{const D=p;throw new J({functionality:`tool choice type: ${D}`})}}}return{toolConfig:f.length>0?{tools:f,toolChoice:d}:{},additionalTools:_,betas:o,toolWarnings:l}}function je(e){var t,n;if(e==null)return{inputTokens:{total:void 0,noCache:void 0,cacheRead:void 0,cacheWrite:void 0},outputTokens:{total:void 0,text:void 0,reasoning:void 0},raw:void 0};const a=e.inputTokens,l=e.outputTokens,o=(t=e.cacheReadInputTokens)!=null?t:0,r=(n=e.cacheWriteInputTokens)!=null?n:0;return{inputTokens:{total:a+o+r,noCache:a,cacheRead:o,cacheWrite:r},outputTokens:{total:l,text:l,reasoning:void 0},raw:e}}function Be(e){return e.includes("mistral.")}function _e(e,t){return t?e.replace(/[^a-zA-Z0-9]/g,"").slice(0,9):e}function Se(e){var t;const n=(t=e?.bedrock)==null?void 0:t.cachePoint;if(n)return{cachePoint:n}}async function zn(e){var t,n;const a=await fe({provider:"bedrock",providerOptions:e,schema:qn});return(n=(t=a?.citations)==null?void 0:t.enabled)!=null?n:!1}async function Kn(e,t=!1){var n,a;const l=Vn(e);let o=[];const r=[];let c=0;const u=()=>`document-${++c}`;for(let g=0;g<l.length;g++){const _=l[g],f=g===l.length-1,m=_.type;switch(m){case"system":{if(r.length>0)throw new J({functionality:"Multiple system messages that are separated by user/assistant messages"});for(const d of _.messages){o.push({text:d.content});const v=Se(d.providerOptions);v&&o.push(v)}break}case"user":{const d=[];for(const v of _.messages){const{role:p,content:D,providerOptions:C}=v;switch(p){case"user":{for(let E=0;E<D.length;E++){const y=D[E];switch(y.type){case"text":{d.push({text:y.text});break}case"file":{if(y.data instanceof URL)throw new J({functionality:"File URL data"});if(y.mediaType.startsWith("image/"))d.push({image:{format:Ve(y.mediaType),source:{bytes:Me(y.data)}}});else{if(!y.mediaType)throw new J({functionality:"file without mime type",message:"File mime type is required in user message part content"});const I=await zn(y.providerOptions);d.push({document:{format:jn(y.mediaType),name:(n=y.filename)!=null?n:u(),source:{bytes:Me(y.data)},...I&&{citations:{enabled:!0}}}})}break}}}break}case"tool":{for(const E of D){if(E.type==="tool-approval-response")continue;let y;const I=E.output;switch(I.type){case"content":{y=I.value.map(k=>{switch(k.type){case"text":return{text:k.text};case"image-data":if(!k.mediaType.startsWith("image/"))throw new J({functionality:`media type: ${k.mediaType}`});return{image:{format:Ve(k.mediaType),source:{bytes:k.data}}};default:throw new J({functionality:`unsupported tool content part type: ${k.type}`})}});break}case"text":case"error-text":y=[{text:I.value}];break;case"execution-denied":y=[{text:(a=I.reason)!=null?a:"Tool execution denied."}];break;case"json":case"error-json":default:y=[{text:JSON.stringify(I.value)}];break}d.push({toolResult:{toolUseId:_e(E.toolCallId,t),content:y}})}break}default:{const E=p;throw new Error(`Unsupported role: ${E}`)}}const S=Se(C);S&&d.push(S)}r.push({role:"user",content:d});break}case"assistant":{const d=[];for(let v=0;v<_.messages.length;v++){const p=_.messages[v],D=v===_.messages.length-1,{content:C}=p;for(let E=0;E<C.length;E++){const y=C[E],I=E===C.length-1;switch(y.type){case"text":{if(!y.text.trim())break;d.push({text:Ge(f,D,I,y.text)});break}case"reasoning":{const k=await fe({provider:"bedrock",providerOptions:y.providerOptions,schema:Zn});k!=null&&(k.signature!=null?d.push({reasoningContent:{reasoningText:{text:Ge(f,D,I,y.text),signature:k.signature}}}):k.redactedData!=null&&d.push({reasoningContent:{redactedReasoning:{data:k.redactedData}}}));break}case"tool-call":{d.push({toolUse:{toolUseId:_e(y.toolCallId,t),name:y.toolName,input:y.input}});break}}}const S=Se(p.providerOptions);S&&d.push(S)}r.push({role:"assistant",content:d});break}default:{const d=m;throw new Error(`Unsupported type: ${d}`)}}}return{system:o,messages:r}}function Ve(e){if(!e)throw new J({functionality:"image without mime type",message:"Image mime type is required in user message part content"});const t=ze[e];if(!t)throw new J({functionality:`image mime type: ${e}`,message:`Unsupported image mime type: ${e}, expected one of: ${Object.keys(ze).join(", ")}`});return t}function jn(e){const t=Ke[e];if(!t)throw new J({functionality:`file mime type: ${e}`,message:`Unsupported file mime type: ${e}, expected one of: ${Object.keys(Ke).join(", ")}`});return t}function Ge(e,t,n,a){return e&&t&&n?a.trim():a}function Vn(e){const t=[];let n;for(const a of e){const{role:l}=a;switch(l){case"system":{n?.type!=="system"&&(n={type:"system",messages:[]},t.push(n)),n.messages.push(a);break}case"assistant":{n?.type!=="assistant"&&(n={type:"assistant",messages:[]},t.push(n)),n.messages.push(a);break}case"user":{n?.type!=="user"&&(n={type:"user",messages:[]},t.push(n)),n.messages.push(a);break}case"tool":{n?.type!=="user"&&(n={type:"user",messages:[]},t.push(n)),n.messages.push(a);break}default:{const o=l;throw new Error(`Unsupported role: ${o}`)}}}return t}function Le(e,t){switch(e){case"stop_sequence":case"end_turn":return"stop";case"max_tokens":return"length";case"content_filtered":case"guardrail_intervened":return"content-filter";case"tool_use":return t?"stop":"tool-calls";default:return"other"}}var Gn=class{constructor(e,t){this.modelId=e,this.config=t,this.specificationVersion="v3",this.provider="amazon-bedrock",this.supportedUrls={}}async getArgs({prompt:e,maxOutputTokens:t,temperature:n,topP:a,topK:l,frequencyPenalty:o,presencePenalty:r,stopSequences:c,responseFormat:u,seed:g,tools:_,toolChoice:f,providerOptions:m}){var d,v,p,D,C,S,E,y,I;const k=(d=await fe({provider:"bedrock",providerOptions:m,schema:$n}))!=null?d:{},B=[];o!=null&&B.push({type:"unsupported",feature:"frequencyPenalty"}),r!=null&&B.push({type:"unsupported",feature:"presencePenalty"}),g!=null&&B.push({type:"unsupported",feature:"seed"}),n!=null&&n>1?(B.push({type:"unsupported",feature:"temperature",details:`${n} exceeds bedrock maximum of 1.0. clamped to 1.0`}),n=1):n!=null&&n<0&&(B.push({type:"unsupported",feature:"temperature",details:`${n} is below bedrock minimum of 0. clamped to 0`}),n=0),u!=null&&u.type!=="text"&&u.type!=="json"&&B.push({type:"unsupported",feature:"responseFormat",details:"Only text and json response formats are supported."});const U=u?.type==="json"&&u.schema!=null?{type:"function",name:"json",description:"Respond with a JSON object.",inputSchema:u.schema}:void 0,{toolConfig:H,additionalTools:j,toolWarnings:Z,betas:V}=await Hn({tools:U?[..._??[],U]:_,toolChoice:U!=null?{type:"required"}:f,modelId:this.modelId});if(B.push(...Z),j&&(k.additionalModelRequestFields={...k.additionalModelRequestFields,...j}),V.size>0||k.anthropicBeta){const ve=(v=k.anthropicBeta)!=null?v:[],P=V.size>0?[...ve,...Array.from(V)]:ve;k.additionalModelRequestFields={...k.additionalModelRequestFields,anthropic_beta:P}}const q=this.modelId.includes("anthropic"),w=((p=k.reasoningConfig)==null?void 0:p.type)==="enabled",M=(D=k.reasoningConfig)==null?void 0:D.budgetTokens,$=q&&w,b={...t!=null&&{maxTokens:t},...n!=null&&{temperature:n},...a!=null&&{topP:a},...l!=null&&{topK:l},...c!=null&&{stopSequences:c}};$&&M!=null?(b.maxTokens!=null?b.maxTokens+=M:b.maxTokens=M+4096,k.additionalModelRequestFields={...k.additionalModelRequestFields,thinking:{type:(C=k.reasoningConfig)==null?void 0:C.type,budget_tokens:M}}):!q&&M!=null&&B.push({type:"unsupported",feature:"budgetTokens",details:"budgetTokens applies only to Anthropic models on Bedrock and will be ignored for this model."});const A=(S=k.reasoningConfig)==null?void 0:S.maxReasoningEffort,N=this.modelId.startsWith("openai.");A!=null&&!q?N?k.additionalModelRequestFields={...k.additionalModelRequestFields,reasoning_effort:A}:k.additionalModelRequestFields={...k.additionalModelRequestFields,reasoningConfig:{...((E=k.reasoningConfig)==null?void 0:E.type)!=null&&{type:k.reasoningConfig.type},maxReasoningEffort:A}}:A!=null&&q&&B.push({type:"unsupported",feature:"maxReasoningEffort",details:"maxReasoningEffort applies only to Amazon Nova models on Bedrock and will be ignored for this model."}),$&&b.temperature!=null&&(delete b.temperature,B.push({type:"unsupported",feature:"temperature",details:"temperature is not supported when thinking is enabled"})),$&&b.topP!=null&&(delete b.topP,B.push({type:"unsupported",feature:"topP",details:"topP is not supported when thinking is enabled"})),$&&b.topK!=null&&(delete b.topK,B.push({type:"unsupported",feature:"topK",details:"topK is not supported when thinking is enabled"}));const G=((I=(y=H.tools)==null?void 0:y.length)!=null?I:0)>0||j;let ce=e;G||e.some(P=>"content"in P&&Array.isArray(P.content)&&P.content.some(ue=>ue.type==="tool-call"||ue.type==="tool-result"))&&(ce=e.map(P=>P.role==="system"?P:{...P,content:P.content.filter(ue=>ue.type!=="tool-call"&&ue.type!=="tool-result")}).filter(P=>P.role==="system"||P.content.length>0),B.push({type:"unsupported",feature:"toolContent",details:"Tool calls and results removed from conversation because Bedrock does not support tool content without active tools."}));const de=Be(this.modelId),{system:L,messages:Te}=await Kn(ce,de),{reasoningConfig:Ie,additionalModelRequestFields:ho,...at}=m?.bedrock||{},Re=q?["/delta/stop_sequence"]:void 0;return{command:{system:L,messages:Te,additionalModelRequestFields:k.additionalModelRequestFields,...Re&&{additionalModelResponseFieldPaths:Re},...Object.keys(b).length>0&&{inferenceConfig:b},...at,...H.tools!==void 0&&H.tools.length>0?{toolConfig:H}:{}},warnings:B,usesJsonResponseTool:U!=null,betas:V}}async getHeaders({headers:e}){return ne(await oe(this.config.headers),e)}async doGenerate(e){var t,n,a,l,o,r,c,u,g,_,f,m;const{command:d,warnings:v,usesJsonResponseTool:p}=await this.getArgs(e),D=`${this.getUrl(this.modelId)}/converse`,{value:C,responseHeaders:S}=await me({url:D,headers:await this.getHeaders({headers:e.headers}),body:d,failedResponseHandler:re({errorSchema:ge,errorToMessage:B=>{var U;return`${(U=B.message)!=null?U:"Unknown error"}`}}),successfulResponseHandler:be(Xn),abortSignal:e.abortSignal,fetch:this.config.fetch}),E=[];let y=!1;for(const B of C.output.message.content){if(B.text&&E.push({type:"text",text:B.text}),B.reasoningContent)if("reasoningText"in B.reasoningContent){const U={type:"reasoning",text:B.reasoningContent.reasoningText.text};B.reasoningContent.reasoningText.signature&&(U.providerMetadata={bedrock:{signature:B.reasoningContent.reasoningText.signature}}),E.push(U)}else"redactedReasoning"in B.reasoningContent&&E.push({type:"reasoning",text:"",providerMetadata:{bedrock:{redactedData:(t=B.reasoningContent.redactedReasoning.data)!=null?t:""}}});if(B.toolUse)if(p&&B.toolUse.name==="json")y=!0,E.push({type:"text",text:JSON.stringify(B.toolUse.input)});else{const H=Be(this.modelId),j=(a=(n=B.toolUse)==null?void 0:n.toolUseId)!=null?a:this.config.generateId();E.push({type:"tool-call",toolCallId:_e(j,H),toolName:(o=(l=B.toolUse)==null?void 0:l.name)!=null?o:`tool-${this.config.generateId()}`,input:JSON.stringify((c=(r=B.toolUse)==null?void 0:r.input)!=null?c:{})})}}const I=(_=(g=(u=C.additionalModelResponseFields)==null?void 0:u.delta)==null?void 0:g.stop_sequence)!=null?_:null,k=C.trace||C.usage||y||I?{bedrock:{...C.trace&&typeof C.trace=="object"?{trace:C.trace}:{},...((f=C.usage)==null?void 0:f.cacheWriteInputTokens)!=null&&{usage:{cacheWriteInputTokens:C.usage.cacheWriteInputTokens}},...y&&{isJsonResponseFromTool:!0},stopSequence:I}}:void 0;return{content:E,finishReason:{unified:Le(C.stopReason,y),raw:(m=C.stopReason)!=null?m:void 0},usage:je(C.usage),response:{headers:S},warnings:v,...k&&{providerMetadata:k}}}async doStream(e){const{command:t,warnings:n,usesJsonResponseTool:a}=await this.getArgs(e),l=Be(this.modelId),o=`${this.getUrl(this.modelId)}/converse-stream`,{value:r,responseHeaders:c}=await me({url:o,headers:await this.getHeaders({headers:e.headers}),body:t,failedResponseHandler:re({errorSchema:ge,errorToMessage:v=>`${v.type}: ${v.message}`}),successfulResponseHandler:Wn(Qn),abortSignal:e.abortSignal,fetch:this.config.fetch});let u={unified:"other",raw:void 0},g,_,f=!1,m=null;const d={};return{stream:r.pipeThrough(new TransformStream({start(v){v.enqueue({type:"stream-start",warnings:n})},transform(v,p){var D,C,S,E,y,I,k,B,U,H,j,Z,V;function q(b){u={unified:"error",raw:void 0},p.enqueue({type:"error",error:b})}if(e.includeRawChunks&&p.enqueue({type:"raw",rawValue:v.rawValue}),!v.success){q(v.error);return}const w=v.value;if(w.internalServerException){q(w.internalServerException);return}if(w.modelStreamErrorException){q(w.modelStreamErrorException);return}if(w.throttlingException){q(w.throttlingException);return}if(w.validationException){q(w.validationException);return}if(w.messageStop&&(u={unified:Le(w.messageStop.stopReason,f),raw:(D=w.messageStop.stopReason)!=null?D:void 0},m=(E=(S=(C=w.messageStop.additionalModelResponseFields)==null?void 0:C.delta)==null?void 0:S.stop_sequence)!=null?E:null),w.metadata){w.metadata.usage&&(g=w.metadata.usage);const b=((y=w.metadata.usage)==null?void 0:y.cacheWriteInputTokens)!=null?{usage:{cacheWriteInputTokens:w.metadata.usage.cacheWriteInputTokens}}:void 0,A=w.metadata.trace?{trace:w.metadata.trace}:void 0;(b||A)&&(_={bedrock:{...b,...A}})}if(((I=w.contentBlockStart)==null?void 0:I.contentBlockIndex)!=null&&!((B=(k=w.contentBlockStart)==null?void 0:k.start)!=null&&B.toolUse)){const b=w.contentBlockStart.contentBlockIndex;d[b]={type:"text"},p.enqueue({type:"text-start",id:String(b)})}if((U=w.contentBlockDelta)!=null&&U.delta&&"text"in w.contentBlockDelta.delta&&w.contentBlockDelta.delta.text){const b=w.contentBlockDelta.contentBlockIndex||0;d[b]==null&&(d[b]={type:"text"},p.enqueue({type:"text-start",id:String(b)})),p.enqueue({type:"text-delta",id:String(b),delta:w.contentBlockDelta.delta.text})}if(((H=w.contentBlockStop)==null?void 0:H.contentBlockIndex)!=null){const b=w.contentBlockStop.contentBlockIndex,A=d[b];A!=null&&(A.type==="reasoning"?p.enqueue({type:"reasoning-end",id:String(b)}):A.type==="text"?p.enqueue({type:"text-end",id:String(b)}):A.type==="tool-call"&&(A.isJsonResponseTool?(f=!0,p.enqueue({type:"text-start",id:String(b)}),p.enqueue({type:"text-delta",id:String(b),delta:A.jsonText}),p.enqueue({type:"text-end",id:String(b)})):(p.enqueue({type:"tool-input-end",id:A.toolCallId}),p.enqueue({type:"tool-call",toolCallId:A.toolCallId,toolName:A.toolName,input:A.jsonText===""?"{}":A.jsonText}))),delete d[b])}if((j=w.contentBlockDelta)!=null&&j.delta&&"reasoningContent"in w.contentBlockDelta.delta&&w.contentBlockDelta.delta.reasoningContent){const b=w.contentBlockDelta.contentBlockIndex||0,A=w.contentBlockDelta.delta.reasoningContent;"text"in A&&A.text?(d[b]==null&&(d[b]={type:"reasoning"},p.enqueue({type:"reasoning-start",id:String(b)})),p.enqueue({type:"reasoning-delta",id:String(b),delta:A.text})):"signature"in A&&A.signature?p.enqueue({type:"reasoning-delta",id:String(b),delta:"",providerMetadata:{bedrock:{signature:A.signature}}}):"data"in A&&A.data&&p.enqueue({type:"reasoning-delta",id:String(b),delta:"",providerMetadata:{bedrock:{redactedData:A.data}}})}const M=w.contentBlockStart;if(((Z=M?.start)==null?void 0:Z.toolUse)!=null){const b=M.start.toolUse,A=M.contentBlockIndex,N=a&&b.name==="json",G=_e(b.toolUseId,l);d[A]={type:"tool-call",toolCallId:G,toolName:b.name,jsonText:"",isJsonResponseTool:N},N||p.enqueue({type:"tool-input-start",id:G,toolName:b.name})}const $=w.contentBlockDelta;if($?.delta&&"toolUse"in $.delta&&$.delta.toolUse){const b=$.contentBlockIndex,A=d[b];if(A?.type==="tool-call"){const N=(V=$.delta.toolUse.input)!=null?V:"";A.isJsonResponseTool||p.enqueue({type:"tool-input-delta",id:A.toolCallId,delta:N}),A.jsonText+=N}}},flush(v){(f||m!=null)&&(_?_.bedrock={..._.bedrock,...f&&{isJsonResponseFromTool:!0},stopSequence:m}:_={bedrock:{...f&&{isJsonResponseFromTool:!0},stopSequence:m}}),v.enqueue({type:"finish",finishReason:u,usage:je(g),..._&&{providerMetadata:_}})}})),response:{headers:c}}}getUrl(e){const t=encodeURIComponent(e);return`${this.config.baseUrl()}/model/${t}`}},tt=K([O(On),s()]),nt=i({delta:i({stop_sequence:s().nullish()}).nullish()}).catchall(z()),ot=i({toolUseId:s(),name:s(),input:z()}),Ln=i({signature:s().nullish(),text:s()}),Jn=i({data:s()}),Xn=i({metrics:i({latencyMs:h()}).nullish(),output:i({message:i({content:T(i({text:s().nullish(),toolUse:ot.nullish(),reasoningContent:K([i({reasoningText:Ln}),i({redactedReasoning:Jn})]).nullish()})),role:s()})}),stopReason:tt,additionalModelResponseFields:nt.nullish(),trace:z().nullish(),usage:i({inputTokens:h(),outputTokens:h(),totalTokens:h(),cacheReadInputTokens:h().nullish(),cacheWriteInputTokens:h().nullish()})}),Qn=i({contentBlockDelta:i({contentBlockIndex:h(),delta:K([i({text:s()}),i({toolUse:i({input:s()})}),i({reasoningContent:i({text:s()})}),i({reasoningContent:i({signature:s()})}),i({reasoningContent:i({data:s()})})]).nullish()}).nullish(),contentBlockStart:i({contentBlockIndex:h(),start:i({toolUse:ot.nullish()}).nullish()}).nullish(),contentBlockStop:i({contentBlockIndex:h()}).nullish(),internalServerException:ee(s(),z()).nullish(),messageStop:i({additionalModelResponseFields:nt.nullish(),stopReason:tt}).nullish(),metadata:i({trace:z().nullish(),usage:i({cacheReadInputTokens:h().nullish(),cacheWriteInputTokens:h().nullish(),inputTokens:h(),outputTokens:h()}).nullish()}).nullish(),modelStreamErrorException:ee(s(),z()).nullish(),throttlingException:ee(s(),z()).nullish(),validationException:ee(s(),z()).nullish()}),Zn=i({signature:s().optional(),redactedData:s().optional()}),Yn=i({dimensions:K([x(1024),x(512),x(256)]).optional(),normalize:W().optional(),embeddingDimension:K([x(256),x(384),x(1024),x(3072)]).optional(),embeddingPurpose:O(["GENERIC_INDEX","TEXT_RETRIEVAL","IMAGE_RETRIEVAL","VIDEO_RETRIEVAL","DOCUMENT_RETRIEVAL","AUDIO_RETRIEVAL","GENERIC_RETRIEVAL","CLASSIFICATION","CLUSTERING"]).optional(),inputType:O(["search_document","search_query","classification","clustering"]).optional(),truncate:O(["NONE","START","END"]).optional(),outputDimension:K([x(256),x(512),x(1024),x(1536)]).optional()}),eo=class{constructor(e,t){this.modelId=e,this.config=t,this.specificationVersion="v3",this.provider="amazon-bedrock",this.maxEmbeddingsPerCall=1,this.supportsParallelCalls=!0}getUrl(e){const t=encodeURIComponent(e);return`${this.config.baseUrl()}/model/${t}/invoke`}async doEmbed({values:e,headers:t,abortSignal:n,providerOptions:a}){var l,o,r,c,u,g;if(e.length>this.maxEmbeddingsPerCall)throw new it({provider:this.provider,modelId:this.modelId,maxEmbeddingsPerCall:this.maxEmbeddingsPerCall,values:e});const _=(l=await fe({provider:"bedrock",providerOptions:a,schema:Yn}))!=null?l:{},f=this.modelId.startsWith("amazon.nova-")&&this.modelId.includes("embed"),m=this.modelId.startsWith("cohere.embed-"),d=f?{taskType:"SINGLE_EMBEDDING",singleEmbeddingParams:{embeddingPurpose:(o=_.embeddingPurpose)!=null?o:"GENERIC_INDEX",embeddingDimension:(r=_.embeddingDimension)!=null?r:1024,text:{truncationMode:(c=_.truncate)!=null?c:"END",value:e[0]}}}:m?{input_type:(u=_.inputType)!=null?u:"search_query",texts:[e[0]],truncate:_.truncate,output_dimension:_.outputDimension}:{inputText:e[0],dimensions:_.dimensions,normalize:_.normalize},v=this.getUrl(this.modelId),{value:p}=await me({url:v,headers:await oe(ne(await oe(this.config.headers),t)),body:d,failedResponseHandler:re({errorSchema:ge,errorToMessage:S=>`${S.type}: ${S.message}`}),successfulResponseHandler:be(to),fetch:this.config.fetch,abortSignal:n});let D;if("embedding"in p)D=p.embedding;else if(Array.isArray(p.embeddings)){const S=p.embeddings[0];typeof S=="object"&&S!==null&&"embeddingType"in S?D=S.embedding:D=S}else D=p.embeddings.float[0];const C="inputTextTokenCount"in p?p.inputTextTokenCount:"inputTokenCount"in p?(g=p.inputTokenCount)!=null?g:0:NaN;return{embeddings:[D],usage:{tokens:C},warnings:[]}}},to=K([i({embedding:T(h()),inputTextTokenCount:h()}),i({embeddings:T(i({embeddingType:s(),embedding:T(h())})),inputTokenCount:h().optional()}),i({embeddings:T(T(h()))}),i({embeddings:i({float:T(T(h()))})})]),no={"amazon.nova-canvas-v1:0":5},oo=class{constructor(e,t){this.modelId=e,this.config=t,this.specificationVersion="v3",this.provider="amazon-bedrock"}get maxImagesPerCall(){var e;return(e=no[this.modelId])!=null?e:1}getUrl(e){const t=encodeURIComponent(e);return`${this.config.baseUrl()}/model/${t}/invoke`}async doGenerate({prompt:e,n:t,size:n,aspectRatio:a,seed:l,providerOptions:o,headers:r,abortSignal:c,files:u,mask:g}){var _,f,m,d,v,p,D,C,S,E,y,I,k,B,U,H;const j=[],[Z,V]=n?n.split("x").map(Number):[],q=u!=null&&u.length>0,w={...Z?{width:Z}:{},...V?{height:V}:{},...l?{seed:l}:{},...t?{numberOfImages:t}:{},...(_=o?.bedrock)!=null&&_.quality?{quality:o.bedrock.quality}:{},...(f=o?.bedrock)!=null&&f.cfgScale?{cfgScale:o.bedrock.cfgScale}:{}};let M;if(q){const N=g?.type!=null,G=((m=o?.bedrock)==null?void 0:m.maskPrompt)!=null,ce=(v=(d=o?.bedrock)==null?void 0:d.taskType)!=null?v:N||G?"INPAINTING":"IMAGE_VARIATION",de=xe(u[0]);switch(ce){case"INPAINTING":{const L={image:de,...e?{text:e}:{},...(p=o?.bedrock)!=null&&p.negativeText?{negativeText:o.bedrock.negativeText}:{}};N?L.maskImage=xe(g):G&&(L.maskPrompt=o.bedrock.maskPrompt),M={taskType:"INPAINTING",inPaintingParams:L,imageGenerationConfig:w};break}case"OUTPAINTING":{const L={image:de,...e?{text:e}:{},...(D=o?.bedrock)!=null&&D.negativeText?{negativeText:o.bedrock.negativeText}:{},...(C=o?.bedrock)!=null&&C.outPaintingMode?{outPaintingMode:o.bedrock.outPaintingMode}:{}};N?L.maskImage=xe(g):G&&(L.maskPrompt=o.bedrock.maskPrompt),M={taskType:"OUTPAINTING",outPaintingParams:L,imageGenerationConfig:w};break}case"BACKGROUND_REMOVAL":{M={taskType:"BACKGROUND_REMOVAL",backgroundRemovalParams:{image:de}};break}case"IMAGE_VARIATION":{M={taskType:"IMAGE_VARIATION",imageVariationParams:{images:u.map(Ie=>xe(Ie)),...e?{text:e}:{},...(S=o?.bedrock)!=null&&S.negativeText?{negativeText:o.bedrock.negativeText}:{},...((E=o?.bedrock)==null?void 0:E.similarityStrength)!=null?{similarityStrength:o.bedrock.similarityStrength}:{}},imageGenerationConfig:w};break}default:throw new Error(`Unsupported task type: ${ce}`)}}else M={taskType:"TEXT_IMAGE",textToImageParams:{text:e,...(y=o?.bedrock)!=null&&y.negativeText?{negativeText:o.bedrock.negativeText}:{},...(I=o?.bedrock)!=null&&I.style?{style:o.bedrock.style}:{}},imageGenerationConfig:w};a!=null&&j.push({type:"unsupported",feature:"aspectRatio",details:"This model does not support aspect ratio. Use `size` instead."});const $=(U=(B=(k=this.config._internal)==null?void 0:k.currentDate)==null?void 0:B.call(k))!=null?U:new Date,{value:b,responseHeaders:A}=await me({url:this.getUrl(this.modelId),headers:await oe(ne(await oe(this.config.headers),r)),body:M,failedResponseHandler:re({errorSchema:ge,errorToMessage:N=>`${N.type}: ${N.message}`}),successfulResponseHandler:be(ao),abortSignal:c,fetch:this.config.fetch});if(b.status==="Request Moderated"){const N=(H=b.details)==null?void 0:H["Moderation Reasons"],G=Array.isArray(N)?N:["Unknown"];throw new Error(`Amazon Bedrock request was moderated: ${G.join(", ")}`)}if(!b.images||b.images.length===0)throw new Error("Amazon Bedrock returned no images. "+(b.status?`Status: ${b.status}`:""));return{images:b.images,warnings:j,response:{timestamp:$,modelId:this.modelId,headers:A}}}};function xe(e){if(e.type==="url")throw new Error("URL-based images are not supported for Amazon Bedrock image editing. Please provide the image data directly.");return e.data instanceof Uint8Array?dt(e.data):e.data}var ao=i({images:T(s()).optional(),id:s().optional(),status:s().optional(),result:z().optional(),progress:z().optional(),details:ee(s(),z()).optional(),preview:z().optional()}),De="4.0.49";function so(e,t=globalThis.fetch){return async(n,a)=>{var l,o;const r=n instanceof Request?n:void 0,c=ne(ye(r?.headers),ye(a?.headers)),u=Ee(c,`ai-sdk/amazon-bedrock/${De}`,Je());let g=(l=a?.body)!=null?l:void 0;if(g===void 0&&r&&r.body!==null)try{g=await r.clone().text()}catch{}const _=(o=a?.method)!=null?o:r?.method;if(_?.toUpperCase()!=="POST"||!g)return t(n,{...a,headers:u});const f=typeof n=="string"?n:n instanceof URL?n.href:n.url,m=io(g),d=await e(),p=await new Mn({url:f,method:"POST",headers:Object.entries(u),body:m,region:d.region,accessKeyId:d.accessKeyId,secretAccessKey:d.secretAccessKey,sessionToken:d.sessionToken,service:"bedrock"}).sign(),D=ye(p.headers),C=ne(u,D);return t(n,{...a,body:m,headers:C})}}function io(e){return typeof e=="string"?e:e instanceof Uint8Array?new TextDecoder().decode(e):e instanceof ArrayBuffer?new TextDecoder().decode(new Uint8Array(e)):JSON.stringify(e)}function ro(e,t=globalThis.fetch){return async(n,a)=>{const l=ye(a?.headers),o=Ee(l,`ai-sdk/amazon-bedrock/${De}`,Je()),r=ne(o,{Authorization:`Bearer ${e}`});return t(n,{...a,headers:r})}}var lo=R(()=>F(i({results:T(i({index:h(),relevanceScore:h()})),nextToken:s().optional()}))),co=R(()=>F(i({nextToken:s().optional(),additionalModelRequestFields:ee(s(),Xe()).optional()}))),uo=class{constructor(e,t){this.modelId=e,this.config=t,this.specificationVersion="v3",this.provider="amazon-bedrock"}async doRerank({documents:e,headers:t,query:n,topN:a,abortSignal:l,providerOptions:o}){const r=await fe({provider:"bedrock",providerOptions:o,schema:co}),{value:c,responseHeaders:u,rawValue:g}=await me({url:`${this.config.baseUrl()}/rerank`,headers:await oe(ne(await oe(this.config.headers),t)),body:{nextToken:r?.nextToken,queries:[{textQuery:{text:n},type:"TEXT"}],rerankingConfiguration:{bedrockRerankingConfiguration:{modelConfiguration:{modelArn:`arn:aws:bedrock:${this.config.region}::foundation-model/${this.modelId}`,additionalModelRequestFields:r?.additionalModelRequestFields},numberOfResults:a},type:"BEDROCK_RERANKING_MODEL"},sources:e.values.map(_=>({type:"INLINE",inlineDocumentSource:e.type==="text"?{type:"TEXT",textDocument:{text:_}}:{type:"JSON",jsonDocument:_}}))},failedResponseHandler:re({errorSchema:ge,errorToMessage:_=>`${_.type}: ${_.message}`}),successfulResponseHandler:be(lo),fetch:this.config.fetch,abortSignal:l});return{ranking:c.results,response:{headers:u,body:g}}}};function po(e={}){const t=Fe({settingValue:e.apiKey,environmentVariableName:"AWS_BEARER_TOKEN_BEDROCK"}),n=t&&t.trim().length>0?t.trim():void 0,a=n?ro(n,e.fetch):so(async()=>{const m=ae({settingValue:e.region,settingName:"region",environmentVariableName:"AWS_REGION",description:"AWS region"});if(e.credentialProvider)try{return{...await e.credentialProvider(),region:m}}catch(d){const v=d instanceof Error?d.message:String(d);throw new Error(`AWS credential provider failed: ${v}. Please ensure your credential provider returns valid AWS credentials with accessKeyId and secretAccessKey properties.`)}try{return{region:m,accessKeyId:ae({settingValue:e.accessKeyId,settingName:"accessKeyId",environmentVariableName:"AWS_ACCESS_KEY_ID",description:"AWS access key ID"}),secretAccessKey:ae({settingValue:e.secretAccessKey,settingName:"secretAccessKey",environmentVariableName:"AWS_SECRET_ACCESS_KEY",description:"AWS secret access key"}),sessionToken:Fe({settingValue:e.sessionToken,environmentVariableName:"AWS_SESSION_TOKEN"})}}catch(d){const v=d instanceof Error?d.message:String(d);throw v.includes("AWS_ACCESS_KEY_ID")||v.includes("accessKeyId")?new Error(`AWS SigV4 authentication requires AWS credentials. Please provide either:
+import {
+  c as X,
+  a as le,
+  b as R,
+  z as F,
+  v as ke,
+  U as J,
+  o as re,
+  l as Fe,
+  L as ae,
+  M as ye,
+  k as Ee,
+  O as Je,
+  e as ne,
+  g as st,
+  p as fe,
+  r as oe,
+  f as me,
+  h as be,
+  T as it,
+  w as Ue,
+  P as rt,
+  n as Me,
+  J as lt,
+  Q as ct,
+  E as dt,
+  K as ut,
+  R as pt,
+} from "./index-CGwOAdyT.js";
+import {
+  o as i,
+  a as T,
+  s,
+  n as h,
+  _ as O,
+  d as te,
+  t as ie,
+  l as x,
+  b as W,
+  u as K,
+  r as ee,
+  f as Xe,
+  e as z,
+} from "./main-B2XpWmPF.js";
+import { a as ht } from "./TerminalRouterContext-CeKE7fio.js";
+import "./types-CUi3gq4E.js";
+var mt = R(() => F(i({ type: x("error"), error: i({ type: s(), message: s() }) })));
+re({ errorSchema: mt, errorToMessage: (e) => e.error.message });
+i({ citations: i({ enabled: W() }).optional(), title: s().optional(), context: s().optional() });
+i({
+  sendReasoning: W().optional(),
+  structuredOutputMode: O(["outputFormat", "jsonTool", "auto"]).optional(),
+  thinking: te("type", [
+    i({ type: x("adaptive") }),
+    i({ type: x("enabled"), budgetTokens: h().optional() }),
+    i({ type: x("disabled") }),
+  ]).optional(),
+  disableParallelToolUse: W().optional(),
+  cacheControl: i({ type: x("ephemeral"), ttl: K([x("5m"), x("1h")]).optional() }).optional(),
+  mcpServers: T(
+    i({
+      type: x("url"),
+      name: s(),
+      url: s(),
+      authorizationToken: s().nullish(),
+      toolConfiguration: i({ enabled: W().nullish(), allowedTools: T(s()).nullish() }).nullish(),
+    })
+  ).optional(),
+  container: i({
+    id: s().optional(),
+    skills: T(
+      i({ type: K([x("anthropic"), x("custom")]), skillId: s(), version: s().optional() })
+    ).optional(),
+  }).optional(),
+  toolStreaming: W().optional(),
+  effort: O(["low", "medium", "high", "max"]).optional(),
+  contextManagement: i({
+    edits: T(
+      te("type", [
+        i({
+          type: x("clear_tool_uses_20250919"),
+          trigger: te("type", [
+            i({ type: x("input_tokens"), value: h() }),
+            i({ type: x("tool_uses"), value: h() }),
+          ]).optional(),
+          keep: i({ type: x("tool_uses"), value: h() }).optional(),
+          clearAtLeast: i({ type: x("input_tokens"), value: h() }).optional(),
+          clearToolInputs: W().optional(),
+          excludeTools: T(s()).optional(),
+        }),
+        i({
+          type: x("clear_thinking_20251015"),
+          keep: K([x("all"), i({ type: x("thinking_turns"), value: h() })]).optional(),
+        }),
+      ])
+    ),
+  }).optional(),
+});
+var Ne = 4;
+function gt(e) {
+  var t;
+  const n = e?.anthropic;
+  return (t = n?.cacheControl) != null ? t : n?.cache_control;
+}
+var ft = class {
+    constructor() {
+      ((this.breakpointCount = 0), (this.warnings = []));
+    }
+    getCacheControl(e, t) {
+      const n = gt(e);
+      if (n) {
+        if (!t.canCache) {
+          this.warnings.push({
+            type: "unsupported",
+            feature: "cache_control on non-cacheable context",
+            details: `cache_control cannot be set on ${t.type}. It will be ignored.`,
+          });
+          return;
+        }
+        if ((this.breakpointCount++, this.breakpointCount > Ne)) {
+          this.warnings.push({
+            type: "unsupported",
+            feature: "cacheControl breakpoint limit",
+            details: `Maximum ${Ne} cache breakpoints exceeded (found ${this.breakpointCount}). This breakpoint will be ignored.`,
+          });
+          return;
+        }
+        return n;
+      }
+    }
+    getWarnings() {
+      return this.warnings;
+    }
+  },
+  xt = R(() => F(i({ maxCharacters: h().optional() }))),
+  yt = R(() =>
+    F(
+      i({
+        command: O(["view", "create", "str_replace", "insert"]),
+        path: s(),
+        file_text: s().optional(),
+        insert_line: h().int().optional(),
+        new_str: s().optional(),
+        insert_text: s().optional(),
+        old_str: s().optional(),
+        view_range: T(h().int()).optional(),
+      })
+    )
+  ),
+  _t = X({ id: "anthropic.text_editor_20250728", inputSchema: yt }),
+  bt = (e = {}) => _t(e),
+  vt = R(() =>
+    F(
+      i({
+        maxUses: h().optional(),
+        allowedDomains: T(s()).optional(),
+        blockedDomains: T(s()).optional(),
+        userLocation: i({
+          type: x("approximate"),
+          city: s().optional(),
+          region: s().optional(),
+          country: s().optional(),
+          timezone: s().optional(),
+        }).optional(),
+      })
+    )
+  ),
+  kt = R(() =>
+    F(
+      T(
+        i({
+          url: s(),
+          title: s().nullable(),
+          pageAge: s().nullable(),
+          encryptedContent: s(),
+          type: x("web_search_result"),
+        })
+      )
+    )
+  ),
+  wt = R(() => F(i({ query: s() }))),
+  Bt = le({
+    id: "anthropic.web_search_20250305",
+    inputSchema: wt,
+    outputSchema: kt,
+    supportsDeferredResults: !0,
+  }),
+  St = (e = {}) => Bt(e),
+  At = R(() =>
+    F(
+      i({
+        maxUses: h().optional(),
+        allowedDomains: T(s()).optional(),
+        blockedDomains: T(s()).optional(),
+        citations: i({ enabled: W() }).optional(),
+        maxContentTokens: h().optional(),
+      })
+    )
+  ),
+  Ct = R(() =>
+    F(
+      i({
+        type: x("web_fetch_result"),
+        url: s(),
+        content: i({
+          type: x("document"),
+          title: s().nullable(),
+          citations: i({ enabled: W() }).optional(),
+          source: K([
+            i({ type: x("base64"), mediaType: x("application/pdf"), data: s() }),
+            i({ type: x("text"), mediaType: x("text/plain"), data: s() }),
+          ]),
+        }),
+        retrievedAt: s().nullable(),
+      })
+    )
+  ),
+  Et = R(() => F(i({ url: s() }))),
+  Dt = le({
+    id: "anthropic.web_fetch_20250910",
+    inputSchema: Et,
+    outputSchema: Ct,
+    supportsDeferredResults: !0,
+  }),
+  Tt = (e = {}) => Dt(e);
+async function It({
+  tools: e,
+  toolChoice: t,
+  disableParallelToolUse: n,
+  cacheControlValidator: a,
+  supportsStructuredOutput: l,
+}) {
+  var o;
+  e = e?.length ? e : void 0;
+  const r = [],
+    c = new Set(),
+    u = a || new ft();
+  if (e == null) return { tools: void 0, toolChoice: void 0, toolWarnings: r, betas: c };
+  const g = [];
+  for (const f of e)
+    switch (f.type) {
+      case "function": {
+        const m = u.getCacheControl(f.providerOptions, { type: "tool definition", canCache: !0 }),
+          d = (o = f.providerOptions) == null ? void 0 : o.anthropic,
+          v = d?.deferLoading,
+          p = d?.allowedCallers;
+        (g.push({
+          name: f.name,
+          description: f.description,
+          input_schema: f.inputSchema,
+          cache_control: m,
+          ...(v != null ? { defer_loading: v } : {}),
+          ...(p != null ? { allowed_callers: p } : {}),
+          ...(f.inputExamples != null
+            ? { input_examples: f.inputExamples.map((D) => D.input) }
+            : {}),
+        }),
+          (f.inputExamples != null || p != null) && c.add("advanced-tool-use-2025-11-20"));
+        break;
+      }
+      case "provider": {
+        switch (f.id) {
+          case "anthropic.code_execution_20250522": {
+            (c.add("code-execution-2025-05-22"),
+              g.push({
+                type: "code_execution_20250522",
+                name: "code_execution",
+                cache_control: void 0,
+              }));
+            break;
+          }
+          case "anthropic.code_execution_20250825": {
+            (c.add("code-execution-2025-08-25"),
+              g.push({ type: "code_execution_20250825", name: "code_execution" }));
+            break;
+          }
+          case "anthropic.computer_20250124": {
+            (c.add("computer-use-2025-01-24"),
+              g.push({
+                name: "computer",
+                type: "computer_20250124",
+                display_width_px: f.args.displayWidthPx,
+                display_height_px: f.args.displayHeightPx,
+                display_number: f.args.displayNumber,
+                cache_control: void 0,
+              }));
+            break;
+          }
+          case "anthropic.computer_20251124": {
+            (c.add("computer-use-2025-11-24"),
+              g.push({
+                name: "computer",
+                type: "computer_20251124",
+                display_width_px: f.args.displayWidthPx,
+                display_height_px: f.args.displayHeightPx,
+                display_number: f.args.displayNumber,
+                enable_zoom: f.args.enableZoom,
+                cache_control: void 0,
+              }));
+            break;
+          }
+          case "anthropic.computer_20241022": {
+            (c.add("computer-use-2024-10-22"),
+              g.push({
+                name: "computer",
+                type: "computer_20241022",
+                display_width_px: f.args.displayWidthPx,
+                display_height_px: f.args.displayHeightPx,
+                display_number: f.args.displayNumber,
+                cache_control: void 0,
+              }));
+            break;
+          }
+          case "anthropic.text_editor_20250124": {
+            (c.add("computer-use-2025-01-24"),
+              g.push({
+                name: "str_replace_editor",
+                type: "text_editor_20250124",
+                cache_control: void 0,
+              }));
+            break;
+          }
+          case "anthropic.text_editor_20241022": {
+            (c.add("computer-use-2024-10-22"),
+              g.push({
+                name: "str_replace_editor",
+                type: "text_editor_20241022",
+                cache_control: void 0,
+              }));
+            break;
+          }
+          case "anthropic.text_editor_20250429": {
+            (c.add("computer-use-2025-01-24"),
+              g.push({
+                name: "str_replace_based_edit_tool",
+                type: "text_editor_20250429",
+                cache_control: void 0,
+              }));
+            break;
+          }
+          case "anthropic.text_editor_20250728": {
+            const m = await ke({ value: f.args, schema: xt });
+            g.push({
+              name: "str_replace_based_edit_tool",
+              type: "text_editor_20250728",
+              max_characters: m.maxCharacters,
+              cache_control: void 0,
+            });
+            break;
+          }
+          case "anthropic.bash_20250124": {
+            (c.add("computer-use-2025-01-24"),
+              g.push({ name: "bash", type: "bash_20250124", cache_control: void 0 }));
+            break;
+          }
+          case "anthropic.bash_20241022": {
+            (c.add("computer-use-2024-10-22"),
+              g.push({ name: "bash", type: "bash_20241022", cache_control: void 0 }));
+            break;
+          }
+          case "anthropic.memory_20250818": {
+            (c.add("context-management-2025-06-27"),
+              g.push({ name: "memory", type: "memory_20250818" }));
+            break;
+          }
+          case "anthropic.web_fetch_20250910": {
+            c.add("web-fetch-2025-09-10");
+            const m = await ke({ value: f.args, schema: At });
+            g.push({
+              type: "web_fetch_20250910",
+              name: "web_fetch",
+              max_uses: m.maxUses,
+              allowed_domains: m.allowedDomains,
+              blocked_domains: m.blockedDomains,
+              citations: m.citations,
+              max_content_tokens: m.maxContentTokens,
+              cache_control: void 0,
+            });
+            break;
+          }
+          case "anthropic.web_search_20250305": {
+            const m = await ke({ value: f.args, schema: vt });
+            g.push({
+              type: "web_search_20250305",
+              name: "web_search",
+              max_uses: m.maxUses,
+              allowed_domains: m.allowedDomains,
+              blocked_domains: m.blockedDomains,
+              user_location: m.userLocation,
+              cache_control: void 0,
+            });
+            break;
+          }
+          case "anthropic.tool_search_regex_20251119": {
+            (c.add("advanced-tool-use-2025-11-20"),
+              g.push({ type: "tool_search_tool_regex_20251119", name: "tool_search_tool_regex" }));
+            break;
+          }
+          case "anthropic.tool_search_bm25_20251119": {
+            (c.add("advanced-tool-use-2025-11-20"),
+              g.push({ type: "tool_search_tool_bm25_20251119", name: "tool_search_tool_bm25" }));
+            break;
+          }
+          default: {
+            r.push({ type: "unsupported", feature: `provider-defined tool ${f.id}` });
+            break;
+          }
+        }
+        break;
+      }
+      default: {
+        r.push({ type: "unsupported", feature: `tool ${f}` });
+        break;
+      }
+    }
+  if (t == null)
+    return {
+      tools: g,
+      toolChoice: n ? { type: "auto", disable_parallel_tool_use: n } : void 0,
+      toolWarnings: r,
+      betas: c,
+    };
+  const _ = t.type;
+  switch (_) {
+    case "auto":
+      return {
+        tools: g,
+        toolChoice: { type: "auto", disable_parallel_tool_use: n },
+        toolWarnings: r,
+        betas: c,
+      };
+    case "required":
+      return {
+        tools: g,
+        toolChoice: { type: "any", disable_parallel_tool_use: n },
+        toolWarnings: r,
+        betas: c,
+      };
+    case "none":
+      return { tools: void 0, toolChoice: void 0, toolWarnings: r, betas: c };
+    case "tool":
+      return {
+        tools: g,
+        toolChoice: { type: "tool", name: t.toolName, disable_parallel_tool_use: n },
+        toolWarnings: r,
+        betas: c,
+      };
+    default: {
+      const f = _;
+      throw new J({ functionality: `tool choice type: ${f}` });
+    }
+  }
+}
+var Rt = R(() =>
+    F(
+      i({
+        type: x("code_execution_result"),
+        stdout: s(),
+        stderr: s(),
+        return_code: h(),
+        content: T(i({ type: x("code_execution_output"), file_id: s() }))
+          .optional()
+          .default([]),
+      })
+    )
+  ),
+  Ft = R(() => F(i({ code: s() }))),
+  Ut = le({ id: "anthropic.code_execution_20250522", inputSchema: Ft, outputSchema: Rt }),
+  Mt = (e = {}) => Ut(e),
+  Nt = R(() =>
+    F(
+      te("type", [
+        i({
+          type: x("code_execution_result"),
+          stdout: s(),
+          stderr: s(),
+          return_code: h(),
+          content: T(i({ type: x("code_execution_output"), file_id: s() }))
+            .optional()
+            .default([]),
+        }),
+        i({
+          type: x("bash_code_execution_result"),
+          content: T(i({ type: x("bash_code_execution_output"), file_id: s() })),
+          stdout: s(),
+          stderr: s(),
+          return_code: h(),
+        }),
+        i({ type: x("bash_code_execution_tool_result_error"), error_code: s() }),
+        i({ type: x("text_editor_code_execution_tool_result_error"), error_code: s() }),
+        i({
+          type: x("text_editor_code_execution_view_result"),
+          content: s(),
+          file_type: s(),
+          num_lines: h().nullable(),
+          start_line: h().nullable(),
+          total_lines: h().nullable(),
+        }),
+        i({ type: x("text_editor_code_execution_create_result"), is_file_update: W() }),
+        i({
+          type: x("text_editor_code_execution_str_replace_result"),
+          lines: T(s()).nullable(),
+          new_lines: h().nullable(),
+          new_start: h().nullable(),
+          old_lines: h().nullable(),
+          old_start: h().nullable(),
+        }),
+      ])
+    )
+  ),
+  Ot = R(() =>
+    F(
+      te("type", [
+        i({ type: x("programmatic-tool-call"), code: s() }),
+        i({ type: x("bash_code_execution"), command: s() }),
+        te("command", [
+          i({ type: x("text_editor_code_execution"), command: x("view"), path: s() }),
+          i({
+            type: x("text_editor_code_execution"),
+            command: x("create"),
+            path: s(),
+            file_text: s().nullish(),
+          }),
+          i({
+            type: x("text_editor_code_execution"),
+            command: x("str_replace"),
+            path: s(),
+            old_str: s(),
+            new_str: s(),
+          }),
+        ]),
+      ])
+    )
+  ),
+  qt = le({
+    id: "anthropic.code_execution_20250825",
+    inputSchema: Ot,
+    outputSchema: Nt,
+    supportsDeferredResults: !0,
+  }),
+  $t = (e = {}) => qt(e),
+  Pt = R(() => F(T(i({ type: x("tool_reference"), toolName: s() })))),
+  Wt = R(() => F(i({ pattern: s(), limit: h().optional() }))),
+  Ht = le({
+    id: "anthropic.tool_search_regex_20251119",
+    inputSchema: Wt,
+    outputSchema: Pt,
+    supportsDeferredResults: !0,
+  }),
+  zt = (e = {}) => Ht(e),
+  Kt = R(() => F(i({ command: s(), restart: W().optional() }))),
+  jt = X({ id: "anthropic.bash_20241022", inputSchema: Kt }),
+  Vt = R(() => F(i({ command: s(), restart: W().optional() }))),
+  Gt = X({ id: "anthropic.bash_20250124", inputSchema: Vt }),
+  Lt = R(() =>
+    F(
+      i({
+        action: O([
+          "key",
+          "type",
+          "mouse_move",
+          "left_click",
+          "left_click_drag",
+          "right_click",
+          "middle_click",
+          "double_click",
+          "screenshot",
+          "cursor_position",
+        ]),
+        coordinate: T(h().int()).optional(),
+        text: s().optional(),
+      })
+    )
+  ),
+  Jt = X({ id: "anthropic.computer_20241022", inputSchema: Lt }),
+  Xt = R(() =>
+    F(
+      i({
+        action: O([
+          "key",
+          "hold_key",
+          "type",
+          "cursor_position",
+          "mouse_move",
+          "left_mouse_down",
+          "left_mouse_up",
+          "left_click",
+          "left_click_drag",
+          "right_click",
+          "middle_click",
+          "double_click",
+          "triple_click",
+          "scroll",
+          "wait",
+          "screenshot",
+        ]),
+        coordinate: ie([h().int(), h().int()]).optional(),
+        duration: h().optional(),
+        scroll_amount: h().optional(),
+        scroll_direction: O(["up", "down", "left", "right"]).optional(),
+        start_coordinate: ie([h().int(), h().int()]).optional(),
+        text: s().optional(),
+      })
+    )
+  ),
+  Qt = X({ id: "anthropic.computer_20250124", inputSchema: Xt }),
+  Zt = R(() =>
+    F(
+      i({
+        action: O([
+          "key",
+          "hold_key",
+          "type",
+          "cursor_position",
+          "mouse_move",
+          "left_mouse_down",
+          "left_mouse_up",
+          "left_click",
+          "left_click_drag",
+          "right_click",
+          "middle_click",
+          "double_click",
+          "triple_click",
+          "scroll",
+          "wait",
+          "screenshot",
+          "zoom",
+        ]),
+        coordinate: ie([h().int(), h().int()]).optional(),
+        duration: h().optional(),
+        region: ie([h().int(), h().int(), h().int(), h().int()]).optional(),
+        scroll_amount: h().optional(),
+        scroll_direction: O(["up", "down", "left", "right"]).optional(),
+        start_coordinate: ie([h().int(), h().int()]).optional(),
+        text: s().optional(),
+      })
+    )
+  ),
+  Yt = X({ id: "anthropic.computer_20251124", inputSchema: Zt }),
+  en = R(() =>
+    F(
+      te("command", [
+        i({ command: x("view"), path: s(), view_range: ie([h(), h()]).optional() }),
+        i({ command: x("create"), path: s(), file_text: s() }),
+        i({ command: x("str_replace"), path: s(), old_str: s(), new_str: s() }),
+        i({ command: x("insert"), path: s(), insert_line: h(), insert_text: s() }),
+        i({ command: x("delete"), path: s() }),
+        i({ command: x("rename"), old_path: s(), new_path: s() }),
+      ])
+    )
+  ),
+  tn = X({ id: "anthropic.memory_20250818", inputSchema: en }),
+  nn = R(() =>
+    F(
+      i({
+        command: O(["view", "create", "str_replace", "insert", "undo_edit"]),
+        path: s(),
+        file_text: s().optional(),
+        insert_line: h().int().optional(),
+        new_str: s().optional(),
+        insert_text: s().optional(),
+        old_str: s().optional(),
+        view_range: T(h().int()).optional(),
+      })
+    )
+  ),
+  on = X({ id: "anthropic.text_editor_20241022", inputSchema: nn }),
+  an = R(() =>
+    F(
+      i({
+        command: O(["view", "create", "str_replace", "insert", "undo_edit"]),
+        path: s(),
+        file_text: s().optional(),
+        insert_line: h().int().optional(),
+        new_str: s().optional(),
+        insert_text: s().optional(),
+        old_str: s().optional(),
+        view_range: T(h().int()).optional(),
+      })
+    )
+  ),
+  sn = X({ id: "anthropic.text_editor_20250124", inputSchema: an }),
+  rn = R(() =>
+    F(
+      i({
+        command: O(["view", "create", "str_replace", "insert"]),
+        path: s(),
+        file_text: s().optional(),
+        insert_line: h().int().optional(),
+        new_str: s().optional(),
+        insert_text: s().optional(),
+        old_str: s().optional(),
+        view_range: T(h().int()).optional(),
+      })
+    )
+  ),
+  ln = X({ id: "anthropic.text_editor_20250429", inputSchema: rn }),
+  cn = R(() => F(T(i({ type: x("tool_reference"), toolName: s() })))),
+  dn = R(() => F(i({ query: s(), limit: h().optional() }))),
+  un = le({
+    id: "anthropic.tool_search_bm25_20251119",
+    inputSchema: dn,
+    outputSchema: cn,
+    supportsDeferredResults: !0,
+  }),
+  pn = (e = {}) => un(e),
+  Qe = {
+    bash_20241022: jt,
+    bash_20250124: Gt,
+    codeExecution_20250522: Mt,
+    codeExecution_20250825: $t,
+    computer_20241022: Jt,
+    computer_20250124: Qt,
+    computer_20251124: Yt,
+    memory_20250818: tn,
+    textEditor_20241022: on,
+    textEditor_20250124: sn,
+    textEditor_20250429: ln,
+    textEditor_20250728: bt,
+    webFetch_20250910: Tt,
+    webSearch_20250305: St,
+    toolSearchRegex_20251119: zt,
+    toolSearchBm25_20251119: pn,
+  };
+const hn = (e) => new TextEncoder().encode(e);
+typeof Buffer < "u" && Buffer.from;
+function mn(e) {
+  if (!Uint32Array.from) {
+    for (var t = new Uint32Array(e.length), n = 0; n < e.length; ) ((t[n] = e[n]), (n += 1));
+    return t;
+  }
+  return Uint32Array.from(e);
+}
+var Ze = (function () {
+    function e() {
+      this.checksum = 4294967295;
+    }
+    return (
+      (e.prototype.update = function (t) {
+        var n, a;
+        try {
+          for (var l = ht(t), o = l.next(); !o.done; o = l.next()) {
+            var r = o.value;
+            this.checksum = (this.checksum >>> 8) ^ fn[(this.checksum ^ r) & 255];
+          }
+        } catch (c) {
+          n = { error: c };
+        } finally {
+          try {
+            o && !o.done && (a = l.return) && a.call(l);
+          } finally {
+            if (n) throw n.error;
+          }
+        }
+        return this;
+      }),
+      (e.prototype.digest = function () {
+        return (this.checksum ^ 4294967295) >>> 0;
+      }),
+      e
+    );
+  })(),
+  gn = [
+    0, 1996959894, 3993919788, 2567524794, 124634137, 1886057615, 3915621685, 2657392035, 249268274,
+    2044508324, 3772115230, 2547177864, 162941995, 2125561021, 3887607047, 2428444049, 498536548,
+    1789927666, 4089016648, 2227061214, 450548861, 1843258603, 4107580753, 2211677639, 325883990,
+    1684777152, 4251122042, 2321926636, 335633487, 1661365465, 4195302755, 2366115317, 997073096,
+    1281953886, 3579855332, 2724688242, 1006888145, 1258607687, 3524101629, 2768942443, 901097722,
+    1119000684, 3686517206, 2898065728, 853044451, 1172266101, 3705015759, 2882616665, 651767980,
+    1373503546, 3369554304, 3218104598, 565507253, 1454621731, 3485111705, 3099436303, 671266974,
+    1594198024, 3322730930, 2970347812, 795835527, 1483230225, 3244367275, 3060149565, 1994146192,
+    31158534, 2563907772, 4023717930, 1907459465, 112637215, 2680153253, 3904427059, 2013776290,
+    251722036, 2517215374, 3775830040, 2137656763, 141376813, 2439277719, 3865271297, 1802195444,
+    476864866, 2238001368, 4066508878, 1812370925, 453092731, 2181625025, 4111451223, 1706088902,
+    314042704, 2344532202, 4240017532, 1658658271, 366619977, 2362670323, 4224994405, 1303535960,
+    984961486, 2747007092, 3569037538, 1256170817, 1037604311, 2765210733, 3554079995, 1131014506,
+    879679996, 2909243462, 3663771856, 1141124467, 855842277, 2852801631, 3708648649, 1342533948,
+    654459306, 3188396048, 3373015174, 1466479909, 544179635, 3110523913, 3462522015, 1591671054,
+    702138776, 2966460450, 3352799412, 1504918807, 783551873, 3082640443, 3233442989, 3988292384,
+    2596254646, 62317068, 1957810842, 3939845945, 2647816111, 81470997, 1943803523, 3814918930,
+    2489596804, 225274430, 2053790376, 3826175755, 2466906013, 167816743, 2097651377, 4027552580,
+    2265490386, 503444072, 1762050814, 4150417245, 2154129355, 426522225, 1852507879, 4275313526,
+    2312317920, 282753626, 1742555852, 4189708143, 2394877945, 397917763, 1622183637, 3604390888,
+    2714866558, 953729732, 1340076626, 3518719985, 2797360999, 1068828381, 1219638859, 3624741850,
+    2936675148, 906185462, 1090812512, 3747672003, 2825379669, 829329135, 1181335161, 3412177804,
+    3160834842, 628085408, 1382605366, 3423369109, 3138078467, 570562233, 1426400815, 3317316542,
+    2998733608, 733239954, 1555261956, 3268935591, 3050360625, 752459403, 1541320221, 2607071920,
+    3965973030, 1969922972, 40735498, 2617837225, 3943577151, 1913087877, 83908371, 2512341634,
+    3803740692, 2075208622, 213261112, 2463272603, 3855990285, 2094854071, 198958881, 2262029012,
+    4057260610, 1759359992, 534414190, 2176718541, 4139329115, 1873836001, 414664567, 2282248934,
+    4279200368, 1711684554, 285281116, 2405801727, 4167216745, 1634467795, 376229701, 2685067896,
+    3608007406, 1308918612, 956543938, 2808555105, 3495958263, 1231636301, 1047427035, 2932959818,
+    3654703836, 1088359270, 936918e3, 2847714899, 3736837829, 1202900863, 817233897, 3183342108,
+    3401237130, 1404277552, 615818150, 3134207493, 3453421203, 1423857449, 601450431, 3009837614,
+    3294710456, 1567103746, 711928724, 3020668471, 3272380065, 1510334235, 755167117,
+  ],
+  fn = mn(gn);
+const Ye = {},
+  Ae = {};
+for (let e = 0; e < 256; e++) {
+  let t = e.toString(16).toLowerCase();
+  (t.length === 1 && (t = `0${t}`), (Ye[e] = t), (Ae[t] = e));
+}
+function xn(e) {
+  if (e.length % 2 !== 0) throw new Error("Hex encoded strings must have an even number length");
+  const t = new Uint8Array(e.length / 2);
+  for (let n = 0; n < e.length; n += 2) {
+    const a = e.slice(n, n + 2).toLowerCase();
+    if (a in Ae) t[n / 2] = Ae[a];
+    else throw new Error(`Cannot decode unrecognized sequence ${a} as hexadecimal`);
+  }
+  return t;
+}
+function se(e) {
+  let t = "";
+  for (let n = 0; n < e.byteLength; n++) t += Ye[e[n]];
+  return t;
+}
+class he {
+  bytes;
+  constructor(t) {
+    if (((this.bytes = t), t.byteLength !== 8))
+      throw new Error("Int64 buffers must be exactly 8 bytes");
+  }
+  static fromNumber(t) {
+    if (t > 9223372036854776e3 || t < -9223372036854776e3)
+      throw new Error(`${t} is too large (or, if negative, too small) to represent as an Int64`);
+    const n = new Uint8Array(8);
+    for (let a = 7, l = Math.abs(Math.round(t)); a > -1 && l > 0; a--, l /= 256) n[a] = l;
+    return (t < 0 && Oe(n), new he(n));
+  }
+  valueOf() {
+    const t = this.bytes.slice(0),
+      n = t[0] & 128;
+    return (n && Oe(t), parseInt(se(t), 16) * (n ? -1 : 1));
+  }
+  toString() {
+    return String(this.valueOf());
+  }
+}
+function Oe(e) {
+  for (let t = 0; t < 8; t++) e[t] ^= 255;
+  for (let t = 7; t > -1 && (e[t]++, e[t] === 0); t--);
+}
+class yn {
+  toUtf8;
+  fromUtf8;
+  constructor(t, n) {
+    ((this.toUtf8 = t), (this.fromUtf8 = n));
+  }
+  format(t) {
+    const n = [];
+    for (const o of Object.keys(t)) {
+      const r = this.fromUtf8(o);
+      n.push(Uint8Array.from([r.byteLength]), r, this.formatHeaderValue(t[o]));
+    }
+    const a = new Uint8Array(n.reduce((o, r) => o + r.byteLength, 0));
+    let l = 0;
+    for (const o of n) (a.set(o, l), (l += o.byteLength));
+    return a;
+  }
+  formatHeaderValue(t) {
+    switch (t.type) {
+      case "boolean":
+        return Uint8Array.from([t.value ? 0 : 1]);
+      case "byte":
+        return Uint8Array.from([2, t.value]);
+      case "short":
+        const n = new DataView(new ArrayBuffer(3));
+        return (n.setUint8(0, 3), n.setInt16(1, t.value, !1), new Uint8Array(n.buffer));
+      case "integer":
+        const a = new DataView(new ArrayBuffer(5));
+        return (a.setUint8(0, 4), a.setInt32(1, t.value, !1), new Uint8Array(a.buffer));
+      case "long":
+        const l = new Uint8Array(9);
+        return ((l[0] = 5), l.set(t.value.bytes, 1), l);
+      case "binary":
+        const o = new DataView(new ArrayBuffer(3 + t.value.byteLength));
+        (o.setUint8(0, 6), o.setUint16(1, t.value.byteLength, !1));
+        const r = new Uint8Array(o.buffer);
+        return (r.set(t.value, 3), r);
+      case "string":
+        const c = this.fromUtf8(t.value),
+          u = new DataView(new ArrayBuffer(3 + c.byteLength));
+        (u.setUint8(0, 7), u.setUint16(1, c.byteLength, !1));
+        const g = new Uint8Array(u.buffer);
+        return (g.set(c, 3), g);
+      case "timestamp":
+        const _ = new Uint8Array(9);
+        return ((_[0] = 8), _.set(he.fromNumber(t.value.valueOf()).bytes, 1), _);
+      case "uuid":
+        if (!Cn.test(t.value)) throw new Error(`Invalid UUID received: ${t.value}`);
+        const f = new Uint8Array(17);
+        return ((f[0] = 9), f.set(xn(t.value.replace(/\-/g, "")), 1), f);
+    }
+  }
+  parse(t) {
+    const n = {};
+    let a = 0;
+    for (; a < t.byteLength; ) {
+      const l = t.getUint8(a++),
+        o = this.toUtf8(new Uint8Array(t.buffer, t.byteOffset + a, l));
+      switch (((a += l), t.getUint8(a++))) {
+        case 0:
+          n[o] = { type: $e, value: !0 };
+          break;
+        case 1:
+          n[o] = { type: $e, value: !1 };
+          break;
+        case 2:
+          n[o] = { type: _n, value: t.getInt8(a++) };
+          break;
+        case 3:
+          ((n[o] = { type: bn, value: t.getInt16(a, !1) }), (a += 2));
+          break;
+        case 4:
+          ((n[o] = { type: vn, value: t.getInt32(a, !1) }), (a += 4));
+          break;
+        case 5:
+          ((n[o] = { type: kn, value: new he(new Uint8Array(t.buffer, t.byteOffset + a, 8)) }),
+            (a += 8));
+          break;
+        case 6:
+          const r = t.getUint16(a, !1);
+          ((a += 2),
+            (n[o] = { type: wn, value: new Uint8Array(t.buffer, t.byteOffset + a, r) }),
+            (a += r));
+          break;
+        case 7:
+          const c = t.getUint16(a, !1);
+          ((a += 2),
+            (n[o] = {
+              type: Bn,
+              value: this.toUtf8(new Uint8Array(t.buffer, t.byteOffset + a, c)),
+            }),
+            (a += c));
+          break;
+        case 8:
+          ((n[o] = {
+            type: Sn,
+            value: new Date(new he(new Uint8Array(t.buffer, t.byteOffset + a, 8)).valueOf()),
+          }),
+            (a += 8));
+          break;
+        case 9:
+          const u = new Uint8Array(t.buffer, t.byteOffset + a, 16);
+          ((a += 16),
+            (n[o] = {
+              type: An,
+              value: `${se(u.subarray(0, 4))}-${se(u.subarray(4, 6))}-${se(u.subarray(6, 8))}-${se(u.subarray(8, 10))}-${se(u.subarray(10))}`,
+            }));
+          break;
+        default:
+          throw new Error("Unrecognized header type tag");
+      }
+    }
+    return n;
+  }
+}
+var qe;
+(function (e) {
+  ((e[(e.boolTrue = 0)] = "boolTrue"),
+    (e[(e.boolFalse = 1)] = "boolFalse"),
+    (e[(e.byte = 2)] = "byte"),
+    (e[(e.short = 3)] = "short"),
+    (e[(e.integer = 4)] = "integer"),
+    (e[(e.long = 5)] = "long"),
+    (e[(e.byteArray = 6)] = "byteArray"),
+    (e[(e.string = 7)] = "string"),
+    (e[(e.timestamp = 8)] = "timestamp"),
+    (e[(e.uuid = 9)] = "uuid"));
+})(qe || (qe = {}));
+const $e = "boolean",
+  _n = "byte",
+  bn = "short",
+  vn = "integer",
+  kn = "long",
+  wn = "binary",
+  Bn = "string",
+  Sn = "timestamp",
+  An = "uuid",
+  Cn = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/,
+  et = 4,
+  Q = et * 2,
+  Y = 4,
+  En = Q + Y * 2;
+function Dn({ byteLength: e, byteOffset: t, buffer: n }) {
+  if (e < En)
+    throw new Error("Provided message too short to accommodate event stream message overhead");
+  const a = new DataView(n, t, e),
+    l = a.getUint32(0, !1);
+  if (e !== l) throw new Error("Reported message length does not match received message length");
+  const o = a.getUint32(et, !1),
+    r = a.getUint32(Q, !1),
+    c = a.getUint32(e - Y, !1),
+    u = new Ze().update(new Uint8Array(n, t, Q));
+  if (r !== u.digest())
+    throw new Error(
+      `The prelude checksum specified in the message (${r}) does not match the calculated CRC32 checksum (${u.digest()})`
+    );
+  if ((u.update(new Uint8Array(n, t + Q, e - (Q + Y))), c !== u.digest()))
+    throw new Error(
+      `The message checksum (${u.digest()}) did not match the expected value of ${c}`
+    );
+  return {
+    headers: new DataView(n, t + Q + Y, o),
+    body: new Uint8Array(n, t + Q + Y + o, l - o - (Q + Y + Y)),
+  };
+}
+class Tn {
+  headerMarshaller;
+  messageBuffer;
+  isEndOfStream;
+  constructor(t, n) {
+    ((this.headerMarshaller = new yn(t, n)), (this.messageBuffer = []), (this.isEndOfStream = !1));
+  }
+  feed(t) {
+    this.messageBuffer.push(this.decode(t));
+  }
+  endOfStream() {
+    this.isEndOfStream = !0;
+  }
+  getMessage() {
+    const t = this.messageBuffer.pop(),
+      n = this.isEndOfStream;
+    return {
+      getMessage() {
+        return t;
+      },
+      isEndOfStream() {
+        return n;
+      },
+    };
+  }
+  getAvailableMessages() {
+    const t = this.messageBuffer;
+    this.messageBuffer = [];
+    const n = this.isEndOfStream;
+    return {
+      getMessages() {
+        return t;
+      },
+      isEndOfStream() {
+        return n;
+      },
+    };
+  }
+  encode({ headers: t, body: n }) {
+    const a = this.headerMarshaller.format(t),
+      l = a.byteLength + n.byteLength + 16,
+      o = new Uint8Array(l),
+      r = new DataView(o.buffer, o.byteOffset, o.byteLength),
+      c = new Ze();
+    return (
+      r.setUint32(0, l, !1),
+      r.setUint32(4, a.byteLength, !1),
+      r.setUint32(8, c.update(o.subarray(0, 8)).digest(), !1),
+      o.set(a, 12),
+      o.set(n, a.byteLength + 12),
+      r.setUint32(l - 4, c.update(o.subarray(8, l - 4)).digest(), !1),
+      o
+    );
+  }
+  decode(t) {
+    const { headers: n, body: a } = Dn(t);
+    return { headers: this.headerMarshaller.parse(n), body: a };
+  }
+  formatHeaders(t) {
+    return this.headerMarshaller.format(t);
+  }
+}
+const In = (e) => new TextEncoder().encode(e),
+  Rn = (e) => {
+    if (typeof e == "string") return e;
+    if (typeof e != "object" || typeof e.byteOffset != "number" || typeof e.byteLength != "number")
+      throw new Error(
+        "@smithy/util-utf8: toUtf8 encoder function only accepts string | Uint8Array."
+      );
+    return new TextDecoder("utf-8").decode(e);
+  };
+const Ce = new TextEncoder(),
+  Fn = {
+    appstream2: "appstream",
+    cloudhsmv2: "cloudhsm",
+    email: "ses",
+    marketplace: "aws-marketplace",
+    mobile: "AWSMobileHubService",
+    pinpoint: "mobiletargeting",
+    queue: "sqs",
+    "git-codecommit": "codecommit",
+    "mturk-requester-sandbox": "mturk-requester",
+    "personalize-runtime": "personalize",
+  },
+  Un = new Set([
+    "authorization",
+    "content-type",
+    "content-length",
+    "user-agent",
+    "presigned-expires",
+    "expect",
+    "x-amzn-trace-id",
+    "range",
+    "connection",
+  ]);
+class Mn {
+  constructor({
+    method: t,
+    url: n,
+    headers: a,
+    body: l,
+    accessKeyId: o,
+    secretAccessKey: r,
+    sessionToken: c,
+    service: u,
+    region: g,
+    cache: _,
+    datetime: f,
+    signQuery: m,
+    appendSessionToken: d,
+    allHeaders: v,
+    singleEncode: p,
+  }) {
+    if (n == null) throw new TypeError("url is a required option");
+    if (o == null) throw new TypeError("accessKeyId is a required option");
+    if (r == null) throw new TypeError("secretAccessKey is a required option");
+    ((this.method = t || (l ? "POST" : "GET")),
+      (this.url = new URL(n)),
+      (this.headers = new Headers(a || {})),
+      (this.body = l),
+      (this.accessKeyId = o),
+      (this.secretAccessKey = r),
+      (this.sessionToken = c));
+    let D, C;
+    ((!u || !g) && ([D, C] = Nn(this.url, this.headers)),
+      (this.service = u || D || ""),
+      (this.region = g || C || "us-east-1"),
+      (this.cache = _ || new Map()),
+      (this.datetime = f || new Date().toISOString().replace(/[:-]|\.\d{3}/g, "")),
+      (this.signQuery = m),
+      (this.appendSessionToken = d || this.service === "iotdevicegateway"),
+      this.headers.delete("Host"),
+      this.service === "s3" &&
+        !this.signQuery &&
+        !this.headers.has("X-Amz-Content-Sha256") &&
+        this.headers.set("X-Amz-Content-Sha256", "UNSIGNED-PAYLOAD"));
+    const S = this.signQuery ? this.url.searchParams : this.headers;
+    if (
+      (S.set("X-Amz-Date", this.datetime),
+      this.sessionToken &&
+        !this.appendSessionToken &&
+        S.set("X-Amz-Security-Token", this.sessionToken),
+      (this.signableHeaders = ["host", ...this.headers.keys()]
+        .filter((y) => v || !Un.has(y))
+        .sort()),
+      (this.signedHeaders = this.signableHeaders.join(";")),
+      (this.canonicalHeaders = this.signableHeaders.map(
+        (y) =>
+          y +
+          ":" +
+          (y === "host" ? this.url.host : (this.headers.get(y) || "").replace(/\s+/g, " "))
+      ).join(`
+`)),
+      (this.credentialString = [
+        this.datetime.slice(0, 8),
+        this.region,
+        this.service,
+        "aws4_request",
+      ].join("/")),
+      this.signQuery &&
+        (this.service === "s3" && !S.has("X-Amz-Expires") && S.set("X-Amz-Expires", "86400"),
+        S.set("X-Amz-Algorithm", "AWS4-HMAC-SHA256"),
+        S.set("X-Amz-Credential", this.accessKeyId + "/" + this.credentialString),
+        S.set("X-Amz-SignedHeaders", this.signedHeaders)),
+      this.service === "s3")
+    )
+      try {
+        this.encodedPath = decodeURIComponent(this.url.pathname.replace(/\+/g, " "));
+      } catch {
+        this.encodedPath = this.url.pathname;
+      }
+    else this.encodedPath = this.url.pathname.replace(/\/+/g, "/");
+    (p || (this.encodedPath = encodeURIComponent(this.encodedPath).replace(/%2F/g, "/")),
+      (this.encodedPath = He(this.encodedPath)));
+    const E = new Set();
+    this.encodedSearch = [...this.url.searchParams]
+      .filter(([y]) => {
+        if (!y) return !1;
+        if (this.service === "s3") {
+          if (E.has(y)) return !1;
+          E.add(y);
+        }
+        return !0;
+      })
+      .map((y) => y.map((I) => He(encodeURIComponent(I))))
+      .sort(([y, I], [k, B]) => (y < k ? -1 : y > k ? 1 : I < B ? -1 : I > B ? 1 : 0))
+      .map((y) => y.join("="))
+      .join("&");
+  }
+  async sign() {
+    return (
+      this.signQuery
+        ? (this.url.searchParams.set("X-Amz-Signature", await this.signature()),
+          this.sessionToken &&
+            this.appendSessionToken &&
+            this.url.searchParams.set("X-Amz-Security-Token", this.sessionToken))
+        : this.headers.set("Authorization", await this.authHeader()),
+      { method: this.method, url: this.url, headers: this.headers, body: this.body }
+    );
+  }
+  async authHeader() {
+    return [
+      "AWS4-HMAC-SHA256 Credential=" + this.accessKeyId + "/" + this.credentialString,
+      "SignedHeaders=" + this.signedHeaders,
+      "Signature=" + (await this.signature()),
+    ].join(", ");
+  }
+  async signature() {
+    const t = this.datetime.slice(0, 8),
+      n = [this.secretAccessKey, t, this.region, this.service].join();
+    let a = this.cache.get(n);
+    if (!a) {
+      const l = await pe("AWS4" + this.secretAccessKey, t),
+        o = await pe(l, this.region),
+        r = await pe(o, this.service);
+      ((a = await pe(r, "aws4_request")), this.cache.set(n, a));
+    }
+    return we(await pe(a, await this.stringToSign()));
+  }
+  async stringToSign() {
+    return [
+      "AWS4-HMAC-SHA256",
+      this.datetime,
+      this.credentialString,
+      we(await Pe(await this.canonicalString())),
+    ].join(`
+`);
+  }
+  async canonicalString() {
+    return [
+      this.method.toUpperCase(),
+      this.encodedPath,
+      this.encodedSearch,
+      this.canonicalHeaders +
+        `
+`,
+      this.signedHeaders,
+      await this.hexBodyHash(),
+    ].join(`
+`);
+  }
+  async hexBodyHash() {
+    let t =
+      this.headers.get("X-Amz-Content-Sha256") ||
+      (this.service === "s3" && this.signQuery ? "UNSIGNED-PAYLOAD" : null);
+    if (t == null) {
+      if (this.body && typeof this.body != "string" && !("byteLength" in this.body))
+        throw new Error(
+          "body must be a string, ArrayBuffer or ArrayBufferView, unless you include the X-Amz-Content-Sha256 header"
+        );
+      t = we(await Pe(this.body || ""));
+    }
+    return t;
+  }
+}
+async function pe(e, t) {
+  const n = await crypto.subtle.importKey(
+    "raw",
+    typeof e == "string" ? Ce.encode(e) : e,
+    { name: "HMAC", hash: { name: "SHA-256" } },
+    !1,
+    ["sign"]
+  );
+  return crypto.subtle.sign("HMAC", n, Ce.encode(t));
+}
+async function Pe(e) {
+  return crypto.subtle.digest("SHA-256", typeof e == "string" ? Ce.encode(e) : e);
+}
+const We = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
+function we(e) {
+  const t = new Uint8Array(e);
+  let n = "";
+  for (let a = 0; a < t.length; a++) {
+    const l = t[a];
+    ((n += We[(l >>> 4) & 15]), (n += We[l & 15]));
+  }
+  return n;
+}
+function He(e) {
+  return e.replace(/[!'()*]/g, (t) => "%" + t.charCodeAt(0).toString(16).toUpperCase());
+}
+function Nn(e, t) {
+  const { hostname: n, pathname: a } = e;
+  if (n.endsWith(".on.aws")) {
+    const c = n.match(/^[^.]{1,63}\.lambda-url\.([^.]{1,63})\.on\.aws$/);
+    return c != null ? ["lambda", c[1] || ""] : ["", ""];
+  }
+  if (n.endsWith(".r2.cloudflarestorage.com")) return ["s3", "auto"];
+  if (n.endsWith(".backblazeb2.com")) {
+    const c = n.match(/^(?:[^.]{1,63}\.)?s3\.([^.]{1,63})\.backblazeb2\.com$/);
+    return c != null ? ["s3", c[1] || ""] : ["", ""];
+  }
+  const l = n
+    .replace("dualstack.", "")
+    .match(/([^.]{1,63})\.(?:([^.]{0,63})\.)?amazonaws\.com(?:\.cn)?$/);
+  let o = (l && l[1]) || "",
+    r = l && l[2];
+  if (r === "us-gov") r = "us-gov-west-1";
+  else if (r === "s3" || r === "s3-accelerate") ((r = "us-east-1"), (o = "s3"));
+  else if (o === "iot")
+    n.startsWith("iot.")
+      ? (o = "execute-api")
+      : n.startsWith("data.jobs.iot.")
+        ? (o = "iot-jobs-data")
+        : (o = a === "/mqtt" ? "iotdevicegateway" : "iotdata");
+  else if (o === "autoscaling") {
+    const c = (t.get("X-Amz-Target") || "").split(".")[0];
+    c === "AnyScaleFrontendService"
+      ? (o = "application-autoscaling")
+      : c === "AnyScaleScalingPlannerFrontendService" && (o = "autoscaling-plans");
+  } else
+    r == null && o.startsWith("s3-")
+      ? ((r = o.slice(3).replace(/^fips-|^external-1/, "")), (o = "s3"))
+      : o.endsWith("-fips")
+        ? (o = o.slice(0, -5))
+        : r && /-\d$/.test(o) && !/-\d$/.test(r) && ([o, r] = [r, o]);
+  return [Fn[o] || o, r || ""];
+}
+var On = [
+    "stop",
+    "stop_sequence",
+    "end_turn",
+    "length",
+    "max_tokens",
+    "content-filter",
+    "content_filtered",
+    "guardrail_intervened",
+    "tool-calls",
+    "tool_use",
+  ],
+  ze = { "image/jpeg": "jpeg", "image/png": "png", "image/gif": "gif", "image/webp": "webp" },
+  Ke = {
+    "application/pdf": "pdf",
+    "text/csv": "csv",
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.ms-excel": "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+    "text/html": "html",
+    "text/plain": "txt",
+    "text/markdown": "md",
+  },
+  qn = i({ citations: i({ enabled: W() }).optional() }),
+  $n = i({
+    additionalModelRequestFields: ee(s(), Xe()).optional(),
+    reasoningConfig: i({
+      type: K([x("enabled"), x("disabled")]).optional(),
+      budgetTokens: h().optional(),
+      maxReasoningEffort: O(["low", "medium", "high"]).optional(),
+    }).optional(),
+    anthropicBeta: T(s()).optional(),
+  }),
+  ge = i({ message: s(), type: s().nullish() });
+function Pn(e, t) {
+  const n = new Tn(Rn, In);
+  let a = new Uint8Array(0);
+  const l = new TextDecoder();
+  return e.pipeThrough(
+    new TransformStream({
+      async transform(o, r) {
+        var c, u;
+        const g = new Uint8Array(a.length + o.length);
+        for (g.set(a), g.set(o, a.length), a = g; a.length >= 4; ) {
+          const _ = new DataView(a.buffer, a.byteOffset, a.byteLength).getUint32(0, !1);
+          if (a.length < _) break;
+          try {
+            const f = a.subarray(0, _),
+              m = n.decode(f);
+            a = a.slice(_);
+            const d = (c = m.headers[":message-type"]) == null ? void 0 : c.value,
+              v = (u = m.headers[":event-type"]) == null ? void 0 : u.value,
+              p = l.decode(m.body);
+            await t({ messageType: d, eventType: v, data: p }, r);
+          } catch {
+            break;
+          }
+        }
+      },
+    })
+  );
+}
+var Wn =
+  (e) =>
+  async ({ response: t }) => {
+    const n = lt(t);
+    if (t.body == null) throw new ct({});
+    return {
+      responseHeaders: n,
+      value: Pn(t.body, async (a, l) => {
+        if (a.messageType === "event") {
+          const o = await ut({ text: a.data });
+          if (!o.success) {
+            l.enqueue(o);
+            return;
+          }
+          delete o.value.p;
+          const r = { [a.eventType]: o.value },
+            c = await pt({ value: r, schema: e });
+          c.success ? l.enqueue({ success: !0, value: c.value, rawValue: r }) : l.enqueue(c);
+        }
+      }),
+    };
+  };
+async function Hn({ tools: e, toolChoice: t, modelId: n }) {
+  var a;
+  const l = [],
+    o = new Set();
+  if (e == null || e.length === 0)
+    return { toolConfig: {}, additionalTools: void 0, betas: o, toolWarnings: l };
+  const r = e.filter((p) =>
+    p.type === "provider" && p.id === "anthropic.web_search_20250305"
+      ? (l.push({
+          type: "unsupported",
+          feature: "web_search_20250305 tool",
+          details: "The web_search_20250305 tool is not supported on Amazon Bedrock.",
+        }),
+        !1)
+      : !0
+  );
+  if (r.length === 0) return { toolConfig: {}, additionalTools: void 0, betas: o, toolWarnings: l };
+  const c = n.includes("anthropic."),
+    u = r.filter((p) => p.type === "provider"),
+    g = r.filter((p) => p.type === "function");
+  let _;
+  const f = [],
+    m = c && u.length > 0;
+  if (m) {
+    g.length > 0 &&
+      l.push({
+        type: "unsupported",
+        feature: "mixing Anthropic provider-defined tools and standard function tools",
+        details:
+          "Mixed Anthropic provider-defined tools and standard function tools are not supported in a single call to Bedrock. Only Anthropic tools will be used.",
+      });
+    const {
+      toolChoice: p,
+      toolWarnings: D,
+      betas: C,
+    } = await It({ tools: u, toolChoice: t, supportsStructuredOutput: !1 });
+    (l.push(...D), C.forEach((S) => o.add(S)), p && (_ = { tool_choice: p }));
+    for (const S of u) {
+      const E = Object.values(Qe).find((y) => y({}).id === S.id);
+      if (E != null) {
+        const y = E({});
+        f.push({
+          toolSpec: { name: S.name, inputSchema: { json: await rt(y.inputSchema).jsonSchema } },
+        });
+      } else l.push({ type: "unsupported", feature: "tool ${tool.id}" });
+    }
+  } else for (const p of u) l.push({ type: "unsupported", feature: `tool ${p.id}` });
+  for (const p of g)
+    f.push({
+      toolSpec: {
+        name: p.name,
+        ...(((a = p.description) == null ? void 0 : a.trim()) !== ""
+          ? { description: p.description }
+          : {}),
+        inputSchema: { json: p.inputSchema },
+      },
+    });
+  let d;
+  if (!m && f.length > 0 && t) {
+    const p = t.type;
+    switch (p) {
+      case "auto":
+        d = { auto: {} };
+        break;
+      case "required":
+        d = { any: {} };
+        break;
+      case "none":
+        ((f.length = 0), (d = void 0));
+        break;
+      case "tool":
+        d = { tool: { name: t.toolName } };
+        break;
+      default: {
+        const D = p;
+        throw new J({ functionality: `tool choice type: ${D}` });
+      }
+    }
+  }
+  return {
+    toolConfig: f.length > 0 ? { tools: f, toolChoice: d } : {},
+    additionalTools: _,
+    betas: o,
+    toolWarnings: l,
+  };
+}
+function je(e) {
+  var t, n;
+  if (e == null)
+    return {
+      inputTokens: { total: void 0, noCache: void 0, cacheRead: void 0, cacheWrite: void 0 },
+      outputTokens: { total: void 0, text: void 0, reasoning: void 0 },
+      raw: void 0,
+    };
+  const a = e.inputTokens,
+    l = e.outputTokens,
+    o = (t = e.cacheReadInputTokens) != null ? t : 0,
+    r = (n = e.cacheWriteInputTokens) != null ? n : 0;
+  return {
+    inputTokens: { total: a + o + r, noCache: a, cacheRead: o, cacheWrite: r },
+    outputTokens: { total: l, text: l, reasoning: void 0 },
+    raw: e,
+  };
+}
+function Be(e) {
+  return e.includes("mistral.");
+}
+function _e(e, t) {
+  return t ? e.replace(/[^a-zA-Z0-9]/g, "").slice(0, 9) : e;
+}
+function Se(e) {
+  var t;
+  const n = (t = e?.bedrock) == null ? void 0 : t.cachePoint;
+  if (n) return { cachePoint: n };
+}
+async function zn(e) {
+  var t, n;
+  const a = await fe({ provider: "bedrock", providerOptions: e, schema: qn });
+  return (n = (t = a?.citations) == null ? void 0 : t.enabled) != null ? n : !1;
+}
+async function Kn(e, t = !1) {
+  var n, a;
+  const l = Vn(e);
+  let o = [];
+  const r = [];
+  let c = 0;
+  const u = () => `document-${++c}`;
+  for (let g = 0; g < l.length; g++) {
+    const _ = l[g],
+      f = g === l.length - 1,
+      m = _.type;
+    switch (m) {
+      case "system": {
+        if (r.length > 0)
+          throw new J({
+            functionality: "Multiple system messages that are separated by user/assistant messages",
+          });
+        for (const d of _.messages) {
+          o.push({ text: d.content });
+          const v = Se(d.providerOptions);
+          v && o.push(v);
+        }
+        break;
+      }
+      case "user": {
+        const d = [];
+        for (const v of _.messages) {
+          const { role: p, content: D, providerOptions: C } = v;
+          switch (p) {
+            case "user": {
+              for (let E = 0; E < D.length; E++) {
+                const y = D[E];
+                switch (y.type) {
+                  case "text": {
+                    d.push({ text: y.text });
+                    break;
+                  }
+                  case "file": {
+                    if (y.data instanceof URL) throw new J({ functionality: "File URL data" });
+                    if (y.mediaType.startsWith("image/"))
+                      d.push({ image: { format: Ve(y.mediaType), source: { bytes: Me(y.data) } } });
+                    else {
+                      if (!y.mediaType)
+                        throw new J({
+                          functionality: "file without mime type",
+                          message: "File mime type is required in user message part content",
+                        });
+                      const I = await zn(y.providerOptions);
+                      d.push({
+                        document: {
+                          format: jn(y.mediaType),
+                          name: (n = y.filename) != null ? n : u(),
+                          source: { bytes: Me(y.data) },
+                          ...(I && { citations: { enabled: !0 } }),
+                        },
+                      });
+                    }
+                    break;
+                  }
+                }
+              }
+              break;
+            }
+            case "tool": {
+              for (const E of D) {
+                if (E.type === "tool-approval-response") continue;
+                let y;
+                const I = E.output;
+                switch (I.type) {
+                  case "content": {
+                    y = I.value.map((k) => {
+                      switch (k.type) {
+                        case "text":
+                          return { text: k.text };
+                        case "image-data":
+                          if (!k.mediaType.startsWith("image/"))
+                            throw new J({ functionality: `media type: ${k.mediaType}` });
+                          return { image: { format: Ve(k.mediaType), source: { bytes: k.data } } };
+                        default:
+                          throw new J({
+                            functionality: `unsupported tool content part type: ${k.type}`,
+                          });
+                      }
+                    });
+                    break;
+                  }
+                  case "text":
+                  case "error-text":
+                    y = [{ text: I.value }];
+                    break;
+                  case "execution-denied":
+                    y = [{ text: (a = I.reason) != null ? a : "Tool execution denied." }];
+                    break;
+                  case "json":
+                  case "error-json":
+                  default:
+                    y = [{ text: JSON.stringify(I.value) }];
+                    break;
+                }
+                d.push({ toolResult: { toolUseId: _e(E.toolCallId, t), content: y } });
+              }
+              break;
+            }
+            default: {
+              const E = p;
+              throw new Error(`Unsupported role: ${E}`);
+            }
+          }
+          const S = Se(C);
+          S && d.push(S);
+        }
+        r.push({ role: "user", content: d });
+        break;
+      }
+      case "assistant": {
+        const d = [];
+        for (let v = 0; v < _.messages.length; v++) {
+          const p = _.messages[v],
+            D = v === _.messages.length - 1,
+            { content: C } = p;
+          for (let E = 0; E < C.length; E++) {
+            const y = C[E],
+              I = E === C.length - 1;
+            switch (y.type) {
+              case "text": {
+                if (!y.text.trim()) break;
+                d.push({ text: Ge(f, D, I, y.text) });
+                break;
+              }
+              case "reasoning": {
+                const k = await fe({
+                  provider: "bedrock",
+                  providerOptions: y.providerOptions,
+                  schema: Zn,
+                });
+                k != null &&
+                  (k.signature != null
+                    ? d.push({
+                        reasoningContent: {
+                          reasoningText: { text: Ge(f, D, I, y.text), signature: k.signature },
+                        },
+                      })
+                    : k.redactedData != null &&
+                      d.push({
+                        reasoningContent: { redactedReasoning: { data: k.redactedData } },
+                      }));
+                break;
+              }
+              case "tool-call": {
+                d.push({
+                  toolUse: { toolUseId: _e(y.toolCallId, t), name: y.toolName, input: y.input },
+                });
+                break;
+              }
+            }
+          }
+          const S = Se(p.providerOptions);
+          S && d.push(S);
+        }
+        r.push({ role: "assistant", content: d });
+        break;
+      }
+      default: {
+        const d = m;
+        throw new Error(`Unsupported type: ${d}`);
+      }
+    }
+  }
+  return { system: o, messages: r };
+}
+function Ve(e) {
+  if (!e)
+    throw new J({
+      functionality: "image without mime type",
+      message: "Image mime type is required in user message part content",
+    });
+  const t = ze[e];
+  if (!t)
+    throw new J({
+      functionality: `image mime type: ${e}`,
+      message: `Unsupported image mime type: ${e}, expected one of: ${Object.keys(ze).join(", ")}`,
+    });
+  return t;
+}
+function jn(e) {
+  const t = Ke[e];
+  if (!t)
+    throw new J({
+      functionality: `file mime type: ${e}`,
+      message: `Unsupported file mime type: ${e}, expected one of: ${Object.keys(Ke).join(", ")}`,
+    });
+  return t;
+}
+function Ge(e, t, n, a) {
+  return e && t && n ? a.trim() : a;
+}
+function Vn(e) {
+  const t = [];
+  let n;
+  for (const a of e) {
+    const { role: l } = a;
+    switch (l) {
+      case "system": {
+        (n?.type !== "system" && ((n = { type: "system", messages: [] }), t.push(n)),
+          n.messages.push(a));
+        break;
+      }
+      case "assistant": {
+        (n?.type !== "assistant" && ((n = { type: "assistant", messages: [] }), t.push(n)),
+          n.messages.push(a));
+        break;
+      }
+      case "user": {
+        (n?.type !== "user" && ((n = { type: "user", messages: [] }), t.push(n)),
+          n.messages.push(a));
+        break;
+      }
+      case "tool": {
+        (n?.type !== "user" && ((n = { type: "user", messages: [] }), t.push(n)),
+          n.messages.push(a));
+        break;
+      }
+      default: {
+        const o = l;
+        throw new Error(`Unsupported role: ${o}`);
+      }
+    }
+  }
+  return t;
+}
+function Le(e, t) {
+  switch (e) {
+    case "stop_sequence":
+    case "end_turn":
+      return "stop";
+    case "max_tokens":
+      return "length";
+    case "content_filtered":
+    case "guardrail_intervened":
+      return "content-filter";
+    case "tool_use":
+      return t ? "stop" : "tool-calls";
+    default:
+      return "other";
+  }
+}
+var Gn = class {
+    constructor(e, t) {
+      ((this.modelId = e),
+        (this.config = t),
+        (this.specificationVersion = "v3"),
+        (this.provider = "amazon-bedrock"),
+        (this.supportedUrls = {}));
+    }
+    async getArgs({
+      prompt: e,
+      maxOutputTokens: t,
+      temperature: n,
+      topP: a,
+      topK: l,
+      frequencyPenalty: o,
+      presencePenalty: r,
+      stopSequences: c,
+      responseFormat: u,
+      seed: g,
+      tools: _,
+      toolChoice: f,
+      providerOptions: m,
+    }) {
+      var d, v, p, D, C, S, E, y, I;
+      const k =
+          (d = await fe({ provider: "bedrock", providerOptions: m, schema: $n })) != null ? d : {},
+        B = [];
+      (o != null && B.push({ type: "unsupported", feature: "frequencyPenalty" }),
+        r != null && B.push({ type: "unsupported", feature: "presencePenalty" }),
+        g != null && B.push({ type: "unsupported", feature: "seed" }),
+        n != null && n > 1
+          ? (B.push({
+              type: "unsupported",
+              feature: "temperature",
+              details: `${n} exceeds bedrock maximum of 1.0. clamped to 1.0`,
+            }),
+            (n = 1))
+          : n != null &&
+            n < 0 &&
+            (B.push({
+              type: "unsupported",
+              feature: "temperature",
+              details: `${n} is below bedrock minimum of 0. clamped to 0`,
+            }),
+            (n = 0)),
+        u != null &&
+          u.type !== "text" &&
+          u.type !== "json" &&
+          B.push({
+            type: "unsupported",
+            feature: "responseFormat",
+            details: "Only text and json response formats are supported.",
+          }));
+      const U =
+          u?.type === "json" && u.schema != null
+            ? {
+                type: "function",
+                name: "json",
+                description: "Respond with a JSON object.",
+                inputSchema: u.schema,
+              }
+            : void 0,
+        {
+          toolConfig: H,
+          additionalTools: j,
+          toolWarnings: Z,
+          betas: V,
+        } = await Hn({
+          tools: U ? [...(_ ?? []), U] : _,
+          toolChoice: U != null ? { type: "required" } : f,
+          modelId: this.modelId,
+        });
+      if (
+        (B.push(...Z),
+        j && (k.additionalModelRequestFields = { ...k.additionalModelRequestFields, ...j }),
+        V.size > 0 || k.anthropicBeta)
+      ) {
+        const ve = (v = k.anthropicBeta) != null ? v : [],
+          P = V.size > 0 ? [...ve, ...Array.from(V)] : ve;
+        k.additionalModelRequestFields = { ...k.additionalModelRequestFields, anthropic_beta: P };
+      }
+      const q = this.modelId.includes("anthropic"),
+        w = ((p = k.reasoningConfig) == null ? void 0 : p.type) === "enabled",
+        M = (D = k.reasoningConfig) == null ? void 0 : D.budgetTokens,
+        $ = q && w,
+        b = {
+          ...(t != null && { maxTokens: t }),
+          ...(n != null && { temperature: n }),
+          ...(a != null && { topP: a }),
+          ...(l != null && { topK: l }),
+          ...(c != null && { stopSequences: c }),
+        };
+      $ && M != null
+        ? (b.maxTokens != null ? (b.maxTokens += M) : (b.maxTokens = M + 4096),
+          (k.additionalModelRequestFields = {
+            ...k.additionalModelRequestFields,
+            thinking: { type: (C = k.reasoningConfig) == null ? void 0 : C.type, budget_tokens: M },
+          }))
+        : !q &&
+          M != null &&
+          B.push({
+            type: "unsupported",
+            feature: "budgetTokens",
+            details:
+              "budgetTokens applies only to Anthropic models on Bedrock and will be ignored for this model.",
+          });
+      const A = (S = k.reasoningConfig) == null ? void 0 : S.maxReasoningEffort,
+        N = this.modelId.startsWith("openai.");
+      (A != null && !q
+        ? N
+          ? (k.additionalModelRequestFields = {
+              ...k.additionalModelRequestFields,
+              reasoning_effort: A,
+            })
+          : (k.additionalModelRequestFields = {
+              ...k.additionalModelRequestFields,
+              reasoningConfig: {
+                ...(((E = k.reasoningConfig) == null ? void 0 : E.type) != null && {
+                  type: k.reasoningConfig.type,
+                }),
+                maxReasoningEffort: A,
+              },
+            })
+        : A != null &&
+          q &&
+          B.push({
+            type: "unsupported",
+            feature: "maxReasoningEffort",
+            details:
+              "maxReasoningEffort applies only to Amazon Nova models on Bedrock and will be ignored for this model.",
+          }),
+        $ &&
+          b.temperature != null &&
+          (delete b.temperature,
+          B.push({
+            type: "unsupported",
+            feature: "temperature",
+            details: "temperature is not supported when thinking is enabled",
+          })),
+        $ &&
+          b.topP != null &&
+          (delete b.topP,
+          B.push({
+            type: "unsupported",
+            feature: "topP",
+            details: "topP is not supported when thinking is enabled",
+          })),
+        $ &&
+          b.topK != null &&
+          (delete b.topK,
+          B.push({
+            type: "unsupported",
+            feature: "topK",
+            details: "topK is not supported when thinking is enabled",
+          })));
+      const G = ((I = (y = H.tools) == null ? void 0 : y.length) != null ? I : 0) > 0 || j;
+      let ce = e;
+      G ||
+        (e.some(
+          (P) =>
+            "content" in P &&
+            Array.isArray(P.content) &&
+            P.content.some((ue) => ue.type === "tool-call" || ue.type === "tool-result")
+        ) &&
+          ((ce = e
+            .map((P) =>
+              P.role === "system"
+                ? P
+                : {
+                    ...P,
+                    content: P.content.filter(
+                      (ue) => ue.type !== "tool-call" && ue.type !== "tool-result"
+                    ),
+                  }
+            )
+            .filter((P) => P.role === "system" || P.content.length > 0)),
+          B.push({
+            type: "unsupported",
+            feature: "toolContent",
+            details:
+              "Tool calls and results removed from conversation because Bedrock does not support tool content without active tools.",
+          })));
+      const de = Be(this.modelId),
+        { system: L, messages: Te } = await Kn(ce, de),
+        { reasoningConfig: Ie, additionalModelRequestFields: ho, ...at } = m?.bedrock || {},
+        Re = q ? ["/delta/stop_sequence"] : void 0;
+      return {
+        command: {
+          system: L,
+          messages: Te,
+          additionalModelRequestFields: k.additionalModelRequestFields,
+          ...(Re && { additionalModelResponseFieldPaths: Re }),
+          ...(Object.keys(b).length > 0 && { inferenceConfig: b }),
+          ...at,
+          ...(H.tools !== void 0 && H.tools.length > 0 ? { toolConfig: H } : {}),
+        },
+        warnings: B,
+        usesJsonResponseTool: U != null,
+        betas: V,
+      };
+    }
+    async getHeaders({ headers: e }) {
+      return ne(await oe(this.config.headers), e);
+    }
+    async doGenerate(e) {
+      var t, n, a, l, o, r, c, u, g, _, f, m;
+      const { command: d, warnings: v, usesJsonResponseTool: p } = await this.getArgs(e),
+        D = `${this.getUrl(this.modelId)}/converse`,
+        { value: C, responseHeaders: S } = await me({
+          url: D,
+          headers: await this.getHeaders({ headers: e.headers }),
+          body: d,
+          failedResponseHandler: re({
+            errorSchema: ge,
+            errorToMessage: (B) => {
+              var U;
+              return `${(U = B.message) != null ? U : "Unknown error"}`;
+            },
+          }),
+          successfulResponseHandler: be(Xn),
+          abortSignal: e.abortSignal,
+          fetch: this.config.fetch,
+        }),
+        E = [];
+      let y = !1;
+      for (const B of C.output.message.content) {
+        if ((B.text && E.push({ type: "text", text: B.text }), B.reasoningContent))
+          if ("reasoningText" in B.reasoningContent) {
+            const U = { type: "reasoning", text: B.reasoningContent.reasoningText.text };
+            (B.reasoningContent.reasoningText.signature &&
+              (U.providerMetadata = {
+                bedrock: { signature: B.reasoningContent.reasoningText.signature },
+              }),
+              E.push(U));
+          } else
+            "redactedReasoning" in B.reasoningContent &&
+              E.push({
+                type: "reasoning",
+                text: "",
+                providerMetadata: {
+                  bedrock: {
+                    redactedData: (t = B.reasoningContent.redactedReasoning.data) != null ? t : "",
+                  },
+                },
+              });
+        if (B.toolUse)
+          if (p && B.toolUse.name === "json")
+            ((y = !0), E.push({ type: "text", text: JSON.stringify(B.toolUse.input) }));
+          else {
+            const H = Be(this.modelId),
+              j =
+                (a = (n = B.toolUse) == null ? void 0 : n.toolUseId) != null
+                  ? a
+                  : this.config.generateId();
+            E.push({
+              type: "tool-call",
+              toolCallId: _e(j, H),
+              toolName:
+                (o = (l = B.toolUse) == null ? void 0 : l.name) != null
+                  ? o
+                  : `tool-${this.config.generateId()}`,
+              input: JSON.stringify(
+                (c = (r = B.toolUse) == null ? void 0 : r.input) != null ? c : {}
+              ),
+            });
+          }
+      }
+      const I =
+          (_ =
+            (g = (u = C.additionalModelResponseFields) == null ? void 0 : u.delta) == null
+              ? void 0
+              : g.stop_sequence) != null
+            ? _
+            : null,
+        k =
+          C.trace || C.usage || y || I
+            ? {
+                bedrock: {
+                  ...(C.trace && typeof C.trace == "object" ? { trace: C.trace } : {}),
+                  ...(((f = C.usage) == null ? void 0 : f.cacheWriteInputTokens) != null && {
+                    usage: { cacheWriteInputTokens: C.usage.cacheWriteInputTokens },
+                  }),
+                  ...(y && { isJsonResponseFromTool: !0 }),
+                  stopSequence: I,
+                },
+              }
+            : void 0;
+      return {
+        content: E,
+        finishReason: {
+          unified: Le(C.stopReason, y),
+          raw: (m = C.stopReason) != null ? m : void 0,
+        },
+        usage: je(C.usage),
+        response: { headers: S },
+        warnings: v,
+        ...(k && { providerMetadata: k }),
+      };
+    }
+    async doStream(e) {
+      const { command: t, warnings: n, usesJsonResponseTool: a } = await this.getArgs(e),
+        l = Be(this.modelId),
+        o = `${this.getUrl(this.modelId)}/converse-stream`,
+        { value: r, responseHeaders: c } = await me({
+          url: o,
+          headers: await this.getHeaders({ headers: e.headers }),
+          body: t,
+          failedResponseHandler: re({
+            errorSchema: ge,
+            errorToMessage: (v) => `${v.type}: ${v.message}`,
+          }),
+          successfulResponseHandler: Wn(Qn),
+          abortSignal: e.abortSignal,
+          fetch: this.config.fetch,
+        });
+      let u = { unified: "other", raw: void 0 },
+        g,
+        _,
+        f = !1,
+        m = null;
+      const d = {};
+      return {
+        stream: r.pipeThrough(
+          new TransformStream({
+            start(v) {
+              v.enqueue({ type: "stream-start", warnings: n });
+            },
+            transform(v, p) {
+              var D, C, S, E, y, I, k, B, U, H, j, Z, V;
+              function q(b) {
+                ((u = { unified: "error", raw: void 0 }), p.enqueue({ type: "error", error: b }));
+              }
+              if (
+                (e.includeRawChunks && p.enqueue({ type: "raw", rawValue: v.rawValue }), !v.success)
+              ) {
+                q(v.error);
+                return;
+              }
+              const w = v.value;
+              if (w.internalServerException) {
+                q(w.internalServerException);
+                return;
+              }
+              if (w.modelStreamErrorException) {
+                q(w.modelStreamErrorException);
+                return;
+              }
+              if (w.throttlingException) {
+                q(w.throttlingException);
+                return;
+              }
+              if (w.validationException) {
+                q(w.validationException);
+                return;
+              }
+              if (
+                (w.messageStop &&
+                  ((u = {
+                    unified: Le(w.messageStop.stopReason, f),
+                    raw: (D = w.messageStop.stopReason) != null ? D : void 0,
+                  }),
+                  (m =
+                    (E =
+                      (S =
+                        (C = w.messageStop.additionalModelResponseFields) == null
+                          ? void 0
+                          : C.delta) == null
+                        ? void 0
+                        : S.stop_sequence) != null
+                      ? E
+                      : null)),
+                w.metadata)
+              ) {
+                w.metadata.usage && (g = w.metadata.usage);
+                const b =
+                    ((y = w.metadata.usage) == null ? void 0 : y.cacheWriteInputTokens) != null
+                      ? { usage: { cacheWriteInputTokens: w.metadata.usage.cacheWriteInputTokens } }
+                      : void 0,
+                  A = w.metadata.trace ? { trace: w.metadata.trace } : void 0;
+                (b || A) && (_ = { bedrock: { ...b, ...A } });
+              }
+              if (
+                ((I = w.contentBlockStart) == null ? void 0 : I.contentBlockIndex) != null &&
+                !((B = (k = w.contentBlockStart) == null ? void 0 : k.start) != null && B.toolUse)
+              ) {
+                const b = w.contentBlockStart.contentBlockIndex;
+                ((d[b] = { type: "text" }), p.enqueue({ type: "text-start", id: String(b) }));
+              }
+              if (
+                (U = w.contentBlockDelta) != null &&
+                U.delta &&
+                "text" in w.contentBlockDelta.delta &&
+                w.contentBlockDelta.delta.text
+              ) {
+                const b = w.contentBlockDelta.contentBlockIndex || 0;
+                (d[b] == null &&
+                  ((d[b] = { type: "text" }), p.enqueue({ type: "text-start", id: String(b) })),
+                  p.enqueue({
+                    type: "text-delta",
+                    id: String(b),
+                    delta: w.contentBlockDelta.delta.text,
+                  }));
+              }
+              if (((H = w.contentBlockStop) == null ? void 0 : H.contentBlockIndex) != null) {
+                const b = w.contentBlockStop.contentBlockIndex,
+                  A = d[b];
+                A != null &&
+                  (A.type === "reasoning"
+                    ? p.enqueue({ type: "reasoning-end", id: String(b) })
+                    : A.type === "text"
+                      ? p.enqueue({ type: "text-end", id: String(b) })
+                      : A.type === "tool-call" &&
+                        (A.isJsonResponseTool
+                          ? ((f = !0),
+                            p.enqueue({ type: "text-start", id: String(b) }),
+                            p.enqueue({ type: "text-delta", id: String(b), delta: A.jsonText }),
+                            p.enqueue({ type: "text-end", id: String(b) }))
+                          : (p.enqueue({ type: "tool-input-end", id: A.toolCallId }),
+                            p.enqueue({
+                              type: "tool-call",
+                              toolCallId: A.toolCallId,
+                              toolName: A.toolName,
+                              input: A.jsonText === "" ? "{}" : A.jsonText,
+                            }))),
+                  delete d[b]);
+              }
+              if (
+                (j = w.contentBlockDelta) != null &&
+                j.delta &&
+                "reasoningContent" in w.contentBlockDelta.delta &&
+                w.contentBlockDelta.delta.reasoningContent
+              ) {
+                const b = w.contentBlockDelta.contentBlockIndex || 0,
+                  A = w.contentBlockDelta.delta.reasoningContent;
+                "text" in A && A.text
+                  ? (d[b] == null &&
+                      ((d[b] = { type: "reasoning" }),
+                      p.enqueue({ type: "reasoning-start", id: String(b) })),
+                    p.enqueue({ type: "reasoning-delta", id: String(b), delta: A.text }))
+                  : "signature" in A && A.signature
+                    ? p.enqueue({
+                        type: "reasoning-delta",
+                        id: String(b),
+                        delta: "",
+                        providerMetadata: { bedrock: { signature: A.signature } },
+                      })
+                    : "data" in A &&
+                      A.data &&
+                      p.enqueue({
+                        type: "reasoning-delta",
+                        id: String(b),
+                        delta: "",
+                        providerMetadata: { bedrock: { redactedData: A.data } },
+                      });
+              }
+              const M = w.contentBlockStart;
+              if (((Z = M?.start) == null ? void 0 : Z.toolUse) != null) {
+                const b = M.start.toolUse,
+                  A = M.contentBlockIndex,
+                  N = a && b.name === "json",
+                  G = _e(b.toolUseId, l);
+                ((d[A] = {
+                  type: "tool-call",
+                  toolCallId: G,
+                  toolName: b.name,
+                  jsonText: "",
+                  isJsonResponseTool: N,
+                }),
+                  N || p.enqueue({ type: "tool-input-start", id: G, toolName: b.name }));
+              }
+              const $ = w.contentBlockDelta;
+              if ($?.delta && "toolUse" in $.delta && $.delta.toolUse) {
+                const b = $.contentBlockIndex,
+                  A = d[b];
+                if (A?.type === "tool-call") {
+                  const N = (V = $.delta.toolUse.input) != null ? V : "";
+                  (A.isJsonResponseTool ||
+                    p.enqueue({ type: "tool-input-delta", id: A.toolCallId, delta: N }),
+                    (A.jsonText += N));
+                }
+              }
+            },
+            flush(v) {
+              ((f || m != null) &&
+                (_
+                  ? (_.bedrock = {
+                      ..._.bedrock,
+                      ...(f && { isJsonResponseFromTool: !0 }),
+                      stopSequence: m,
+                    })
+                  : (_ = {
+                      bedrock: { ...(f && { isJsonResponseFromTool: !0 }), stopSequence: m },
+                    })),
+                v.enqueue({
+                  type: "finish",
+                  finishReason: u,
+                  usage: je(g),
+                  ...(_ && { providerMetadata: _ }),
+                }));
+            },
+          })
+        ),
+        response: { headers: c },
+      };
+    }
+    getUrl(e) {
+      const t = encodeURIComponent(e);
+      return `${this.config.baseUrl()}/model/${t}`;
+    }
+  },
+  tt = K([O(On), s()]),
+  nt = i({ delta: i({ stop_sequence: s().nullish() }).nullish() }).catchall(z()),
+  ot = i({ toolUseId: s(), name: s(), input: z() }),
+  Ln = i({ signature: s().nullish(), text: s() }),
+  Jn = i({ data: s() }),
+  Xn = i({
+    metrics: i({ latencyMs: h() }).nullish(),
+    output: i({
+      message: i({
+        content: T(
+          i({
+            text: s().nullish(),
+            toolUse: ot.nullish(),
+            reasoningContent: K([i({ reasoningText: Ln }), i({ redactedReasoning: Jn })]).nullish(),
+          })
+        ),
+        role: s(),
+      }),
+    }),
+    stopReason: tt,
+    additionalModelResponseFields: nt.nullish(),
+    trace: z().nullish(),
+    usage: i({
+      inputTokens: h(),
+      outputTokens: h(),
+      totalTokens: h(),
+      cacheReadInputTokens: h().nullish(),
+      cacheWriteInputTokens: h().nullish(),
+    }),
+  }),
+  Qn = i({
+    contentBlockDelta: i({
+      contentBlockIndex: h(),
+      delta: K([
+        i({ text: s() }),
+        i({ toolUse: i({ input: s() }) }),
+        i({ reasoningContent: i({ text: s() }) }),
+        i({ reasoningContent: i({ signature: s() }) }),
+        i({ reasoningContent: i({ data: s() }) }),
+      ]).nullish(),
+    }).nullish(),
+    contentBlockStart: i({
+      contentBlockIndex: h(),
+      start: i({ toolUse: ot.nullish() }).nullish(),
+    }).nullish(),
+    contentBlockStop: i({ contentBlockIndex: h() }).nullish(),
+    internalServerException: ee(s(), z()).nullish(),
+    messageStop: i({ additionalModelResponseFields: nt.nullish(), stopReason: tt }).nullish(),
+    metadata: i({
+      trace: z().nullish(),
+      usage: i({
+        cacheReadInputTokens: h().nullish(),
+        cacheWriteInputTokens: h().nullish(),
+        inputTokens: h(),
+        outputTokens: h(),
+      }).nullish(),
+    }).nullish(),
+    modelStreamErrorException: ee(s(), z()).nullish(),
+    throttlingException: ee(s(), z()).nullish(),
+    validationException: ee(s(), z()).nullish(),
+  }),
+  Zn = i({ signature: s().optional(), redactedData: s().optional() }),
+  Yn = i({
+    dimensions: K([x(1024), x(512), x(256)]).optional(),
+    normalize: W().optional(),
+    embeddingDimension: K([x(256), x(384), x(1024), x(3072)]).optional(),
+    embeddingPurpose: O([
+      "GENERIC_INDEX",
+      "TEXT_RETRIEVAL",
+      "IMAGE_RETRIEVAL",
+      "VIDEO_RETRIEVAL",
+      "DOCUMENT_RETRIEVAL",
+      "AUDIO_RETRIEVAL",
+      "GENERIC_RETRIEVAL",
+      "CLASSIFICATION",
+      "CLUSTERING",
+    ]).optional(),
+    inputType: O(["search_document", "search_query", "classification", "clustering"]).optional(),
+    truncate: O(["NONE", "START", "END"]).optional(),
+    outputDimension: K([x(256), x(512), x(1024), x(1536)]).optional(),
+  }),
+  eo = class {
+    constructor(e, t) {
+      ((this.modelId = e),
+        (this.config = t),
+        (this.specificationVersion = "v3"),
+        (this.provider = "amazon-bedrock"),
+        (this.maxEmbeddingsPerCall = 1),
+        (this.supportsParallelCalls = !0));
+    }
+    getUrl(e) {
+      const t = encodeURIComponent(e);
+      return `${this.config.baseUrl()}/model/${t}/invoke`;
+    }
+    async doEmbed({ values: e, headers: t, abortSignal: n, providerOptions: a }) {
+      var l, o, r, c, u, g;
+      if (e.length > this.maxEmbeddingsPerCall)
+        throw new it({
+          provider: this.provider,
+          modelId: this.modelId,
+          maxEmbeddingsPerCall: this.maxEmbeddingsPerCall,
+          values: e,
+        });
+      const _ =
+          (l = await fe({ provider: "bedrock", providerOptions: a, schema: Yn })) != null ? l : {},
+        f = this.modelId.startsWith("amazon.nova-") && this.modelId.includes("embed"),
+        m = this.modelId.startsWith("cohere.embed-"),
+        d = f
+          ? {
+              taskType: "SINGLE_EMBEDDING",
+              singleEmbeddingParams: {
+                embeddingPurpose: (o = _.embeddingPurpose) != null ? o : "GENERIC_INDEX",
+                embeddingDimension: (r = _.embeddingDimension) != null ? r : 1024,
+                text: { truncationMode: (c = _.truncate) != null ? c : "END", value: e[0] },
+              },
+            }
+          : m
+            ? {
+                input_type: (u = _.inputType) != null ? u : "search_query",
+                texts: [e[0]],
+                truncate: _.truncate,
+                output_dimension: _.outputDimension,
+              }
+            : { inputText: e[0], dimensions: _.dimensions, normalize: _.normalize },
+        v = this.getUrl(this.modelId),
+        { value: p } = await me({
+          url: v,
+          headers: await oe(ne(await oe(this.config.headers), t)),
+          body: d,
+          failedResponseHandler: re({
+            errorSchema: ge,
+            errorToMessage: (S) => `${S.type}: ${S.message}`,
+          }),
+          successfulResponseHandler: be(to),
+          fetch: this.config.fetch,
+          abortSignal: n,
+        });
+      let D;
+      if ("embedding" in p) D = p.embedding;
+      else if (Array.isArray(p.embeddings)) {
+        const S = p.embeddings[0];
+        typeof S == "object" && S !== null && "embeddingType" in S ? (D = S.embedding) : (D = S);
+      } else D = p.embeddings.float[0];
+      const C =
+        "inputTextTokenCount" in p
+          ? p.inputTextTokenCount
+          : "inputTokenCount" in p
+            ? (g = p.inputTokenCount) != null
+              ? g
+              : 0
+            : NaN;
+      return { embeddings: [D], usage: { tokens: C }, warnings: [] };
+    }
+  },
+  to = K([
+    i({ embedding: T(h()), inputTextTokenCount: h() }),
+    i({
+      embeddings: T(i({ embeddingType: s(), embedding: T(h()) })),
+      inputTokenCount: h().optional(),
+    }),
+    i({ embeddings: T(T(h())) }),
+    i({ embeddings: i({ float: T(T(h())) }) }),
+  ]),
+  no = { "amazon.nova-canvas-v1:0": 5 },
+  oo = class {
+    constructor(e, t) {
+      ((this.modelId = e),
+        (this.config = t),
+        (this.specificationVersion = "v3"),
+        (this.provider = "amazon-bedrock"));
+    }
+    get maxImagesPerCall() {
+      var e;
+      return (e = no[this.modelId]) != null ? e : 1;
+    }
+    getUrl(e) {
+      const t = encodeURIComponent(e);
+      return `${this.config.baseUrl()}/model/${t}/invoke`;
+    }
+    async doGenerate({
+      prompt: e,
+      n: t,
+      size: n,
+      aspectRatio: a,
+      seed: l,
+      providerOptions: o,
+      headers: r,
+      abortSignal: c,
+      files: u,
+      mask: g,
+    }) {
+      var _, f, m, d, v, p, D, C, S, E, y, I, k, B, U, H;
+      const j = [],
+        [Z, V] = n ? n.split("x").map(Number) : [],
+        q = u != null && u.length > 0,
+        w = {
+          ...(Z ? { width: Z } : {}),
+          ...(V ? { height: V } : {}),
+          ...(l ? { seed: l } : {}),
+          ...(t ? { numberOfImages: t } : {}),
+          ...((_ = o?.bedrock) != null && _.quality ? { quality: o.bedrock.quality } : {}),
+          ...((f = o?.bedrock) != null && f.cfgScale ? { cfgScale: o.bedrock.cfgScale } : {}),
+        };
+      let M;
+      if (q) {
+        const N = g?.type != null,
+          G = ((m = o?.bedrock) == null ? void 0 : m.maskPrompt) != null,
+          ce =
+            (v = (d = o?.bedrock) == null ? void 0 : d.taskType) != null
+              ? v
+              : N || G
+                ? "INPAINTING"
+                : "IMAGE_VARIATION",
+          de = xe(u[0]);
+        switch (ce) {
+          case "INPAINTING": {
+            const L = {
+              image: de,
+              ...(e ? { text: e } : {}),
+              ...((p = o?.bedrock) != null && p.negativeText
+                ? { negativeText: o.bedrock.negativeText }
+                : {}),
+            };
+            (N ? (L.maskImage = xe(g)) : G && (L.maskPrompt = o.bedrock.maskPrompt),
+              (M = { taskType: "INPAINTING", inPaintingParams: L, imageGenerationConfig: w }));
+            break;
+          }
+          case "OUTPAINTING": {
+            const L = {
+              image: de,
+              ...(e ? { text: e } : {}),
+              ...((D = o?.bedrock) != null && D.negativeText
+                ? { negativeText: o.bedrock.negativeText }
+                : {}),
+              ...((C = o?.bedrock) != null && C.outPaintingMode
+                ? { outPaintingMode: o.bedrock.outPaintingMode }
+                : {}),
+            };
+            (N ? (L.maskImage = xe(g)) : G && (L.maskPrompt = o.bedrock.maskPrompt),
+              (M = { taskType: "OUTPAINTING", outPaintingParams: L, imageGenerationConfig: w }));
+            break;
+          }
+          case "BACKGROUND_REMOVAL": {
+            M = { taskType: "BACKGROUND_REMOVAL", backgroundRemovalParams: { image: de } };
+            break;
+          }
+          case "IMAGE_VARIATION": {
+            M = {
+              taskType: "IMAGE_VARIATION",
+              imageVariationParams: {
+                images: u.map((Ie) => xe(Ie)),
+                ...(e ? { text: e } : {}),
+                ...((S = o?.bedrock) != null && S.negativeText
+                  ? { negativeText: o.bedrock.negativeText }
+                  : {}),
+                ...(((E = o?.bedrock) == null ? void 0 : E.similarityStrength) != null
+                  ? { similarityStrength: o.bedrock.similarityStrength }
+                  : {}),
+              },
+              imageGenerationConfig: w,
+            };
+            break;
+          }
+          default:
+            throw new Error(`Unsupported task type: ${ce}`);
+        }
+      } else
+        M = {
+          taskType: "TEXT_IMAGE",
+          textToImageParams: {
+            text: e,
+            ...((y = o?.bedrock) != null && y.negativeText
+              ? { negativeText: o.bedrock.negativeText }
+              : {}),
+            ...((I = o?.bedrock) != null && I.style ? { style: o.bedrock.style } : {}),
+          },
+          imageGenerationConfig: w,
+        };
+      a != null &&
+        j.push({
+          type: "unsupported",
+          feature: "aspectRatio",
+          details: "This model does not support aspect ratio. Use `size` instead.",
+        });
+      const $ =
+          (U =
+            (B = (k = this.config._internal) == null ? void 0 : k.currentDate) == null
+              ? void 0
+              : B.call(k)) != null
+            ? U
+            : new Date(),
+        { value: b, responseHeaders: A } = await me({
+          url: this.getUrl(this.modelId),
+          headers: await oe(ne(await oe(this.config.headers), r)),
+          body: M,
+          failedResponseHandler: re({
+            errorSchema: ge,
+            errorToMessage: (N) => `${N.type}: ${N.message}`,
+          }),
+          successfulResponseHandler: be(ao),
+          abortSignal: c,
+          fetch: this.config.fetch,
+        });
+      if (b.status === "Request Moderated") {
+        const N = (H = b.details) == null ? void 0 : H["Moderation Reasons"],
+          G = Array.isArray(N) ? N : ["Unknown"];
+        throw new Error(`Amazon Bedrock request was moderated: ${G.join(", ")}`);
+      }
+      if (!b.images || b.images.length === 0)
+        throw new Error(
+          "Amazon Bedrock returned no images. " + (b.status ? `Status: ${b.status}` : "")
+        );
+      return {
+        images: b.images,
+        warnings: j,
+        response: { timestamp: $, modelId: this.modelId, headers: A },
+      };
+    }
+  };
+function xe(e) {
+  if (e.type === "url")
+    throw new Error(
+      "URL-based images are not supported for Amazon Bedrock image editing. Please provide the image data directly."
+    );
+  return e.data instanceof Uint8Array ? dt(e.data) : e.data;
+}
+var ao = i({
+    images: T(s()).optional(),
+    id: s().optional(),
+    status: s().optional(),
+    result: z().optional(),
+    progress: z().optional(),
+    details: ee(s(), z()).optional(),
+    preview: z().optional(),
+  }),
+  De = "4.0.49";
+function so(e, t = globalThis.fetch) {
+  return async (n, a) => {
+    var l, o;
+    const r = n instanceof Request ? n : void 0,
+      c = ne(ye(r?.headers), ye(a?.headers)),
+      u = Ee(c, `ai-sdk/amazon-bedrock/${De}`, Je());
+    let g = (l = a?.body) != null ? l : void 0;
+    if (g === void 0 && r && r.body !== null)
+      try {
+        g = await r.clone().text();
+      } catch {}
+    const _ = (o = a?.method) != null ? o : r?.method;
+    if (_?.toUpperCase() !== "POST" || !g) return t(n, { ...a, headers: u });
+    const f = typeof n == "string" ? n : n instanceof URL ? n.href : n.url,
+      m = io(g),
+      d = await e(),
+      p = await new Mn({
+        url: f,
+        method: "POST",
+        headers: Object.entries(u),
+        body: m,
+        region: d.region,
+        accessKeyId: d.accessKeyId,
+        secretAccessKey: d.secretAccessKey,
+        sessionToken: d.sessionToken,
+        service: "bedrock",
+      }).sign(),
+      D = ye(p.headers),
+      C = ne(u, D);
+    return t(n, { ...a, body: m, headers: C });
+  };
+}
+function io(e) {
+  return typeof e == "string"
+    ? e
+    : e instanceof Uint8Array
+      ? new TextDecoder().decode(e)
+      : e instanceof ArrayBuffer
+        ? new TextDecoder().decode(new Uint8Array(e))
+        : JSON.stringify(e);
+}
+function ro(e, t = globalThis.fetch) {
+  return async (n, a) => {
+    const l = ye(a?.headers),
+      o = Ee(l, `ai-sdk/amazon-bedrock/${De}`, Je()),
+      r = ne(o, { Authorization: `Bearer ${e}` });
+    return t(n, { ...a, headers: r });
+  };
+}
+var lo = R(() =>
+    F(i({ results: T(i({ index: h(), relevanceScore: h() })), nextToken: s().optional() }))
+  ),
+  co = R(() =>
+    F(i({ nextToken: s().optional(), additionalModelRequestFields: ee(s(), Xe()).optional() }))
+  ),
+  uo = class {
+    constructor(e, t) {
+      ((this.modelId = e),
+        (this.config = t),
+        (this.specificationVersion = "v3"),
+        (this.provider = "amazon-bedrock"));
+    }
+    async doRerank({
+      documents: e,
+      headers: t,
+      query: n,
+      topN: a,
+      abortSignal: l,
+      providerOptions: o,
+    }) {
+      const r = await fe({ provider: "bedrock", providerOptions: o, schema: co }),
+        {
+          value: c,
+          responseHeaders: u,
+          rawValue: g,
+        } = await me({
+          url: `${this.config.baseUrl()}/rerank`,
+          headers: await oe(ne(await oe(this.config.headers), t)),
+          body: {
+            nextToken: r?.nextToken,
+            queries: [{ textQuery: { text: n }, type: "TEXT" }],
+            rerankingConfiguration: {
+              bedrockRerankingConfiguration: {
+                modelConfiguration: {
+                  modelArn: `arn:aws:bedrock:${this.config.region}::foundation-model/${this.modelId}`,
+                  additionalModelRequestFields: r?.additionalModelRequestFields,
+                },
+                numberOfResults: a,
+              },
+              type: "BEDROCK_RERANKING_MODEL",
+            },
+            sources: e.values.map((_) => ({
+              type: "INLINE",
+              inlineDocumentSource:
+                e.type === "text"
+                  ? { type: "TEXT", textDocument: { text: _ } }
+                  : { type: "JSON", jsonDocument: _ },
+            })),
+          },
+          failedResponseHandler: re({
+            errorSchema: ge,
+            errorToMessage: (_) => `${_.type}: ${_.message}`,
+          }),
+          successfulResponseHandler: be(lo),
+          fetch: this.config.fetch,
+          abortSignal: l,
+        });
+      return { ranking: c.results, response: { headers: u, body: g } };
+    }
+  };
+function po(e = {}) {
+  const t = Fe({ settingValue: e.apiKey, environmentVariableName: "AWS_BEARER_TOKEN_BEDROCK" }),
+    n = t && t.trim().length > 0 ? t.trim() : void 0,
+    a = n
+      ? ro(n, e.fetch)
+      : so(async () => {
+          const m = ae({
+            settingValue: e.region,
+            settingName: "region",
+            environmentVariableName: "AWS_REGION",
+            description: "AWS region",
+          });
+          if (e.credentialProvider)
+            try {
+              return { ...(await e.credentialProvider()), region: m };
+            } catch (d) {
+              const v = d instanceof Error ? d.message : String(d);
+              throw new Error(
+                `AWS credential provider failed: ${v}. Please ensure your credential provider returns valid AWS credentials with accessKeyId and secretAccessKey properties.`
+              );
+            }
+          try {
+            return {
+              region: m,
+              accessKeyId: ae({
+                settingValue: e.accessKeyId,
+                settingName: "accessKeyId",
+                environmentVariableName: "AWS_ACCESS_KEY_ID",
+                description: "AWS access key ID",
+              }),
+              secretAccessKey: ae({
+                settingValue: e.secretAccessKey,
+                settingName: "secretAccessKey",
+                environmentVariableName: "AWS_SECRET_ACCESS_KEY",
+                description: "AWS secret access key",
+              }),
+              sessionToken: Fe({
+                settingValue: e.sessionToken,
+                environmentVariableName: "AWS_SESSION_TOKEN",
+              }),
+            };
+          } catch (d) {
+            const v = d instanceof Error ? d.message : String(d);
+            throw v.includes("AWS_ACCESS_KEY_ID") || v.includes("accessKeyId")
+              ? new Error(`AWS SigV4 authentication requires AWS credentials. Please provide either:
 1. Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables
 2. Provide accessKeyId and secretAccessKey in options
 3. Use a credentialProvider function
 4. Use API key authentication with AWS_BEARER_TOKEN_BEDROCK or apiKey option
-Original error: ${v}`):v.includes("AWS_SECRET_ACCESS_KEY")||v.includes("secretAccessKey")?new Error(`AWS SigV4 authentication requires both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Please ensure both credentials are provided.
-Original error: ${v}`):d}},e.fetch),l=()=>{var m;const d=(m=e.headers)!=null?m:{};return Ee(d,`ai-sdk/amazon-bedrock/${De}`)},o=()=>{var m,d;return(d=Ue((m=e.baseURL)!=null?m:`https://bedrock-runtime.${ae({settingValue:e.region,settingName:"region",environmentVariableName:"AWS_REGION",description:"AWS region"})}.amazonaws.com`))!=null?d:"https://bedrock-runtime.us-east-1.amazonaws.com"},r=()=>{var m,d;return(d=Ue((m=e.baseURL)!=null?m:`https://bedrock-agent-runtime.${ae({settingValue:e.region,settingName:"region",environmentVariableName:"AWS_REGION",description:"AWS region"})}.amazonaws.com`))!=null?d:"https://bedrock-agent-runtime.us-west-2.amazonaws.com"},c=m=>new Gn(m,{baseUrl:o,headers:l,fetch:a,generateId:st}),u=function(m){if(new.target)throw new Error("The Amazon Bedrock model function cannot be called with the new keyword.");return c(m)},g=m=>new eo(m,{baseUrl:o,headers:l,fetch:a}),_=m=>new oo(m,{baseUrl:o,headers:l,fetch:a}),f=m=>new uo(m,{baseUrl:r,region:ae({settingValue:e.region,settingName:"region",environmentVariableName:"AWS_REGION",description:"AWS region"}),headers:l,fetch:a});return u.specificationVersion="v3",u.languageModel=c,u.embedding=g,u.embeddingModel=g,u.textEmbedding=g,u.textEmbeddingModel=g,u.image=_,u.imageModel=_,u.reranking=f,u.rerankingModel=f,u.tools=Qe,u}var yo=po();export{De as VERSION,yo as bedrock,po as createAmazonBedrock};
+Original error: ${v}`)
+              : v.includes("AWS_SECRET_ACCESS_KEY") || v.includes("secretAccessKey")
+                ? new Error(`AWS SigV4 authentication requires both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Please ensure both credentials are provided.
+Original error: ${v}`)
+                : d;
+          }
+        }, e.fetch),
+    l = () => {
+      var m;
+      const d = (m = e.headers) != null ? m : {};
+      return Ee(d, `ai-sdk/amazon-bedrock/${De}`);
+    },
+    o = () => {
+      var m, d;
+      return (d = Ue(
+        (m = e.baseURL) != null
+          ? m
+          : `https://bedrock-runtime.${ae({ settingValue: e.region, settingName: "region", environmentVariableName: "AWS_REGION", description: "AWS region" })}.amazonaws.com`
+      )) != null
+        ? d
+        : "https://bedrock-runtime.us-east-1.amazonaws.com";
+    },
+    r = () => {
+      var m, d;
+      return (d = Ue(
+        (m = e.baseURL) != null
+          ? m
+          : `https://bedrock-agent-runtime.${ae({ settingValue: e.region, settingName: "region", environmentVariableName: "AWS_REGION", description: "AWS region" })}.amazonaws.com`
+      )) != null
+        ? d
+        : "https://bedrock-agent-runtime.us-west-2.amazonaws.com";
+    },
+    c = (m) => new Gn(m, { baseUrl: o, headers: l, fetch: a, generateId: st }),
+    u = function (m) {
+      if (new.target)
+        throw new Error("The Amazon Bedrock model function cannot be called with the new keyword.");
+      return c(m);
+    },
+    g = (m) => new eo(m, { baseUrl: o, headers: l, fetch: a }),
+    _ = (m) => new oo(m, { baseUrl: o, headers: l, fetch: a }),
+    f = (m) =>
+      new uo(m, {
+        baseUrl: r,
+        region: ae({
+          settingValue: e.region,
+          settingName: "region",
+          environmentVariableName: "AWS_REGION",
+          description: "AWS region",
+        }),
+        headers: l,
+        fetch: a,
+      });
+  return (
+    (u.specificationVersion = "v3"),
+    (u.languageModel = c),
+    (u.embedding = g),
+    (u.embeddingModel = g),
+    (u.textEmbedding = g),
+    (u.textEmbeddingModel = g),
+    (u.image = _),
+    (u.imageModel = _),
+    (u.reranking = f),
+    (u.rerankingModel = f),
+    (u.tools = Qe),
+    u
+  );
+}
+var yo = po();
+export { De as VERSION, yo as bedrock, po as createAmazonBedrock };

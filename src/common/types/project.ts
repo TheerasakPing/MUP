@@ -117,7 +117,6 @@ export interface ProjectsConfig {
   iconThemeConfig?: IconThemeConfig;
 }
 
-
 export interface CustomModelConfig {
   maxInputTokens?: number;
   maxOutputTokens?: number;

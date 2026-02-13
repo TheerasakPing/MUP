@@ -11,10 +11,9 @@ exports.parseDebugUpdater = parseDebugUpdater;
  * Everything else (including undefined, "0", "false", "FALSE") as false
  */
 function parseBoolEnv(value) {
-    if (!value)
-        return false;
-    const normalized = value.toLowerCase();
-    return normalized === "1" || normalized === "true" || normalized === "yes";
+  if (!value) return false;
+  const normalized = value.toLowerCase();
+  return normalized === "1" || normalized === "true" || normalized === "yes";
 }
 /**
  * Parse DEBUG_UPDATER environment variable
@@ -27,13 +26,12 @@ function parseBoolEnv(value) {
  * - undefined → { enabled: false }
  */
 function parseDebugUpdater(value) {
-    if (!value)
-        return { enabled: false };
-    const normalized = value.toLowerCase();
-    if (normalized === "1" || normalized === "true" || normalized === "yes") {
-        return { enabled: true };
-    }
-    // Not a bool, treat as version string
-    return { enabled: true, fakeVersion: value };
+  if (!value) return { enabled: false };
+  const normalized = value.toLowerCase();
+  if (normalized === "1" || normalized === "true" || normalized === "yes") {
+    return { enabled: true };
+  }
+  // Not a bool, treat as version string
+  return { enabled: true, fakeVersion: value };
 }
 //# sourceMappingURL=env.js.map

@@ -15,9 +15,9 @@ exports.parseGitStatusScriptOutput = parseGitStatusScriptOutput;
  *                  If not provided or not an origin/ ref, auto-detects.
  */
 function generateGitStatusScript(baseRef) {
-    // Extract branch name if it's an origin/ ref, otherwise empty for auto-detect
-    const preferredBranch = baseRef?.startsWith("origin/") ? baseRef.replace(/^origin\//, "") : "";
-    return `
+  // Extract branch name if it's an origin/ ref, otherwise empty for auto-detect
+  const preferredBranch = baseRef?.startsWith("origin/") ? baseRef.replace(/^origin\//, "") : "";
+  return `
 # Determine primary branch to compare against
 PRIMARY_BRANCH=""
 PREFERRED_BRANCH="${preferredBranch}"
@@ -115,40 +115,40 @@ echo "$OUTGOING_STATS $INCOMING_STATS"
  */
 exports.GIT_STATUS_SCRIPT = generateGitStatusScript();
 function parseGitStatusScriptOutput(output) {
-    // Split by section markers using regex to get content between markers
-    const headBranchRegex = /---HEAD_BRANCH---\s*([\s\S]*?)---PRIMARY---/;
-    const primaryRegex = /---PRIMARY---\s*([\s\S]*?)---AHEAD_BEHIND---/;
-    const aheadBehindRegex = /---AHEAD_BEHIND---\s*(\d+)\s+(\d+)/;
-    const dirtyRegex = /---DIRTY---\s*(\d+)/;
-    const lineDeltaRegex = /---LINE_DELTA---\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/;
-    const headBranchMatch = headBranchRegex.exec(output);
-    const primaryMatch = primaryRegex.exec(output);
-    const aheadBehindMatch = aheadBehindRegex.exec(output);
-    const dirtyMatch = dirtyRegex.exec(output);
-    const lineDeltaMatch = lineDeltaRegex.exec(output);
-    if (!primaryMatch || !aheadBehindMatch || !dirtyMatch) {
-        return null;
-    }
-    const ahead = parseInt(aheadBehindMatch[1], 10);
-    const behind = parseInt(aheadBehindMatch[2], 10);
-    if (Number.isNaN(ahead) || Number.isNaN(behind)) {
-        return null;
-    }
-    const outgoingAdditions = lineDeltaMatch ? parseInt(lineDeltaMatch[1], 10) : 0;
-    const outgoingDeletions = lineDeltaMatch ? parseInt(lineDeltaMatch[2], 10) : 0;
-    const incomingAdditions = lineDeltaMatch ? parseInt(lineDeltaMatch[3], 10) : 0;
-    const incomingDeletions = lineDeltaMatch ? parseInt(lineDeltaMatch[4], 10) : 0;
-    return {
-        headBranch: headBranchMatch ? headBranchMatch[1].trim() : "",
-        primaryBranch: primaryMatch[1].trim(),
-        ahead,
-        behind,
-        dirtyCount: parseInt(dirtyMatch[1], 10),
-        outgoingAdditions,
-        outgoingDeletions,
-        incomingAdditions,
-        incomingDeletions,
-    };
+  // Split by section markers using regex to get content between markers
+  const headBranchRegex = /---HEAD_BRANCH---\s*([\s\S]*?)---PRIMARY---/;
+  const primaryRegex = /---PRIMARY---\s*([\s\S]*?)---AHEAD_BEHIND---/;
+  const aheadBehindRegex = /---AHEAD_BEHIND---\s*(\d+)\s+(\d+)/;
+  const dirtyRegex = /---DIRTY---\s*(\d+)/;
+  const lineDeltaRegex = /---LINE_DELTA---\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/;
+  const headBranchMatch = headBranchRegex.exec(output);
+  const primaryMatch = primaryRegex.exec(output);
+  const aheadBehindMatch = aheadBehindRegex.exec(output);
+  const dirtyMatch = dirtyRegex.exec(output);
+  const lineDeltaMatch = lineDeltaRegex.exec(output);
+  if (!primaryMatch || !aheadBehindMatch || !dirtyMatch) {
+    return null;
+  }
+  const ahead = parseInt(aheadBehindMatch[1], 10);
+  const behind = parseInt(aheadBehindMatch[2], 10);
+  if (Number.isNaN(ahead) || Number.isNaN(behind)) {
+    return null;
+  }
+  const outgoingAdditions = lineDeltaMatch ? parseInt(lineDeltaMatch[1], 10) : 0;
+  const outgoingDeletions = lineDeltaMatch ? parseInt(lineDeltaMatch[2], 10) : 0;
+  const incomingAdditions = lineDeltaMatch ? parseInt(lineDeltaMatch[3], 10) : 0;
+  const incomingDeletions = lineDeltaMatch ? parseInt(lineDeltaMatch[4], 10) : 0;
+  return {
+    headBranch: headBranchMatch ? headBranchMatch[1].trim() : "",
+    primaryBranch: primaryMatch[1].trim(),
+    ahead,
+    behind,
+    dirtyCount: parseInt(dirtyMatch[1], 10),
+    outgoingAdditions,
+    outgoingDeletions,
+    incomingAdditions,
+    incomingDeletions,
+  };
 }
 /**
  * Smart git fetch script that minimizes lock contention.

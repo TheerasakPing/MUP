@@ -11,21 +11,21 @@ exports.getTitleBarOptions = getTitleBarOptions;
  * space for native window controls (traffic lights on mac, overlay on win/linux).
  */
 function getTitleBarOptions(platform = process.platform) {
-    if (platform === "darwin") {
-        return {
-            titleBarStyle: "hiddenInset",
-            // trafficLightPosition can be added here if we need finer alignment
-        };
-    }
-    // Windows and Linux: use titleBarOverlay to keep native window controls
+  if (platform === "darwin") {
     return {
-        titleBarStyle: "hidden",
-        titleBarOverlay: {
-            // Match the sidebar background color (--color-sidebar from globals.css)
-            color: "#171717",
-            symbolColor: "#a3a3a3",
-            height: 32, // Match our header height (h-8 = 32px)
-        },
+      titleBarStyle: "hiddenInset",
+      // trafficLightPosition can be added here if we need finer alignment
     };
+  }
+  // Windows and Linux: use titleBarOverlay to keep native window controls
+  return {
+    titleBarStyle: "hidden",
+    titleBarOverlay: {
+      // Match the sidebar background color (--color-sidebar from globals.css)
+      color: "#171717",
+      symbolColor: "#a3a3a3",
+      height: 32, // Match our header height (h-8 = 32px)
+    },
+  };
 }
 //# sourceMappingURL=titleBarOptions.js.map

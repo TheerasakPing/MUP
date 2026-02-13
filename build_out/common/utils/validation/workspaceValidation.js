@@ -8,21 +8,22 @@ exports.validateWorkspaceName = validateWorkspaceName;
  * - Pattern: [a-z0-9_-]{1,64}
  */
 function validateWorkspaceName(name) {
-    if (!name || name.length === 0) {
-        return { valid: false, error: "Workspace name cannot be empty" };
-    }
-    if (name.length > 64) {
-        return { valid: false, error: "Workspace name cannot exceed 64 characters" };
-    }
-    const validPattern = /^[a-z0-9_-]+$/;
-    if (!validPattern.test(name)) {
-        return {
-            valid: false,
-            // Workspace names become folder names, git branches, and session directories,
-            // so they need to be filesystem-safe across platforms.
-            error: "Workspace names can only contain lowercase letters, numbers, hyphens, and underscores",
-        };
-    }
-    return { valid: true };
+  if (!name || name.length === 0) {
+    return { valid: false, error: "Workspace name cannot be empty" };
+  }
+  if (name.length > 64) {
+    return { valid: false, error: "Workspace name cannot exceed 64 characters" };
+  }
+  const validPattern = /^[a-z0-9_-]+$/;
+  if (!validPattern.test(name)) {
+    return {
+      valid: false,
+      // Workspace names become folder names, git branches, and session directories,
+      // so they need to be filesystem-safe across platforms.
+      error:
+        "Workspace names can only contain lowercase letters, numbers, hyphens, and underscores",
+    };
+  }
+  return { valid: true };
 }
 //# sourceMappingURL=workspaceValidation.js.map

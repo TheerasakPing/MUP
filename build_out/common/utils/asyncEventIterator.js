@@ -28,42 +28,38 @@ exports.createAsyncEventQueue = createAsyncEventQueue;
  * ```
  */
 async function* asyncEventIterator(subscribe, unsubscribe, options) {
-    const queue = [];
-    let resolveNext = null;
-    let ended = false;
-    const handler = (value) => {
-        if (ended)
-            return;
-        if (resolveNext) {
-            const resolve = resolveNext;
-            resolveNext = null;
-            resolve(value);
-        }
-        else {
-            queue.push(value);
-        }
-    };
-    subscribe(handler);
-    try {
-        // Yield initial value if provided
-        if (options?.initialValue !== undefined) {
-            yield options.initialValue;
-        }
-        while (!ended) {
-            if (queue.length > 0) {
-                yield queue.shift();
-            }
-            else {
-                yield await new Promise((resolve) => {
-                    resolveNext = resolve;
-                });
-            }
-        }
+  const queue = [];
+  let resolveNext = null;
+  let ended = false;
+  const handler = (value) => {
+    if (ended) return;
+    if (resolveNext) {
+      const resolve = resolveNext;
+      resolveNext = null;
+      resolve(value);
+    } else {
+      queue.push(value);
     }
-    finally {
-        ended = true;
-        unsubscribe(handler);
+  };
+  subscribe(handler);
+  try {
+    // Yield initial value if provided
+    if (options?.initialValue !== undefined) {
+      yield options.initialValue;
     }
+    while (!ended) {
+      if (queue.length > 0) {
+        yield queue.shift();
+      } else {
+        yield await new Promise((resolve) => {
+          resolveNext = resolve;
+        });
+      }
+    }
+  } finally {
+    ended = true;
+    unsubscribe(handler);
+  }
 }
 /**
  * Create an async event queue that can be pushed to from event handlers.
@@ -88,46 +84,44 @@ async function* asyncEventIterator(subscribe, unsubscribe, options) {
  * ```
  */
 function createAsyncEventQueue() {
-    const queue = [];
-    let resolveNext = null;
-    let ended = false;
-    const push = (value) => {
-        if (ended)
-            return;
-        if (resolveNext) {
-            const resolve = resolveNext;
-            resolveNext = null;
-            resolve(value);
-        }
-        else {
-            queue.push(value);
-        }
-    };
-    async function* iterate() {
-        while (!ended) {
-            if (queue.length > 0) {
-                yield queue.shift();
-                continue;
-            }
-            const value = await new Promise((resolve) => {
-                resolveNext = resolve;
-            });
-            // end() may have been called while we were waiting. Ensure we don't yield
-            // a sentinel/invalid value back to consumers.
-            if (ended) {
-                return;
-            }
-            yield value;
-        }
+  const queue = [];
+  let resolveNext = null;
+  let ended = false;
+  const push = (value) => {
+    if (ended) return;
+    if (resolveNext) {
+      const resolve = resolveNext;
+      resolveNext = null;
+      resolve(value);
+    } else {
+      queue.push(value);
     }
-    const end = () => {
-        ended = true;
-        // Wake up the iterator if it's waiting
-        if (resolveNext) {
-            // This will never be yielded since ended=true stops the loop
-            resolveNext(undefined);
-        }
-    };
-    return { push, iterate, end };
+  };
+  async function* iterate() {
+    while (!ended) {
+      if (queue.length > 0) {
+        yield queue.shift();
+        continue;
+      }
+      const value = await new Promise((resolve) => {
+        resolveNext = resolve;
+      });
+      // end() may have been called while we were waiting. Ensure we don't yield
+      // a sentinel/invalid value back to consumers.
+      if (ended) {
+        return;
+      }
+      yield value;
+    }
+  }
+  const end = () => {
+    ended = true;
+    // Wake up the iterator if it's waiting
+    if (resolveNext) {
+      // This will never be yielded since ended=true stops the loop
+      resolveNext(undefined);
+    }
+  };
+  return { push, iterate, end };
 }
 //# sourceMappingURL=asyncEventIterator.js.map

@@ -17,35 +17,38 @@ exports.sanitizeToolInputs = sanitizeToolInputs;
  * @returns New array with sanitized messages (original messages are not modified)
  */
 function sanitizeToolInputs(messages) {
-    return messages.map((msg) => {
-        // Only process assistant messages with tool parts
-        if (msg.role !== "assistant") {
-            return msg;
+  return messages.map((msg) => {
+    // Only process assistant messages with tool parts
+    if (msg.role !== "assistant") {
+      return msg;
+    }
+    // Check if any parts need sanitization
+    const needsSanitization = msg.parts.some(
+      (part) =>
+        part.type === "dynamic-tool" &&
+        (typeof part.input !== "object" || part.input === null || Array.isArray(part.input))
+    );
+    if (!needsSanitization) {
+      return msg;
+    }
+    // Create new message with sanitized parts
+    return {
+      ...msg,
+      parts: msg.parts.map((part) => {
+        if (part.type !== "dynamic-tool") {
+          return part;
         }
-        // Check if any parts need sanitization
-        const needsSanitization = msg.parts.some((part) => part.type === "dynamic-tool" &&
-            (typeof part.input !== "object" || part.input === null || Array.isArray(part.input)));
-        if (!needsSanitization) {
-            return msg;
+        // Sanitize the input if it's not a valid object
+        if (typeof part.input !== "object" || part.input === null || Array.isArray(part.input)) {
+          const sanitized = {
+            ...part,
+            input: {}, // Replace with empty object
+          };
+          return sanitized;
         }
-        // Create new message with sanitized parts
-        return {
-            ...msg,
-            parts: msg.parts.map((part) => {
-                if (part.type !== "dynamic-tool") {
-                    return part;
-                }
-                // Sanitize the input if it's not a valid object
-                if (typeof part.input !== "object" || part.input === null || Array.isArray(part.input)) {
-                    const sanitized = {
-                        ...part,
-                        input: {}, // Replace with empty object
-                    };
-                    return sanitized;
-                }
-                return part;
-            }),
-        };
-    });
+        return part;
+      }),
+    };
+  });
 }
 //# sourceMappingURL=sanitizeToolInput.js.map

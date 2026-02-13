@@ -446,12 +446,12 @@ export class AgentSession {
       const expectedPath = isInPlace
         ? metadata.projectPath
         : (() => {
-          const runtime = createRuntime(metadata.runtimeConfig, {
-            projectPath: metadata.projectPath,
-            workspaceName: metadata.name,
-          });
-          return runtime.getWorkspacePath(metadata.projectPath, metadata.name);
-        })();
+            const runtime = createRuntime(metadata.runtimeConfig, {
+              projectPath: metadata.projectPath,
+              workspaceName: metadata.name,
+            });
+            return runtime.getWorkspacePath(metadata.projectPath, metadata.name);
+          })();
       assert(
         expectedPath === normalizedWorkspacePath,
         `Existing metadata workspace path mismatch for ${this.workspaceId}: expected ${expectedPath}, got ${normalizedWorkspacePath}`
@@ -610,31 +610,31 @@ export class AgentSession {
         ? preservedEditFileParts
         : fileParts && fileParts.length > 0
           ? fileParts.map((part, index) => {
-            assert(
-              typeof part.url === "string",
-              `file part [${index}] must include url string content (got ${typeof part.url}): ${JSON.stringify(part).slice(0, 200)}`
-            );
-            assert(
-              part.url.startsWith("data:"),
-              `file part [${index}] url must be a data URL (got: ${part.url.slice(0, 50)}...)`
-            );
-            assert(
-              typeof part.mediaType === "string" && part.mediaType.trim().length > 0,
-              `file part [${index}] must include a mediaType (got ${typeof part.mediaType}): ${JSON.stringify(part).slice(0, 200)}`
-            );
-            if (part.filename !== undefined) {
               assert(
-                typeof part.filename === "string",
-                `file part [${index}] filename must be a string if present (got ${typeof part.filename}): ${JSON.stringify(part).slice(0, 200)}`
+                typeof part.url === "string",
+                `file part [${index}] must include url string content (got ${typeof part.url}): ${JSON.stringify(part).slice(0, 200)}`
               );
-            }
-            return {
-              type: "file" as const,
-              url: part.url,
-              mediaType: part.mediaType,
-              filename: part.filename,
-            };
-          })
+              assert(
+                part.url.startsWith("data:"),
+                `file part [${index}] url must be a data URL (got: ${part.url.slice(0, 50)}...)`
+              );
+              assert(
+                typeof part.mediaType === "string" && part.mediaType.trim().length > 0,
+                `file part [${index}] must include a mediaType (got ${typeof part.mediaType}): ${JSON.stringify(part).slice(0, 200)}`
+              );
+              if (part.filename !== undefined) {
+                assert(
+                  typeof part.filename === "string",
+                  `file part [${index}] filename must be a string if present (got ${typeof part.filename}): ${JSON.stringify(part).slice(0, 200)}`
+                );
+              }
+              return {
+                type: "file" as const,
+                url: part.url,
+                mediaType: part.mediaType,
+                filename: part.filename,
+              };
+            })
           : undefined;
 
     // toolPolicy is properly typed via Zod schema inference
@@ -669,10 +669,10 @@ export class AgentSession {
     const effectiveFileParts =
       preservedEditFileParts && preservedEditFileParts.length > 0
         ? preservedEditFileParts.map((part) => ({
-          url: part.url,
-          mediaType: part.mediaType,
-          filename: part.filename,
-        }))
+            url: part.url,
+            mediaType: part.mediaType,
+            filename: part.filename,
+          }))
         : fileParts;
 
     if (effectiveFileParts && effectiveFileParts.length > 0) {
@@ -1551,17 +1551,17 @@ export class AgentSession {
 
     const retryOptions: SendMessageOptions | undefined = context.options
       ? {
-        ...context.options,
-        additionalSystemInstructions: mergedAdditionalSystemInstructions,
-      }
+          ...context.options,
+          additionalSystemInstructions: mergedAdditionalSystemInstructions,
+        }
       : {
-        model: context.modelString,
-        agentId: WORKSPACE_DEFAULTS.agentId,
-        additionalSystemInstructions: mergedAdditionalSystemInstructions,
-        experiments: {
-          execSubagentHardRestart: true,
-        },
-      };
+          model: context.modelString,
+          agentId: WORKSPACE_DEFAULTS.agentId,
+          additionalSystemInstructions: mergedAdditionalSystemInstructions,
+          experiments: {
+            execSubagentHardRestart: true,
+          },
+        };
 
     this.streamStarting = true;
     let retryResult: Result<void, SendMessageError>;

@@ -1134,7 +1134,8 @@ export const router = (authToken?: string) => {
             }
             const prefix = body.trim().slice(0, 200);
             return Err(
-              `Mux Gateway balance request failed (HTTP ${response.status}): ${prefix || response.statusText
+              `Mux Gateway balance request failed (HTTP ${response.status}): ${
+                prefix || response.statusText
               }`
             );
           }
@@ -1511,10 +1512,10 @@ export const router = (authToken?: string) => {
 
           const configuredTransport = input.name
             ? (
-              await context.mcpConfigService.listServers(
-                projectPathProvided ? resolvedProjectPath : undefined
-              )
-            )[input.name]?.transport
+                await context.mcpConfigService.listServers(
+                  projectPathProvided ? resolvedProjectPath : undefined
+                )
+              )[input.name]?.transport
             : undefined;
 
           const transport =
@@ -1950,7 +1951,7 @@ export const router = (authToken?: string) => {
 
             const configuredTransport = input.name
               ? (await context.mcpConfigService.listServers(input.projectPath))[input.name]
-                ?.transport
+                  ?.transport
               : undefined;
 
             const transport =
@@ -2624,9 +2625,9 @@ export const router = (authToken?: string) => {
               : null;
             const messages = params.chatPath
               ? await readChatJsonlAllowMissing({
-                chatPath: params.chatPath,
-                logLabel: params.logLabel,
-              })
+                  chatPath: params.chatPath,
+                  logLabel: params.logLabel,
+                })
               : null;
 
             // If we only archived partial.json (e.g. interrupted stream), still allow viewing.
@@ -2673,8 +2674,8 @@ export const router = (authToken?: string) => {
               const metaResult = await context.aiService.getWorkspaceMetadata(taskId);
               const model =
                 metaResult.success &&
-                  typeof metaResult.data.taskModelString === "string" &&
-                  metaResult.data.taskModelString.trim().length > 0
+                typeof metaResult.data.taskModelString === "string" &&
+                metaResult.data.taskModelString.trim().length > 0
                   ? metaResult.data.taskModelString.trim()
                   : undefined;
               const thinkingLevel = metaResult.success
@@ -3350,10 +3351,10 @@ export const router = (authToken?: string) => {
         .handler(({ context, input }) => {
           const thinkingLevel =
             input.thinkingLevel === "off" ||
-              input.thinkingLevel === "low" ||
-              input.thinkingLevel === "medium" ||
-              input.thinkingLevel === "high" ||
-              input.thinkingLevel === "xhigh"
+            input.thinkingLevel === "low" ||
+            input.thinkingLevel === "medium" ||
+            input.thinkingLevel === "high" ||
+            input.thinkingLevel === "xhigh"
               ? input.thinkingLevel
               : undefined;
 
@@ -3818,15 +3819,11 @@ export const router = (authToken?: string) => {
       export: t
         .input(schemas.modelPresets.export.input)
         .output(schemas.modelPresets.export.output)
-        .handler(({ context, input }) =>
-          context.modelPresetsService.exportPresets(input.ids)
-        ),
+        .handler(({ context, input }) => context.modelPresetsService.exportPresets(input.ids)),
       import: t
         .input(schemas.modelPresets.import.input)
         .output(schemas.modelPresets.import.output)
-        .handler(({ context, input }) =>
-          context.modelPresetsService.importPresets(input.json)
-        ),
+        .handler(({ context, input }) => context.modelPresetsService.importPresets(input.json)),
     },
     modelHealth: {
       checkModel: t
@@ -3838,9 +3835,7 @@ export const router = (authToken?: string) => {
       checkAll: t
         .input(schemas.modelHealth.checkAll.input)
         .output(schemas.modelHealth.checkAll.output)
-        .handler(({ context, input }) =>
-          context.modelHealthService.checkAllModels(input.models)
-        ),
+        .handler(({ context, input }) => context.modelHealthService.checkAllModels(input.models)),
       getLastResults: t
         .input(schemas.modelHealth.getLastResults.input)
         .output(schemas.modelHealth.getLastResults.output)

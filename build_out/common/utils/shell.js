@@ -11,8 +11,7 @@ exports.shellQuote = shellQuote;
  * shellQuote("") // "''"
  */
 function shellQuote(value) {
-    if (value.length === 0)
-        return "''";
-    return "'" + value.replace(/'/g, "'\"'\"'") + "'";
+  if (value.length === 0) return "''";
+  return "'" + value.replace(/'/g, "'\"'\"'") + "'";
 }
 //# sourceMappingURL=shell.js.map

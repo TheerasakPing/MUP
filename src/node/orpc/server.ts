@@ -178,16 +178,19 @@ export async function createOrpcServer({
   // Serve icon theme files (SVG, PNG, etc.) from ~/.mux/icon-themes/
   {
     const iconThemesDir = context.iconThemeService.getIconThemesDir();
-    app.use("/icon-themes", express.static(iconThemesDir, {
-      maxAge: "1d",
-      immutable: true,
-      setHeaders: (res, filePath) => {
-        // Set correct Content-Type for SVGs
-        if (filePath.endsWith(".svg")) {
-          res.setHeader("Content-Type", "image/svg+xml");
-        }
-      },
-    }));
+    app.use(
+      "/icon-themes",
+      express.static(iconThemesDir, {
+        maxAge: "1d",
+        immutable: true,
+        setHeaders: (res, filePath) => {
+          // Set correct Content-Type for SVGs
+          if (filePath.endsWith(".svg")) {
+            res.setHeader("Content-Type", "image/svg+xml");
+          }
+        },
+      })
+    );
   }
 
   // Health check endpoint
@@ -668,13 +671,13 @@ export async function createOrpcServer({
       security: authToken ? [{ bearerAuth: [] }] : undefined,
       components: authToken
         ? {
-          securitySchemes: {
-            bearerAuth: {
-              type: "http",
-              scheme: "bearer",
+            securitySchemes: {
+              bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+              },
             },
-          },
-        }
+          }
         : undefined,
     });
     res.json(spec);

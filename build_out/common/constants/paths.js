@@ -24,18 +24,18 @@ const MUX_DIR_NAME = ".mux";
  * This ensures old scripts/tools referencing ~/.cmux continue working.
  */
 function migrateLegacyMuxHome() {
-    const oldPath = (0, path_1.join)((0, os_1.homedir)(), LEGACY_MUX_DIR_NAME);
-    const newPath = (0, path_1.join)((0, os_1.homedir)(), MUX_DIR_NAME);
-    // If .mux exists, we're done (already migrated or fresh install)
-    if ((0, fs_1.existsSync)(newPath)) {
-        return;
-    }
-    // If .cmux exists, move it and create symlink for backward compatibility
-    if ((0, fs_1.existsSync)(oldPath)) {
-        (0, fs_1.renameSync)(oldPath, newPath);
-        (0, fs_1.symlinkSync)(newPath, oldPath, "dir");
-    }
-    // If neither exists, nothing to do (will be created on first use)
+  const oldPath = (0, path_1.join)((0, os_1.homedir)(), LEGACY_MUX_DIR_NAME);
+  const newPath = (0, path_1.join)((0, os_1.homedir)(), MUX_DIR_NAME);
+  // If .mux exists, we're done (already migrated or fresh install)
+  if ((0, fs_1.existsSync)(newPath)) {
+    return;
+  }
+  // If .cmux exists, move it and create symlink for backward compatibility
+  if ((0, fs_1.existsSync)(oldPath)) {
+    (0, fs_1.renameSync)(oldPath, newPath);
+    (0, fs_1.symlinkSync)(newPath, oldPath, "dir");
+  }
+  // If neither exists, nothing to do (will be created on first use)
 }
 /**
  * Get the root directory for all mux configuration and data.
@@ -48,16 +48,16 @@ function migrateLegacyMuxHome() {
  * for organizational purposes. The process.env access is safe.
  */
 function getMuxHome() {
+  // eslint-disable-next-line no-restricted-syntax, no-restricted-globals
+  if (process.env.MUX_ROOT) {
     // eslint-disable-next-line no-restricted-syntax, no-restricted-globals
-    if (process.env.MUX_ROOT) {
-        // eslint-disable-next-line no-restricted-syntax, no-restricted-globals
-        return process.env.MUX_ROOT;
-    }
-    const baseName = MUX_DIR_NAME;
-    // Use -dev suffix only when explicitly in development mode
-    // eslint-disable-next-line no-restricted-syntax, no-restricted-globals
-    const suffix = process.env.NODE_ENV === "development" ? "-dev" : "";
-    return (0, path_1.join)((0, os_1.homedir)(), baseName + suffix);
+    return process.env.MUX_ROOT;
+  }
+  const baseName = MUX_DIR_NAME;
+  // Use -dev suffix only when explicitly in development mode
+  // eslint-disable-next-line no-restricted-syntax, no-restricted-globals
+  const suffix = process.env.NODE_ENV === "development" ? "-dev" : "";
+  return (0, path_1.join)((0, os_1.homedir)(), baseName + suffix);
 }
 /**
  * Get the directory where workspace git worktrees are stored.
@@ -66,8 +66,8 @@ function getMuxHome() {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxSrcDir(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "src");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "src");
 }
 /**
  * Get the directory where session chat histories are stored.
@@ -76,8 +76,8 @@ function getMuxSrcDir(rootDir) {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxSessionsDir(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "sessions");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "sessions");
 }
 /**
  * Get the directory where plan files are stored.
@@ -86,8 +86,8 @@ function getMuxSessionsDir(rootDir) {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxPlansDir(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "plans");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "plans");
 }
 /**
  * Get the main configuration file path.
@@ -95,8 +95,8 @@ function getMuxPlansDir(rootDir) {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxConfigFile(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "config.json");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "config.json");
 }
 /**
  * Get the providers configuration file path.
@@ -104,8 +104,8 @@ function getMuxConfigFile(rootDir) {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxProvidersFile(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "providers.jsonc");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "providers.jsonc");
 }
 /**
  * Get the secrets file path.
@@ -113,8 +113,8 @@ function getMuxProvidersFile(rootDir) {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxSecretsFile(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "secrets.json");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "secrets.json");
 }
 /**
  * Get the default directory for new projects created with bare names.
@@ -123,8 +123,8 @@ function getMuxSecretsFile(rootDir) {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxProjectsDir(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "projects");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "projects");
 }
 /**
  * Get the extension metadata file path (shared with VS Code extension).
@@ -132,7 +132,7 @@ function getMuxProjectsDir(rootDir) {
  * @param rootDir - Optional root directory (defaults to getMuxHome())
  */
 function getMuxExtensionMetadataPath(rootDir) {
-    const root = rootDir ?? getMuxHome();
-    return (0, path_1.join)(root, "extensionMetadata.json");
+  const root = rootDir ?? getMuxHome();
+  return (0, path_1.join)(root, "extensionMetadata.json");
 }
 //# sourceMappingURL=paths.js.map

@@ -401,7 +401,7 @@ async function archiveChildSessionArtifactsIntoParentSessionDir(params: {
 
         const model =
           typeof params.childTaskModelString === "string" &&
-            params.childTaskModelString.trim().length > 0
+          params.childTaskModelString.trim().length > 0
             ? params.childTaskModelString.trim()
             : undefined;
         const thinkingLevel = coerceThinkingLevel(params.childTaskThinkingLevel);
@@ -1540,40 +1540,40 @@ export class WorkspaceService extends EventEmitter {
       const wasStreaming = this.aiService.isStreaming(workspaceId);
       const streamStoppedEvent: Promise<"abort" | "end" | undefined> | undefined = wasStreaming
         ? new Promise((resolve) => {
-          const aiService = this.aiService;
-          const targetWorkspaceId = workspaceId;
-          const timeoutMs = 5000;
+            const aiService = this.aiService;
+            const targetWorkspaceId = workspaceId;
+            const timeoutMs = 5000;
 
-          let settled = false;
-          let timer: ReturnType<typeof setTimeout> | undefined;
+            let settled = false;
+            let timer: ReturnType<typeof setTimeout> | undefined;
 
-          const cleanup = (result: "abort" | "end" | undefined) => {
-            if (settled) return;
-            settled = true;
-            if (timer) {
-              clearTimeout(timer);
-              timer = undefined;
+            const cleanup = (result: "abort" | "end" | undefined) => {
+              if (settled) return;
+              settled = true;
+              if (timer) {
+                clearTimeout(timer);
+                timer = undefined;
+              }
+              aiService.off("stream-abort", onAbort);
+              aiService.off("stream-end", onEnd);
+              resolve(result);
+            };
+
+            function onAbort(data: StreamAbortEvent): void {
+              if (data.workspaceId !== targetWorkspaceId) return;
+              cleanup("abort");
             }
-            aiService.off("stream-abort", onAbort);
-            aiService.off("stream-end", onEnd);
-            resolve(result);
-          };
 
-          function onAbort(data: StreamAbortEvent): void {
-            if (data.workspaceId !== targetWorkspaceId) return;
-            cleanup("abort");
-          }
+            function onEnd(data: StreamEndEvent): void {
+              if (data.workspaceId !== targetWorkspaceId) return;
+              cleanup("end");
+            }
 
-          function onEnd(data: StreamEndEvent): void {
-            if (data.workspaceId !== targetWorkspaceId) return;
-            cleanup("end");
-          }
+            aiService.on("stream-abort", onAbort);
+            aiService.on("stream-end", onEnd);
 
-          aiService.on("stream-abort", onAbort);
-          aiService.on("stream-end", onEnd);
-
-          timer = setTimeout(() => cleanup(undefined), timeoutMs);
-        })
+            timer = setTimeout(() => cleanup(undefined), timeoutMs);
+          })
         : undefined;
 
       try {
@@ -2828,12 +2828,12 @@ export class WorkspaceService extends EventEmitter {
         Object.keys(resolvedExperiments).length === 0
           ? options
           : {
-            ...options,
-            experiments: {
-              ...(options.experiments ?? {}),
-              ...resolvedExperiments,
-            },
-          };
+              ...options,
+              experiments: {
+                ...(options.experiments ?? {}),
+                ...resolvedExperiments,
+              },
+            };
 
       const normalizedOptions = this.normalizeSendMessageAgentId(resolvedOptions);
 

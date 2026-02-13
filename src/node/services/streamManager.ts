@@ -277,8 +277,8 @@ interface WorkspaceStreamInfo {
   processingPromise: Promise<void>;
   // Soft-interrupt state: when pending, stream will end at next block boundary
   softInterrupt:
-  | { pending: false }
-  | { pending: true; abandonPartial: boolean; abortReason: StreamAbortReason };
+    | { pending: false }
+    | { pending: true; abandonPartial: boolean; abortReason: StreamAbortReason };
   // Temporary directory for tool outputs (auto-cleaned when stream ends)
   runtimeTempDir: string;
   // Runtime for temp directory cleanup

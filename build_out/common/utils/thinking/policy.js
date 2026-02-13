@@ -34,47 +34,49 @@ const thinking_1 = require("../../../common/types/thinking");
  * Does NOT match gpt-5-pro-mini (uses negative lookahead).
  */
 function getThinkingPolicyForModel(modelString) {
-    // Normalize to be robust to provider prefixes, whitespace, gateway wrappers, and version suffixes
-    const normalized = modelString.trim().toLowerCase();
-    const withoutPrefix = normalized.replace(/^[a-z0-9_-]+:\s*/, "");
-    // Many providers/proxies encode the upstream provider as a path segment:
-    //   mux-gateway:openai/gpt-5.2-pro -> openai/gpt-5.2-pro -> gpt-5.2-pro
-    const withoutProviderNamespace = withoutPrefix.replace(/^[a-z0-9_-]+\//, "");
-    // Claude Opus 4.6 supports 5 levels including xhigh (mapped to "max" effort)
-    if (withoutProviderNamespace.includes("opus-4-6")) {
-        return ["off", "low", "medium", "high", "xhigh"];
-    }
-    // GPT-5.1-Codex-Max supports 5 reasoning levels including xhigh (Extra High)
-    if (withoutProviderNamespace.startsWith("gpt-5.1-codex-max") ||
-        withoutProviderNamespace.startsWith("codex-max")) {
-        return ["off", "low", "medium", "high", "xhigh"];
-    }
-    // GPT-5.2-Codex and GPT-5.3-Codex support 5 reasoning levels including xhigh (Extra High)
-    if (/^gpt-5\.[23]-codex(?!-[a-z])/.test(withoutProviderNamespace)) {
-        return ["off", "low", "medium", "high", "xhigh"];
-    }
-    // gpt-5.2-pro supports medium, high, xhigh reasoning levels
-    if (/^gpt-5\.2-pro(?!-[a-z])/.test(withoutProviderNamespace)) {
-        return ["medium", "high", "xhigh"];
-    }
-    // gpt-5.2 supports 5 reasoning levels including xhigh (Extra High)
-    if (/^gpt-5\.2(?!-[a-z])/.test(withoutProviderNamespace)) {
-        return ["off", "low", "medium", "high", "xhigh"];
-    }
-    // gpt-5-pro (legacy) only supports high
-    if (/^gpt-5-pro(?!-[a-z])/.test(withoutProviderNamespace)) {
-        return ["high"];
-    }
-    // Gemini 3 Flash supports 4 levels: off (minimal), low, medium, high
-    if (withoutProviderNamespace.includes("gemini-3-flash")) {
-        return ["off", "low", "medium", "high"];
-    }
-    // Gemini 3 Pro only supports "low" and "high" reasoning levels
-    if (withoutProviderNamespace.includes("gemini-3")) {
-        return ["low", "high"];
-    }
-    // Default policy: standard 4 levels (off/low/medium/high). Models with xhigh must opt in above.
+  // Normalize to be robust to provider prefixes, whitespace, gateway wrappers, and version suffixes
+  const normalized = modelString.trim().toLowerCase();
+  const withoutPrefix = normalized.replace(/^[a-z0-9_-]+:\s*/, "");
+  // Many providers/proxies encode the upstream provider as a path segment:
+  //   mux-gateway:openai/gpt-5.2-pro -> openai/gpt-5.2-pro -> gpt-5.2-pro
+  const withoutProviderNamespace = withoutPrefix.replace(/^[a-z0-9_-]+\//, "");
+  // Claude Opus 4.6 supports 5 levels including xhigh (mapped to "max" effort)
+  if (withoutProviderNamespace.includes("opus-4-6")) {
+    return ["off", "low", "medium", "high", "xhigh"];
+  }
+  // GPT-5.1-Codex-Max supports 5 reasoning levels including xhigh (Extra High)
+  if (
+    withoutProviderNamespace.startsWith("gpt-5.1-codex-max") ||
+    withoutProviderNamespace.startsWith("codex-max")
+  ) {
+    return ["off", "low", "medium", "high", "xhigh"];
+  }
+  // GPT-5.2-Codex and GPT-5.3-Codex support 5 reasoning levels including xhigh (Extra High)
+  if (/^gpt-5\.[23]-codex(?!-[a-z])/.test(withoutProviderNamespace)) {
+    return ["off", "low", "medium", "high", "xhigh"];
+  }
+  // gpt-5.2-pro supports medium, high, xhigh reasoning levels
+  if (/^gpt-5\.2-pro(?!-[a-z])/.test(withoutProviderNamespace)) {
+    return ["medium", "high", "xhigh"];
+  }
+  // gpt-5.2 supports 5 reasoning levels including xhigh (Extra High)
+  if (/^gpt-5\.2(?!-[a-z])/.test(withoutProviderNamespace)) {
+    return ["off", "low", "medium", "high", "xhigh"];
+  }
+  // gpt-5-pro (legacy) only supports high
+  if (/^gpt-5-pro(?!-[a-z])/.test(withoutProviderNamespace)) {
+    return ["high"];
+  }
+  // Gemini 3 Flash supports 4 levels: off (minimal), low, medium, high
+  if (withoutProviderNamespace.includes("gemini-3-flash")) {
     return ["off", "low", "medium", "high"];
+  }
+  // Gemini 3 Pro only supports "low" and "high" reasoning levels
+  if (withoutProviderNamespace.includes("gemini-3")) {
+    return ["low", "high"];
+  }
+  // Default policy: standard 4 levels (off/low/medium/high). Models with xhigh must opt in above.
+  return ["off", "low", "medium", "high"];
 }
 /**
  * Enforce thinking policy by clamping requested level to allowed set.
@@ -86,28 +88,31 @@ function getThinkingPolicyForModel(modelString) {
  * 4. Otherwise, pick the closest allowed level by order.
  */
 function enforceThinkingPolicy(modelString, requested) {
-    const allowed = getThinkingPolicyForModel(modelString);
-    if (allowed.includes(requested)) {
-        return requested;
-    }
-    const orderedAllowed = [...allowed].sort((left, right) => thinking_1.THINKING_LEVELS.indexOf(left) - thinking_1.THINKING_LEVELS.indexOf(right));
-    const minAllowed = orderedAllowed[0] ?? "off";
-    const maxAllowed = orderedAllowed[orderedAllowed.length - 1] ?? minAllowed;
-    const requestedIndex = thinking_1.THINKING_LEVELS.indexOf(requested);
-    if (requestedIndex <= thinking_1.THINKING_LEVELS.indexOf(minAllowed)) {
-        return minAllowed;
-    }
-    if (requestedIndex >= thinking_1.THINKING_LEVELS.indexOf(maxAllowed)) {
-        return maxAllowed;
-    }
-    const closest = orderedAllowed.reduce((nearest, level) => {
-        const nearestIndex = thinking_1.THINKING_LEVELS.indexOf(nearest);
-        const levelIndex = thinking_1.THINKING_LEVELS.indexOf(level);
-        return Math.abs(levelIndex - requestedIndex) < Math.abs(nearestIndex - requestedIndex)
-            ? level
-            : nearest;
-    }, minAllowed);
-    return closest;
+  const allowed = getThinkingPolicyForModel(modelString);
+  if (allowed.includes(requested)) {
+    return requested;
+  }
+  const orderedAllowed = [...allowed].sort(
+    (left, right) =>
+      thinking_1.THINKING_LEVELS.indexOf(left) - thinking_1.THINKING_LEVELS.indexOf(right)
+  );
+  const minAllowed = orderedAllowed[0] ?? "off";
+  const maxAllowed = orderedAllowed[orderedAllowed.length - 1] ?? minAllowed;
+  const requestedIndex = thinking_1.THINKING_LEVELS.indexOf(requested);
+  if (requestedIndex <= thinking_1.THINKING_LEVELS.indexOf(minAllowed)) {
+    return minAllowed;
+  }
+  if (requestedIndex >= thinking_1.THINKING_LEVELS.indexOf(maxAllowed)) {
+    return maxAllowed;
+  }
+  const closest = orderedAllowed.reduce((nearest, level) => {
+    const nearestIndex = thinking_1.THINKING_LEVELS.indexOf(nearest);
+    const levelIndex = thinking_1.THINKING_LEVELS.indexOf(level);
+    return Math.abs(levelIndex - requestedIndex) < Math.abs(nearestIndex - requestedIndex)
+      ? level
+      : nearest;
+  }, minAllowed);
+  return closest;
 }
 /**
  * Resolve a parsed thinking input to a concrete ThinkingLevel for a given model.
@@ -119,13 +124,14 @@ function enforceThinkingPolicy(modelString, requested) {
  * the model's highest level. Out-of-range indices clamp to min/max.
  */
 function resolveThinkingInput(input, modelString) {
-    // Named levels pass through directly
-    if (typeof input === "string")
-        return input;
-    // Numeric: index into the model's allowed levels (sorted lowest → highest)
-    const policy = getThinkingPolicyForModel(modelString);
-    const sorted = [...policy].sort((a, b) => thinking_1.THINKING_LEVELS.indexOf(a) - thinking_1.THINKING_LEVELS.indexOf(b));
-    const clamped = Math.max(0, Math.min(input, sorted.length - 1));
-    return sorted[clamped] ?? sorted[0] ?? "off";
+  // Named levels pass through directly
+  if (typeof input === "string") return input;
+  // Numeric: index into the model's allowed levels (sorted lowest → highest)
+  const policy = getThinkingPolicyForModel(modelString);
+  const sorted = [...policy].sort(
+    (a, b) => thinking_1.THINKING_LEVELS.indexOf(a) - thinking_1.THINKING_LEVELS.indexOf(b)
+  );
+  const clamped = Math.max(0, Math.min(input, sorted.length - 1));
+  return sorted[clamped] ?? sorted[0] ?? "off";
 }
 //# sourceMappingURL=policy.js.map

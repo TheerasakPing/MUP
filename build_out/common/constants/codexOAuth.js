@@ -9,7 +9,19 @@
  * UI can reference the same endpoints and model gating rules.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CODEX_OAUTH_REQUIRED_MODELS = exports.CODEX_OAUTH_ALLOWED_MODELS = exports.CODEX_OAUTH_DEVICE_VERIFY_URL = exports.CODEX_OAUTH_DEVICE_TOKEN_POLL_URL = exports.CODEX_OAUTH_DEVICE_USERCODE_URL = exports.CODEX_OAUTH_BROWSER_REDIRECT_URI = exports.CODEX_OAUTH_SCOPE = exports.CODEX_ENDPOINT = exports.CODEX_OAUTH_TOKEN_URL = exports.CODEX_OAUTH_AUTHORIZE_URL = exports.CODEX_OAUTH_CLIENT_ID = exports.CODEX_OAUTH_ORIGIN = void 0;
+exports.CODEX_OAUTH_REQUIRED_MODELS =
+  exports.CODEX_OAUTH_ALLOWED_MODELS =
+  exports.CODEX_OAUTH_DEVICE_VERIFY_URL =
+  exports.CODEX_OAUTH_DEVICE_TOKEN_POLL_URL =
+  exports.CODEX_OAUTH_DEVICE_USERCODE_URL =
+  exports.CODEX_OAUTH_BROWSER_REDIRECT_URI =
+  exports.CODEX_OAUTH_SCOPE =
+  exports.CODEX_ENDPOINT =
+  exports.CODEX_OAUTH_TOKEN_URL =
+  exports.CODEX_OAUTH_AUTHORIZE_URL =
+  exports.CODEX_OAUTH_CLIENT_ID =
+  exports.CODEX_OAUTH_ORIGIN =
+    void 0;
 exports.buildCodexAuthorizeUrl = buildCodexAuthorizeUrl;
 exports.buildCodexTokenExchangeBody = buildCodexTokenExchangeBody;
 exports.buildCodexRefreshBody = buildCodexRefreshBody;
@@ -39,35 +51,35 @@ exports.CODEX_OAUTH_DEVICE_USERCODE_URL = `${exports.CODEX_OAUTH_ORIGIN}/api/acc
 exports.CODEX_OAUTH_DEVICE_TOKEN_POLL_URL = `${exports.CODEX_OAUTH_ORIGIN}/api/accounts/deviceauth/token`;
 exports.CODEX_OAUTH_DEVICE_VERIFY_URL = `${exports.CODEX_OAUTH_ORIGIN}/codex/device`;
 function buildCodexAuthorizeUrl(input) {
-    const url = new URL(exports.CODEX_OAUTH_AUTHORIZE_URL);
-    url.searchParams.set("response_type", "code");
-    url.searchParams.set("client_id", exports.CODEX_OAUTH_CLIENT_ID);
-    url.searchParams.set("redirect_uri", input.redirectUri);
-    url.searchParams.set("scope", exports.CODEX_OAUTH_SCOPE);
-    url.searchParams.set("state", input.state);
-    url.searchParams.set("code_challenge", input.codeChallenge);
-    url.searchParams.set("code_challenge_method", "S256");
-    // Extra authorize params required by the Codex flow.
-    url.searchParams.set("id_token_add_organizations", "true");
-    url.searchParams.set("codex_cli_simplified_flow", "true");
-    url.searchParams.set("originator", "mux");
-    return url.toString();
+  const url = new URL(exports.CODEX_OAUTH_AUTHORIZE_URL);
+  url.searchParams.set("response_type", "code");
+  url.searchParams.set("client_id", exports.CODEX_OAUTH_CLIENT_ID);
+  url.searchParams.set("redirect_uri", input.redirectUri);
+  url.searchParams.set("scope", exports.CODEX_OAUTH_SCOPE);
+  url.searchParams.set("state", input.state);
+  url.searchParams.set("code_challenge", input.codeChallenge);
+  url.searchParams.set("code_challenge_method", "S256");
+  // Extra authorize params required by the Codex flow.
+  url.searchParams.set("id_token_add_organizations", "true");
+  url.searchParams.set("codex_cli_simplified_flow", "true");
+  url.searchParams.set("originator", "mux");
+  return url.toString();
 }
 function buildCodexTokenExchangeBody(input) {
-    const body = new URLSearchParams();
-    body.set("grant_type", "authorization_code");
-    body.set("client_id", exports.CODEX_OAUTH_CLIENT_ID);
-    body.set("code", input.code);
-    body.set("redirect_uri", input.redirectUri);
-    body.set("code_verifier", input.codeVerifier);
-    return body;
+  const body = new URLSearchParams();
+  body.set("grant_type", "authorization_code");
+  body.set("client_id", exports.CODEX_OAUTH_CLIENT_ID);
+  body.set("code", input.code);
+  body.set("redirect_uri", input.redirectUri);
+  body.set("code_verifier", input.codeVerifier);
+  return body;
 }
 function buildCodexRefreshBody(input) {
-    const body = new URLSearchParams();
-    body.set("grant_type", "refresh_token");
-    body.set("client_id", exports.CODEX_OAUTH_CLIENT_ID);
-    body.set("refresh_token", input.refreshToken);
-    return body;
+  const body = new URLSearchParams();
+  body.set("grant_type", "refresh_token");
+  body.set("client_id", exports.CODEX_OAUTH_CLIENT_ID);
+  body.set("refresh_token", input.refreshToken);
+  return body;
 }
 /**
  * Models that may be routed through the Codex OAuth path.
@@ -75,12 +87,12 @@ function buildCodexRefreshBody(input) {
  * The values in this set are providerModelIds (no `openai:` prefix).
  */
 exports.CODEX_OAUTH_ALLOWED_MODELS = new Set([
-    "gpt-5.1-codex-max",
-    "gpt-5.1-codex-mini",
-    "gpt-5.2",
-    "gpt-5.2-codex",
-    "gpt-5.3-codex",
-    "gpt-5.1-codex",
+  "gpt-5.1-codex-max",
+  "gpt-5.1-codex-mini",
+  "gpt-5.2",
+  "gpt-5.2-codex",
+  "gpt-5.3-codex",
+  "gpt-5.1-codex",
 ]);
 /**
  * Models that *prefer* Codex OAuth routing.
@@ -91,24 +103,24 @@ exports.CODEX_OAUTH_ALLOWED_MODELS = new Set([
  * model is accessible.
  */
 exports.CODEX_OAUTH_REQUIRED_MODELS = new Set([
-    "gpt-5.1-codex-max",
-    "gpt-5.1-codex-mini",
-    "gpt-5.2-codex",
-    "gpt-5.3-codex",
-    "gpt-5.1-codex",
+  "gpt-5.1-codex-max",
+  "gpt-5.1-codex-mini",
+  "gpt-5.2-codex",
+  "gpt-5.3-codex",
+  "gpt-5.1-codex",
 ]);
 function normalizeCodexOauthModelId(modelId) {
-    // Accept either provider:model or bare model ids and normalize to providerModelId.
-    const colonIndex = modelId.indexOf(":");
-    if (colonIndex !== -1) {
-        return modelId.slice(colonIndex + 1);
-    }
-    return modelId;
+  // Accept either provider:model or bare model ids and normalize to providerModelId.
+  const colonIndex = modelId.indexOf(":");
+  if (colonIndex !== -1) {
+    return modelId.slice(colonIndex + 1);
+  }
+  return modelId;
 }
 function isCodexOauthAllowedModelId(modelId) {
-    return exports.CODEX_OAUTH_ALLOWED_MODELS.has(normalizeCodexOauthModelId(modelId));
+  return exports.CODEX_OAUTH_ALLOWED_MODELS.has(normalizeCodexOauthModelId(modelId));
 }
 function isCodexOauthRequiredModelId(modelId) {
-    return exports.CODEX_OAUTH_REQUIRED_MODELS.has(normalizeCodexOauthModelId(modelId));
+  return exports.CODEX_OAUTH_REQUIRED_MODELS.has(normalizeCodexOauthModelId(modelId));
 }
 //# sourceMappingURL=codexOAuth.js.map

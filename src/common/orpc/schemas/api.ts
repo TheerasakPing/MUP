@@ -1739,7 +1739,7 @@ export const modelHealth = {
           provider: z.string(),
           modelId: z.string(),
           metadata: CustomModelMetadataSchema.optional(),
-        }),
+        })
       ),
     }),
     output: z.array(HealthCheckResultSchema),
@@ -1774,7 +1774,7 @@ export const DailySummarySchema = z.object({
   requestCount: z.number(),
   byModel: z.record(
     z.string(),
-    z.object({ cost: z.number(), requests: z.number(), tokens: z.number() }),
+    z.object({ cost: z.number(), requests: z.number(), tokens: z.number() })
   ),
 });
 
@@ -1797,7 +1797,7 @@ export type CostSummaryTotalsType = z.infer<typeof CostSummaryTotalsSchema>;
 
 export const ModelCostBreakdownSchema = z.record(
   z.string(),
-  z.object({ cost: z.number(), requests: z.number(), tokens: z.number() }),
+  z.object({ cost: z.number(), requests: z.number(), tokens: z.number() })
 );
 
 export const costTracking = {

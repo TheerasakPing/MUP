@@ -12,32 +12,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.truncateBashOutput = truncateBashOutput;
 const toolLimits_1 = require("../../common/constants/toolLimits");
 function truncateBashOutput(output) {
-    const bytes = Buffer.byteLength(output, "utf-8");
-    // Split into lines, but don't count a trailing empty string as a line.
-    // "line1\nline2\n".split("\n") gives ["line1", "line2", ""], but that's 2 lines, not 3.
-    const rawLines = output.split("\n");
-    const hasTrailingNewline = output.endsWith("\n") && rawLines.length > 0;
-    const lines = hasTrailingNewline ? rawLines.slice(0, -1) : rawLines;
-    if (lines.length <= toolLimits_1.BASH_HARD_MAX_LINES && bytes <= toolLimits_1.BASH_MAX_TOTAL_BYTES) {
-        return { output, truncated: false, originalLines: lines.length, originalBytes: bytes };
+  const bytes = Buffer.byteLength(output, "utf-8");
+  // Split into lines, but don't count a trailing empty string as a line.
+  // "line1\nline2\n".split("\n") gives ["line1", "line2", ""], but that's 2 lines, not 3.
+  const rawLines = output.split("\n");
+  const hasTrailingNewline = output.endsWith("\n") && rawLines.length > 0;
+  const lines = hasTrailingNewline ? rawLines.slice(0, -1) : rawLines;
+  if (
+    lines.length <= toolLimits_1.BASH_HARD_MAX_LINES &&
+    bytes <= toolLimits_1.BASH_MAX_TOTAL_BYTES
+  ) {
+    return { output, truncated: false, originalLines: lines.length, originalBytes: bytes };
+  }
+  // Keep tail (most recent output is usually most relevant for debugging)
+  let truncatedLines = lines.slice(-toolLimits_1.BASH_HARD_MAX_LINES);
+  // Restore trailing newline if original had one
+  let truncatedOutput = truncatedLines.join("\n") + (hasTrailingNewline ? "\n" : "");
+  // Also enforce byte limit (slice from end to keep recent output)
+  if (Buffer.byteLength(truncatedOutput, "utf-8") > toolLimits_1.BASH_MAX_TOTAL_BYTES) {
+    // Binary search would be more efficient but this is simple and correct
+    while (Buffer.byteLength(truncatedOutput, "utf-8") > toolLimits_1.BASH_MAX_TOTAL_BYTES) {
+      truncatedLines = truncatedLines.slice(1);
+      truncatedOutput = truncatedLines.join("\n");
     }
-    // Keep tail (most recent output is usually most relevant for debugging)
-    let truncatedLines = lines.slice(-toolLimits_1.BASH_HARD_MAX_LINES);
-    // Restore trailing newline if original had one
-    let truncatedOutput = truncatedLines.join("\n") + (hasTrailingNewline ? "\n" : "");
-    // Also enforce byte limit (slice from end to keep recent output)
-    if (Buffer.byteLength(truncatedOutput, "utf-8") > toolLimits_1.BASH_MAX_TOTAL_BYTES) {
-        // Binary search would be more efficient but this is simple and correct
-        while (Buffer.byteLength(truncatedOutput, "utf-8") > toolLimits_1.BASH_MAX_TOTAL_BYTES) {
-            truncatedLines = truncatedLines.slice(1);
-            truncatedOutput = truncatedLines.join("\n");
-        }
-    }
-    return {
-        output: truncatedOutput,
-        truncated: true,
-        originalLines: lines.length,
-        originalBytes: bytes,
-    };
+  }
+  return {
+    output: truncatedOutput,
+    truncated: true,
+    originalLines: lines.length,
+    originalBytes: bytes,
+  };
 }
 //# sourceMappingURL=truncateBashOutput.js.map

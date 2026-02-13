@@ -186,7 +186,7 @@ export class Config {
           muxGovernorToken?: unknown;
           stopCoderWorkspaceOnArchive?: unknown;
           customModelPrices?: unknown;
-        iconThemeConfig?: unknown;
+          iconThemeConfig?: unknown;
         };
 
         // Config is stored as array of [path, config] pairs
@@ -260,7 +260,9 @@ export class Config {
             muxGovernorUrl: parseOptionalNonEmptyString(parsed.muxGovernorUrl),
             muxGovernorToken: parseOptionalNonEmptyString(parsed.muxGovernorToken),
             stopCoderWorkspaceOnArchive,
-            customModelPrices: parsed.customModelPrices as Record<string, CustomModelConfig> | undefined,
+            customModelPrices: parsed.customModelPrices as
+              | Record<string, CustomModelConfig>
+              | undefined,
             iconThemeConfig: parsed.iconThemeConfig as IconThemeConfig | undefined,
           };
         }
@@ -688,9 +690,9 @@ export class Config {
                 workspace.aiSettingsByAgent ??
                 (workspace.aiSettings
                   ? {
-                    plan: workspace.aiSettings,
-                    exec: workspace.aiSettings,
-                  }
+                      plan: workspace.aiSettings,
+                      exec: workspace.aiSettings,
+                    }
                   : undefined),
               parentWorkspaceId: workspace.parentWorkspaceId,
               agentType: workspace.agentType,
@@ -715,9 +717,9 @@ export class Config {
             if (!workspace.aiSettingsByAgent) {
               const derived = workspace.aiSettings
                 ? {
-                  plan: workspace.aiSettings,
-                  exec: workspace.aiSettings,
-                }
+                    plan: workspace.aiSettings,
+                    exec: workspace.aiSettings,
+                  }
                 : undefined;
               if (derived) {
                 workspace.aiSettingsByAgent = derived;
@@ -771,9 +773,9 @@ export class Config {
               workspace.aiSettingsByAgent ??
               (workspace.aiSettings
                 ? {
-                  plan: workspace.aiSettings,
-                  exec: workspace.aiSettings,
-                }
+                    plan: workspace.aiSettings,
+                    exec: workspace.aiSettings,
+                  }
                 : undefined);
             metadata.aiSettings ??= workspace.aiSettings;
 
@@ -824,9 +826,9 @@ export class Config {
                 workspace.aiSettingsByAgent ??
                 (workspace.aiSettings
                   ? {
-                    plan: workspace.aiSettings,
-                    exec: workspace.aiSettings,
-                  }
+                      plan: workspace.aiSettings,
+                      exec: workspace.aiSettings,
+                    }
                   : undefined),
               parentWorkspaceId: workspace.parentWorkspaceId,
               agentType: workspace.agentType,
@@ -868,9 +870,9 @@ export class Config {
               workspace.aiSettingsByAgent ??
               (workspace.aiSettings
                 ? {
-                  plan: workspace.aiSettings,
-                  exec: workspace.aiSettings,
-                }
+                    plan: workspace.aiSettings,
+                    exec: workspace.aiSettings,
+                  }
                 : undefined),
             parentWorkspaceId: workspace.parentWorkspaceId,
             agentType: workspace.agentType,

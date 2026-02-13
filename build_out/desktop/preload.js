@@ -22,59 +22,58 @@ const electron_1 = require("electron");
 const pendingDeepLinks = [];
 const deepLinkSubscribers = new Set();
 electron_1.ipcRenderer.on("mux:deep-link", (_event, payload) => {
-    if (deepLinkSubscribers.size === 0) {
-        pendingDeepLinks.push(payload);
+  if (deepLinkSubscribers.size === 0) {
+    pendingDeepLinks.push(payload);
+  }
+  for (const subscriber of deepLinkSubscribers) {
+    try {
+      subscriber(payload);
+    } catch (error) {
+      // Best-effort: a renderer bug shouldn't break deep link delivery.
+      console.debug("[deep-link] Renderer subscriber threw:", error);
     }
-    for (const subscriber of deepLinkSubscribers) {
-        try {
-            subscriber(payload);
-        }
-        catch (error) {
-            // Best-effort: a renderer bug shouldn't break deep link delivery.
-            console.debug("[deep-link] Renderer subscriber threw:", error);
-        }
-    }
+  }
 });
 // Forward ORPC MessagePort from renderer to main process
 window.addEventListener("message", (event) => {
-    if (event.data === "start-orpc-client" && event.ports?.[0]) {
-        electron_1.ipcRenderer.postMessage("start-orpc-server", null, [...event.ports]);
-    }
+  if (event.data === "start-orpc-client" && event.ports?.[0]) {
+    electron_1.ipcRenderer.postMessage("start-orpc-server", null, [...event.ports]);
+  }
 });
 electron_1.contextBridge.exposeInMainWorld("api", {
-    platform: process.platform,
-    versions: {
-        node: process.versions.node,
-        chrome: process.versions.chrome,
-        electron: process.versions.electron,
-    },
-    isE2E: process.env.MUX_E2E === "1",
-    enableTelemetryInDev: process.env.MUX_ENABLE_TELEMETRY_IN_DEV === "1",
-    // Note: When debugging LLM requests, we also want to see synthetic/request-only
-    // messages in the chat history so the UI matches what was sent to the provider.
-    debugLlmRequest: process.env.MUX_DEBUG_LLM_REQUEST === "1",
-    // Allow testing against a mux.md staging/local deployment without rebuilding the renderer.
-    muxMdUrlOverride: process.env.MUX_MD_URL_OVERRIDE,
-    // NOTE: This is intentionally async so the preload script does not rely on Node builtins
-    // like `child_process` (which can break in hardened/sandboxed environments).
-    getIsRosetta: () => electron_1.ipcRenderer.invoke("mux:get-is-rosetta"),
-    getApiServerUrl: () => electron_1.ipcRenderer.invoke("mux:get-api-server-url"),
-    getIsWindowsWslShell: () => electron_1.ipcRenderer.invoke("mux:get-is-windows-wsl-shell"),
-    // Register a callback for notification clicks (navigates to workspace)
-    // Returns an unsubscribe function.
-    onNotificationClicked: (callback) => {
-        const listener = (_event, data) => callback(data);
-        electron_1.ipcRenderer.on("mux:notification-clicked", listener);
-        return () => {
-            electron_1.ipcRenderer.off("mux:notification-clicked", listener);
-        };
-    },
-    consumePendingDeepLinks: () => pendingDeepLinks.splice(0, pendingDeepLinks.length),
-    onDeepLink: (callback) => {
-        deepLinkSubscribers.add(callback);
-        return () => {
-            deepLinkSubscribers.delete(callback);
-        };
-    },
+  platform: process.platform,
+  versions: {
+    node: process.versions.node,
+    chrome: process.versions.chrome,
+    electron: process.versions.electron,
+  },
+  isE2E: process.env.MUX_E2E === "1",
+  enableTelemetryInDev: process.env.MUX_ENABLE_TELEMETRY_IN_DEV === "1",
+  // Note: When debugging LLM requests, we also want to see synthetic/request-only
+  // messages in the chat history so the UI matches what was sent to the provider.
+  debugLlmRequest: process.env.MUX_DEBUG_LLM_REQUEST === "1",
+  // Allow testing against a mux.md staging/local deployment without rebuilding the renderer.
+  muxMdUrlOverride: process.env.MUX_MD_URL_OVERRIDE,
+  // NOTE: This is intentionally async so the preload script does not rely on Node builtins
+  // like `child_process` (which can break in hardened/sandboxed environments).
+  getIsRosetta: () => electron_1.ipcRenderer.invoke("mux:get-is-rosetta"),
+  getApiServerUrl: () => electron_1.ipcRenderer.invoke("mux:get-api-server-url"),
+  getIsWindowsWslShell: () => electron_1.ipcRenderer.invoke("mux:get-is-windows-wsl-shell"),
+  // Register a callback for notification clicks (navigates to workspace)
+  // Returns an unsubscribe function.
+  onNotificationClicked: (callback) => {
+    const listener = (_event, data) => callback(data);
+    electron_1.ipcRenderer.on("mux:notification-clicked", listener);
+    return () => {
+      electron_1.ipcRenderer.off("mux:notification-clicked", listener);
+    };
+  },
+  consumePendingDeepLinks: () => pendingDeepLinks.splice(0, pendingDeepLinks.length),
+  onDeepLink: (callback) => {
+    deepLinkSubscribers.add(callback);
+    return () => {
+      deepLinkSubscribers.delete(callback);
+    };
+  },
 });
 //# sourceMappingURL=preload.js.map

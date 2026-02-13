@@ -467,11 +467,11 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
   // Uses same logic as useResumeManager for DRY
   const interruption = workspaceState
     ? getInterruptionContext(
-      workspaceState.messages,
-      workspaceState.pendingStreamStartTime,
-      workspaceState.runtimeStatus,
-      workspaceState.lastAbortReason
-    )
+        workspaceState.messages,
+        workspaceState.pendingStreamStartTime,
+        workspaceState.runtimeStatus,
+        workspaceState.lastAbortReason
+      )
     : null;
 
   const showRetryBarrier = workspaceState
@@ -529,17 +529,17 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
   // When editing, find the cutoff point
   const editCutoffHistoryId = editingMessage
     ? transformedMessages.find(
-      (
-        msg
-      ): msg is Exclude<
-        DisplayedMessage,
-        { type: "history-hidden" | "workspace-init" | "compaction-boundary" }
-      > =>
-        msg.type !== "history-hidden" &&
-        msg.type !== "workspace-init" &&
-        msg.type !== "compaction-boundary" &&
-        msg.historyId === editingMessage.id
-    )?.historyId
+        (
+          msg
+        ): msg is Exclude<
+          DisplayedMessage,
+          { type: "history-hidden" | "workspace-init" | "compaction-boundary" }
+        > =>
+          msg.type !== "history-hidden" &&
+          msg.type !== "workspace-init" &&
+          msg.type !== "compaction-boundary" &&
+          msg.historyId === editingMessage.id
+      )?.historyId
     : undefined;
 
   // Find the ID of the latest propose_plan tool call for external edit detection
@@ -644,8 +644,8 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
                           data-testid="chat-message"
                           data-message-id={
                             msg.type !== "history-hidden" &&
-                              msg.type !== "workspace-init" &&
-                              msg.type !== "compaction-boundary"
+                            msg.type !== "workspace-init" &&
+                            msg.type !== "compaction-boundary"
                               ? msg.historyId
                               : undefined
                           }
@@ -666,10 +666,10 @@ export const ChatPane: React.FC<ChatPaneProps> = (props) => {
                             userMessageNavigation={
                               msg.type === "user" && userMessageNavMap
                                 ? {
-                                  prevUserMessageId: userMessageNavMap.get(msg.historyId)?.prev,
-                                  nextUserMessageId: userMessageNavMap.get(msg.historyId)?.next,
-                                  onNavigate: handleNavigateToMessage,
-                                }
+                                    prevUserMessageId: userMessageNavMap.get(msg.historyId)?.prev,
+                                    nextUserMessageId: userMessageNavMap.get(msg.historyId)?.next,
+                                    onNavigate: handleNavigateToMessage,
+                                  }
                                 : undefined
                             }
                           />

@@ -1,13 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import {
-  GitBranch,
-  Search,
-  Zap,
-  Settings,
-  Terminal,
-  Files,
-} from "lucide-react";
+import { GitBranch, Search, Zap, Settings, Terminal, Files } from "lucide-react";
 import { CUSTOM_EVENTS } from "@/common/constants/events";
 import { cn } from "@/common/lib/utils";
 

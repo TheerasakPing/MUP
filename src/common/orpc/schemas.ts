@@ -223,8 +223,4 @@ export {
 export type { WorkspaceSendMessageOutput } from "./schemas/api";
 
 // Icon Theme schemas
-export {
-  iconTheme,
-  IconThemeDocumentSchema,
-  InstalledIconThemeSchema,
-} from "./schemas/iconTheme";
+export { iconTheme, IconThemeDocumentSchema, InstalledIconThemeSchema } from "./schemas/iconTheme";
