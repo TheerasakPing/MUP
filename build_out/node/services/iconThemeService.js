@@ -96,7 +96,7 @@ class IconThemeService {
         const config = this.config.loadConfigOrDefault();
         const installed = config.iconThemeConfig?.installedThemes ?? [];
         // Always include the built-in MUP default theme if not present
-        const hasDefault = installed.some(t => t.id === iconTheme_1.DEFAULT_MUP_THEME_ID);
+        const hasDefault = installed.some((t) => t.id === iconTheme_1.DEFAULT_MUP_THEME_ID);
         if (!hasDefault) {
             return [this.getBuiltinThemeDefinition(), ...installed];
         }
@@ -136,7 +136,7 @@ class IconThemeService {
             return null;
         }
         const themes = this.getInstalledThemes();
-        const theme = themes.find(t => t.id === themeId);
+        const theme = themes.find((t) => t.id === themeId);
         if (!theme) {
             log_1.log.warn(`Icon theme not found: ${themeId}`);
             return null;
@@ -148,7 +148,23 @@ class IconThemeService {
                 return null;
             }
             const content = await fs.promises.readFile(jsonPath, "utf-8");
-            return JSON.parse(content);
+            const doc = JSON.parse(content);
+            // Resolve iconPath values: they are relative to the JSON file, but the
+            // static file server serves from themeDir. Rewrite them to be relative
+            // to the theme root so the frontend can use them directly.
+            const jsonDir = path.posix.dirname(theme.themeJsonPath.replace(/\\/g, "/"));
+            if (doc.iconDefinitions) {
+                for (const def of Object.values(doc.iconDefinitions)) {
+                    if (def.iconPath) {
+                        // e.g. jsonDir="dist/macchiato", iconPath="./icons/git.svg"
+                        // → "dist/macchiato/icons/git.svg"
+                        const joined = path.posix.join(jsonDir, def.iconPath.replace(/\\/g, "/"));
+                        // Normalize away any ".." or "." segments
+                        def.iconPath = path.posix.normalize(joined);
+                    }
+                }
+            }
+            return doc;
         }
         catch (err) {
             log_1.log.error(`Failed to load icon theme ${themeId}:`, err);
@@ -165,7 +181,7 @@ class IconThemeService {
         }
         const config = this.config.loadConfigOrDefault();
         const installed = config.iconThemeConfig?.installedThemes ?? [];
-        const themeIndex = installed.findIndex(t => t.id === themeId);
+        const themeIndex = installed.findIndex((t) => t.id === themeId);
         if (themeIndex === -1) {
             return false; // Theme not found
         }
@@ -219,8 +235,7 @@ class IconThemeService {
             const buffer = Buffer.from(vsixBase64, "base64");
             const zip = await jszip_1.default.loadAsync(buffer);
             // Find package.json inside the extension
-            const packageJsonFile = zip.file("extension/package.json") ??
-                zip.file("package.json");
+            const packageJsonFile = zip.file("extension/package.json") ?? zip.file("package.json");
             if (!packageJsonFile) {
                 return { importedThemeIds, errors: ["No package.json found in .vsix"] };
             }

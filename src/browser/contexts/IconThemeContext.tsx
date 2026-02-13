@@ -138,7 +138,9 @@ export const IconThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         return getRootIconUrl(definition.iconPath);
       }
 
-      // Custom theme: construct URL to server-served icon file
+      // Custom theme: construct URL to server-served icon file.
+      // The backend pre-resolves iconPath values to be relative to the theme
+      // root directory, so we just strip any leading "./" and use directly.
       const iconPath = definition.iconPath.replace(/^\.\//, "");
       return `${iconBaseUrl}/icon-themes/${activeThemeId}/${iconPath}`;
     },
