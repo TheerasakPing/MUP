@@ -1,0 +1,5 @@
+import{R as c,j as i,A as l,T as m,d as w,u as I}from"./TerminalRouterContext-CeKE7fio.js";import{T as k}from"./__vite-browser-external-2447137e-C5rDWfTQ.js";function u(s){const e=w.c(7),{api:t}=I();let o;e[0]!==t?.terminal||e[1]!==s.workspaceId?(o=()=>{t?.terminal.closeWindow({workspaceId:s.workspaceId}).catch(f)},e[0]=t?.terminal,e[1]=s.workspaceId,e[2]=o):o=e[2];let n;return e[3]!==s.sessionId||e[4]!==s.workspaceId||e[5]!==o?(n=i.jsx(k,{workspaceId:s.workspaceId,sessionId:s.sessionId,visible:!0,onExit:o}),e[3]=s.sessionId,e[4]=s.workspaceId,e[5]=o,e[6]=n):n=e[6],n}function f(s){console.warn("[TerminalWindow] Failed to close terminal window:",s)}const d=new URLSearchParams(window.location.search),a=d.get("workspaceId"),r=d.get("sessionId");!a||!r?document.body.innerHTML=`
+    <div style="color: #f44; padding: 20px; font-family: monospace;">
+      Error: Missing workspace ID or session ID
+    </div>
+  `:(document.title=`Terminal — ${a}`,c.createRoot(document.getElementById("root")).render(i.jsx(l,{children:i.jsx(m,{children:i.jsx(u,{workspaceId:a,sessionId:r})})})));
