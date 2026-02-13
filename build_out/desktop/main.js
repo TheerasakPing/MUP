@@ -521,6 +521,11 @@ async function loadServices() {
         ],
     });
     const orpcContext = services.toORPCContext();
+    // Track API server base URL for frontend icon resolution
+    let apiServerBaseUrl = null;
+    electron_1.ipcMain.handle("mux:get-api-server-url", () => {
+        return apiServerBaseUrl;
+    });
     electron_1.ipcMain.handle("mux:get-is-rosetta", async () => {
         if (process.platform !== "darwin") {
             return false;
@@ -597,6 +602,7 @@ async function loadServices() {
         const lockfile = new serverLockfile_1.ServerLockfile(config.rootDir);
         const existing = await lockfile.read();
         if (existing) {
+            apiServerBaseUrl = existing.baseUrl;
             console.log(`[${timestamp()}] API server already running at ${existing.baseUrl}, skipping`);
         }
         else {
@@ -623,6 +629,7 @@ async function loadServices() {
                     serveStatic,
                     port,
                 });
+                apiServerBaseUrl = serverInfo.baseUrl;
                 console.log(`[${timestamp()}] API server started at ${serverInfo.baseUrl}`);
             }
             catch (error) {

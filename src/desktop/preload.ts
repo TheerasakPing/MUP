@@ -62,6 +62,7 @@ contextBridge.exposeInMainWorld("api", {
   // NOTE: This is intentionally async so the preload script does not rely on Node builtins
   // like `child_process` (which can break in hardened/sandboxed environments).
   getIsRosetta: () => ipcRenderer.invoke("mux:get-is-rosetta"),
+  getApiServerUrl: () => ipcRenderer.invoke("mux:get-api-server-url") as Promise<string | null>,
   getIsWindowsWslShell: () => ipcRenderer.invoke("mux:get-is-windows-wsl-shell"),
   // Register a callback for notification clicks (navigates to workspace)
   // Returns an unsubscribe function.

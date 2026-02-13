@@ -568,6 +568,13 @@ async function loadServices(): Promise<void> {
 
   const orpcContext = services.toORPCContext();
 
+  // Track API server base URL for frontend icon resolution
+  let apiServerBaseUrl: string | null = null;
+
+  electronIpcMain.handle("mux:get-api-server-url", () => {
+    return apiServerBaseUrl;
+  });
+
   electronIpcMain.handle("mux:get-is-rosetta", async () => {
     if (process.platform !== "darwin") {
       return false;
@@ -652,13 +659,14 @@ async function loadServices(): Promise<void> {
     const existing = await lockfile.read();
 
     if (existing) {
+      apiServerBaseUrl = existing.baseUrl;
       console.log(`[${timestamp()}] API server already running at ${existing.baseUrl}, skipping`);
     } else {
       try {
         const loadedConfig = config.loadConfigOrDefault();
         const configuredBindHost =
           typeof loadedConfig.apiServerBindHost === "string" &&
-            loadedConfig.apiServerBindHost.trim()
+          loadedConfig.apiServerBindHost.trim()
             ? loadedConfig.apiServerBindHost.trim()
             : undefined;
         const serveStatic = loadedConfig.apiServerServeWebUi === true;
@@ -682,6 +690,7 @@ async function loadServices(): Promise<void> {
           serveStatic,
           port,
         });
+        apiServerBaseUrl = serverInfo.baseUrl;
         console.log(`[${timestamp()}] API server started at ${serverInfo.baseUrl}`);
       } catch (error) {
         console.error(`[${timestamp()}] Failed to start API server:`, error);

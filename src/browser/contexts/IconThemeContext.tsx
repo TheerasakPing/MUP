@@ -82,6 +82,18 @@ export const IconThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [activeThemeId, setActiveThemeId] = useState<string>(DEFAULT_MUP_THEME_ID);
   const [activeThemeDocument, setActiveThemeDocument] = useState<IconThemeDocument | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // In Electron mode, store the HTTP API server base URL for icon file requests.
+  // Falls back to getBrowserBackendBaseUrl() (correct for browser/dev-server with proxy).
+  const [iconBaseUrl, setIconBaseUrl] = useState<string>(() => getBrowserBackendBaseUrl());
+
+  // Fetch API server URL from Electron main process on mount
+  useEffect(() => {
+    if (window.api?.getApiServerUrl) {
+      window.api.getApiServerUrl().then((url) => {
+        if (url) setIconBaseUrl(url);
+      });
+    }
+  }, []);
 
   const fetchTheme = useCallback(async () => {
     if (!api) return;
@@ -127,11 +139,10 @@ export const IconThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
 
       // Custom theme: construct URL to server-served icon file
-      const baseUrl = getBrowserBackendBaseUrl();
       const iconPath = definition.iconPath.replace(/^\.\//, "");
-      return `${baseUrl}/icon-themes/${activeThemeId}/${iconPath}`;
+      return `${iconBaseUrl}/icon-themes/${activeThemeId}/${iconPath}`;
     },
-    [activeThemeDocument, activeThemeId]
+    [activeThemeDocument, activeThemeId, iconBaseUrl]
   );
 
   return (

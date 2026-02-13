@@ -190,6 +190,10 @@ export default defineConfig(({ mode }) => {
           // point back to the public dev-server origin (not 127.0.0.1:3000).
           changeOrigin: false,
         },
+        "/icon-themes": {
+          target: backendProxyTarget,
+          changeOrigin: true,
+        },
         "/health": {
           target: backendProxyTarget,
           changeOrigin: true,
