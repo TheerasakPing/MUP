@@ -24,6 +24,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { getStorageChangeEvent } from "@/common/constants/events";
+import { useDebouncedValue } from "@/browser/hooks/useDebouncedValue";
 import { readPersistedString, updatePersistedState } from "@/browser/hooks/usePersistedState";
 
 export type ResizableSidebarSide = "left" | "right";
@@ -115,11 +116,13 @@ export function useResizableSidebar({
     return Math.max(minWidth, resolved);
   }, [maxWidth, minWidth]);
 
+  const debouncedWidth = useDebouncedValue(width, 200);
+
   // Persist width changes to localStorage
   useEffect(() => {
     if (!enabled) return;
-    updatePersistedState<number>(storageKey, width);
-  }, [width, storageKey, enabled]);
+    updatePersistedState<number>(storageKey, debouncedWidth);
+  }, [debouncedWidth, storageKey, enabled]);
 
   // Keep width in sync when updated externally (e.g., layout presets)
   useEffect(() => {
