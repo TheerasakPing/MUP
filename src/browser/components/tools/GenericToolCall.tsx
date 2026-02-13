@@ -6,6 +6,8 @@ import {
   ToolIcon,
   TOOL_NAME_TO_ICON,
   ToolName,
+  McpToolName,
+  isMcpTool,
   StatusIndicator,
   ToolDetails,
   DetailSection,
@@ -65,8 +67,17 @@ export const GenericToolCall: React.FC<GenericToolCallProps> = ({
     <ToolContainer expanded={shouldShowDetails}>
       <ToolHeader onClick={() => hasDetails && toggleExpanded()}>
         {hasDetails && <ExpandIcon expanded={shouldShowDetails}>▶</ExpandIcon>}
-        {TOOL_NAME_TO_ICON[toolName] && <ToolIcon toolName={toolName} />}
-        <ToolName>{toolName}</ToolName>
+        {isMcpTool(toolName) ? (
+          <>
+            <ToolIcon toolName={toolName} className="text-pink-400" />
+            <McpToolName toolName={toolName} />
+          </>
+        ) : (
+          <>
+            {TOOL_NAME_TO_ICON[toolName] && <ToolIcon toolName={toolName} />}
+            <ToolName>{toolName}</ToolName>
+          </>
+        )}
         <StatusIndicator status={status}>{getStatusDisplay(status)}</StatusIndicator>
       </ToolHeader>
 

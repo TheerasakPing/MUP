@@ -11,6 +11,7 @@ import {
   Info,
   List,
   Pencil,
+  Plug,
   Sparkles,
   Square,
   Wrench,
@@ -71,6 +72,51 @@ export const ToolName: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({
   className,
   ...props
 }) => <span className={cn("font-medium", className)} {...props} />;
+
+/**
+ * Checks whether a tool name belongs to an MCP server.
+ * MCP tool names follow the pattern: mcp__<server>__<tool>
+ */
+export function isMcpTool(toolName: string): boolean {
+  return toolName.startsWith("mcp__");
+}
+
+/**
+ * Parses an MCP tool name into server and tool parts.
+ * e.g. "mcp__github__create_issue" → { server: "github", tool: "create_issue" }
+ */
+export function parseMcpToolName(toolName: string): { server: string; tool: string } | null {
+  if (!isMcpTool(toolName)) return null;
+  const withoutPrefix = toolName.slice(5); // remove "mcp__"
+  const separatorIndex = withoutPrefix.indexOf("__");
+  if (separatorIndex === -1) return { server: withoutPrefix, tool: withoutPrefix };
+  return {
+    server: withoutPrefix.slice(0, separatorIndex),
+    tool: withoutPrefix.slice(separatorIndex + 2),
+  };
+}
+
+/**
+ * MCP-aware tool name display.
+ * Renders the server name as a pink badge and tool name in pink text.
+ */
+export const McpToolName: React.FC<{ toolName: string; className?: string }> = ({
+  toolName,
+  className,
+}) => {
+  const parsed = parseMcpToolName(toolName);
+  if (!parsed) return <ToolName className={className}>{toolName}</ToolName>;
+
+  return (
+    <span className={cn("inline-flex items-center gap-1.5 font-medium", className)}>
+      <span className="inline-flex items-center gap-1 rounded-sm bg-pink-500/15 px-1.5 py-0.5 text-[10px] text-pink-400 font-semibold uppercase tracking-wide">
+        <Plug className="size-2.5" />
+        {parsed.server}
+      </span>
+      <span className="text-pink-400">{parsed.tool}</span>
+    </span>
+  );
+};
 
 interface StatusIndicatorProps extends React.HTMLAttributes<HTMLSpanElement> {
   status: string;
